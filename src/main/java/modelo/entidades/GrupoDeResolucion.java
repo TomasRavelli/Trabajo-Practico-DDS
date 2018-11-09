@@ -3,6 +3,7 @@ package modelo.entidades;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,10 +29,10 @@ public class GrupoDeResolucion implements Serializable {
 	private Integer id_Grupo;
 	
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "grupo")
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "grupo")
 	private List<Empleado> empleados;
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "grupo")
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "grupo")
 	private List<Intervencion> intervenciones;
 	
 	@ManyToMany

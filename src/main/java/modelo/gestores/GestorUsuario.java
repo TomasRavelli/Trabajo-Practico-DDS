@@ -5,6 +5,8 @@ import modelo.entidades.Usuario;
 public class GestorUsuario {
 	
 	private Usuario usuarioActual;
+	
+	public GestorUsuario () {}
 
 	public GestorUsuario(Usuario usuarioActual) {
 		super();

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,7 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "INTERVALO_TRABAJO")
+@Table (name = "ESTADO_INTERVENCION")
 public class EstadoIntervencion implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -32,13 +33,14 @@ public class EstadoIntervencion implements Serializable {
 	@OneToOne (fetch = FetchType.LAZY, mappedBy = "estadoIntervencion1")
 	private Intervencion intervencion1;
 	
-	@ManyToOne
+	@ManyToOne 
 	@JoinColumn (name = "ID_INTERVENCION")
 	private Intervencion intervencionMuchos;
 	
 	@ManyToOne
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Usuario usuario;
+	
 	
 	@Column (name = "ESTADO")
 	private String estado;	
@@ -50,15 +52,22 @@ public class EstadoIntervencion implements Serializable {
 	private LocalTime horaInicio;
 	@Column (name = "HORA_FIN")
 	private LocalTime horaFin;
+	@Column (name = "OBSERVACIONES")
+	private String observaciones;
 	
 	
 
 	public EstadoIntervencion() {}
 	
-	public EstadoIntervencion(String estado2, LocalDate fInicio, LocalTime hInicio) {
+	public EstadoIntervencion(String estado, LocalDate fInicio, LocalTime hInicio) {
+		this.estado = estado;
 		this.fechaInicio = fInicio;
 		this.horaInicio = hInicio;
-		this.estado = estado2;
+	}
+	
+	public EstadoIntervencion(LocalDate fInicio, LocalTime hInicio) {
+		this.fechaInicio = fInicio;
+		this.horaInicio = hInicio;
 	}
 	
 
@@ -101,6 +110,27 @@ public class EstadoIntervencion implements Serializable {
 
 	public void setId_EstadoIntervencion(Integer id_EstadoIntervencion) {
 		this.id_EstadoIntervencion = id_EstadoIntervencion;
+	}
+	
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		if (estado.equals("TERMINADA")) {
+			//VER FECHAS ACTUALES
+			this.setFechaFin(null);
+			this.setHoraFin(null);
+		}
+		this.estado = estado;
 	}
 
 }

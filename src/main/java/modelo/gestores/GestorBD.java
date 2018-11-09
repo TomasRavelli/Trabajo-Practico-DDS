@@ -7,10 +7,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+// interfacesGraficas.Query;
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.Empleado;
 import modelo.entidades.Estado;
 import modelo.entidades.GrupoDeResolucion;
+import modelo.entidades.Intervencion;
 import modelo.entidades.Ticket;
 
 public class GestorBD {
@@ -59,6 +61,13 @@ public class GestorBD {
 		return ticket;
 	}
 	
+	public void guardarIntervencion(Intervencion interv) {
+		manager.getTransaction().begin();
+		manager.persist(interv);
+		manager.getTransaction().commit();
+		
+	}
+	
 	public Ticket actualizarTicket (Ticket ticket) {
 		manager.getTransaction().begin();
 		ticket = manager.merge(ticket);
@@ -94,6 +103,25 @@ public class GestorBD {
 		grupoEncontrado = (GrupoDeResolucion) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
 		return grupoEncontrado;
+	}
+	
+	
+	public Intervencion getIntervencionMDA (Integer numeroTicket) {
+		Intervencion intervencionEncontrada;
+		String consulta = "FROM Intervencion WHERE numero_ticket = " + numeroTicket;
+		manager.getTransaction().begin();
+		intervencionEncontrada = (Intervencion) manager.createQuery(consulta).getSingleResult();
+		manager.getTransaction().commit();
+		return intervencionEncontrada;
+	}
+	
+	
+	public void eliminarTicket (String numeroTicket) {
+		Integer numero = Integer.valueOf(numeroTicket);
+		manager.getTransaction().begin();
+		String consulta = "delete Ticket where id = " + numero;
+		manager.createQuery(consulta).executeUpdate();
+		manager.getTransaction().commit();
 	}
 	
 }

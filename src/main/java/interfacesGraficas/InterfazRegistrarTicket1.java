@@ -47,6 +47,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	private JTextField txtNumeroLegajo;
 	private JLabel errorLegajoExistente;
 	private JLabel errorLegajoVacio;
+	private JTextField nombre;
 	
 	
 	public InterfazRegistrarTicket1(Principal frame) {
@@ -140,6 +141,14 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		errorLegajoExistente.setVisible(false);
 		
 		
+		nombre = new JTextField();
+		nombre.setBounds(988, 255, 200, 22);
+		add(nombre);
+		nombre.setColumns(10);
+		nombre.setVisible(false);
+		nombre.setEditable(false);
+		
+		
 		
 		txtFechaApertura = new JTextField();
 		txtFechaApertura.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -184,16 +193,34 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		txtNumeroLegajo.setBounds(611, 253, 365, 24);
 		this.add(txtNumeroLegajo);
 		txtNumeroLegajo.addFocusListener(new FocusListener() {
-
+			String nombreEmpleado;
 	        public void focusLost(FocusEvent arg0) {
-	            validarLegajo();
-
+	        	if(txtNumeroLegajo.getText().isEmpty()) {
+	    			errorLegajoExistente.setVisible(false);
+	    			errorLegajoVacio.setVisible(true);
+	    			nombre.setVisible(false);
+	    		} else {
+	    			errorLegajoVacio.setVisible(false);
+	    		}
+	        	if(!txtNumeroLegajo.getText().isEmpty()) {
+	        		nombreEmpleado = ventana.getGestorEmpleado().validarLegajo(txtNumeroLegajo.getText());
+	        		if (nombreEmpleado == null) {
+	        			errorLegajoExistente.setVisible(true);
+	        			nombre.setVisible(false);
+	        			errorLegajoVacio.setVisible(false);
+	        		}
+	        		else {
+	        			errorLegajoVacio.setVisible(false);
+	        			errorLegajoExistente.setVisible(false);
+	        			nombre.setText(nombreEmpleado);
+	        			nombre.setVisible(true);
+	        		}
+	        	}
 	        }
-
+	        
+	        
 			@Override
 			public void focusGained(FocusEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 				
@@ -217,12 +244,16 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		this.add(btnAceptar);
 		
 		
+		
+		
+		
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea cancelar el registro del ticket? Los cambios no seran guardados.","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
+					ventana.getGestorTicket().eliminarTicket(txtNumeroTicket.getText());
 					ventana.setContentPane(new HomeMesaAyuda(ventana));
 					ventana.pack();
 				}
@@ -267,33 +298,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		Ticket nuevoTicket = gestorT.crearTicket();
 		return nuevoTicket.getNumero().toString();
 	}
-	
-	private void validarLegajo() {
-		if(txtNumeroLegajo.getText().isEmpty()) {
-			errorLegajoExistente.setVisible(false);
-			errorLegajoVacio.setVisible(true);
-		} else {
-			errorLegajoVacio.setVisible(false);
-		}
-		if( !txtNumeroLegajo.getText().isEmpty() && existeEmpleado()) {
-			errorLegajoVacio.setVisible(false);
-			errorLegajoExistente.setVisible(false);
-			}
-		else {
-				errorLegajoExistente.setVisible(true);
-			}
-		
-	} 
-	
-	
-	private boolean existeEmpleado() {
-		for (Empleado e : ventana.getGestorEmpleado().getEmpleados()) {
-			if (e.getNumeroLegajo().toString().equals(txtNumeroLegajo.getText())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
+
 }
 
