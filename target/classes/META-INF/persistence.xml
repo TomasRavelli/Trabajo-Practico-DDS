@@ -8,13 +8,15 @@
 
   <persistence-unit name="Persistencia">
     <properties>
-        <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-        <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://190.114.206.177:5432/tutifruti27/public?serverTimezone=UTC" />
-        <property name="javax.persistence.jdbc.user" value="tf27_user" />
-        <property name="javax.persistence.jdbc.password" value="malenamoix" />
+        <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tpds?useSSL=false" />
+        <property name="javax.persistence.jdbc.user" value="root" />
+        <property name="javax.persistence.jdbc.password" value="Malena40563449" />
         
-        <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
         <property name="hibernate.hbm2ddl.auto" value="validate" />
+        
+        <property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
     </properties>
   </persistence-unit>
 

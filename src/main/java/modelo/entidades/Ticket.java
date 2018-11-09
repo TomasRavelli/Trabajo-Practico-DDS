@@ -3,8 +3,10 @@ package modelo.entidades;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -39,7 +41,7 @@ public class Ticket implements Serializable {
 	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket")
 	private List<DuracionEstado> duracionEstado;
 	
-	@OneToOne (fetch = FetchType.LAZY)
+	@OneToOne (cascade = {CascadeType.ALL}) //(fetch = FetchType.LAZY)
 	@JoinColumn (name = "ID_DURACION_ESTADO")
 	private DuracionEstado duracionEstadoActual;
 	
@@ -86,6 +88,13 @@ public class Ticket implements Serializable {
 	}
 	
 	public Ticket(TicketDTO t) {
+		clasificaciones = new ArrayList<>();
+		duracionEstado = new ArrayList<>();
+		empleado = new Empleado();
+		usuario = new Usuario();
+		clasificacion = new ClasificacionTicket();
+		intervenciones = new ArrayList<>();
+		
 		this.numeroTicket = t.getNumero();
 		this.clasificacion = t.getClasificacion();
 		this.clasificaciones.add(t.getClasificacion());
@@ -150,6 +159,7 @@ public class Ticket implements Serializable {
 	}
 
 	public void setEmpleado(Empleado e) {
+		System.out.println(e.getNumeroLegajo());
 		this.empleado = e;
 	}
 

@@ -13,9 +13,10 @@ public class GestorIntervencion {
 
 	public Intervencion crearIntervencion(LocalDate fechaActual, LocalTime horaActual) {
 		Intervencion interv = new Intervencion(fechaActual, horaActual);
-		interv.setGrupoResolucion(gestorBD.getGrupoResolucion("Mesa de ayuda"));
+		interv.setGrupoResolucion(gestorBD.getGrupoResolucion(1));
 		EstadoIntervencion estadoInterv = new EstadoIntervencion("Trabajando",fechaActual, horaActual);
 		interv.add(estadoInterv);
+		interv.setEstadoIntervencionActual(estadoInterv);
 		return interv;
 	}
 }

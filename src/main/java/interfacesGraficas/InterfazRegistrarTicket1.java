@@ -8,8 +8,10 @@ import javax.transaction.Transactional.TxType;
 import infoDTO.TicketDTO;
 import modelo.aplicacion.Principal;
 import modelo.entidades.ClasificacionTicket;
+import modelo.entidades.Empleado;
 import modelo.entidades.Ticket;
 import modelo.gestores.GestorClasificacion;
+import modelo.gestores.GestorEmpleado;
 import modelo.gestores.GestorTicket;
 
 import javax.swing.JLabel;
@@ -242,6 +244,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 				else {
 					
 					ticketDTO = new TicketDTO(Integer.valueOf(txtNumeroTicket.getText()),Integer.valueOf(txtNumeroLegajo.getText()), (ClasificacionTicket) comboBoxClasificacionTicket.getSelectedItem(), textAreaDescripcion.getText(), fechaApertura, horaApertura, null, null);
+					System.out.println(ticketDTO.getClasificacion());
 					ventana.getGestorTicket().crearTicket(ticketDTO);
 					ventana.setContentPane(new InterfazRegistrarTicket2(ventana,ticketDTO));
 					ventana.pack();
@@ -272,15 +275,25 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		} else {
 			errorLegajoVacio.setVisible(false);
 		}
-		if( !txtNumeroLegajo.getText().isEmpty() && ventana.getGestorEmpleado().getEmpleado(Integer.valueOf(txtNumeroLegajo.getText())).getNumeroLegajo().equals(null) == true) {
+		if( !txtNumeroLegajo.getText().isEmpty() && existeEmpleado()) {
 			errorLegajoVacio.setVisible(false);
-			errorLegajoExistente.setVisible(true);
+			errorLegajoExistente.setVisible(false);
 			}
 		else {
-				errorLegajoExistente.setVisible(false);
+				errorLegajoExistente.setVisible(true);
 			}
 		
 	} 
+	
+	
+	private boolean existeEmpleado() {
+		for (Empleado e : ventana.getGestorEmpleado().getEmpleados()) {
+			if (e.getNumeroLegajo().toString().equals(txtNumeroLegajo.getText())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }
 

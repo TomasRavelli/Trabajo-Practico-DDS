@@ -3,6 +3,7 @@ package modelo.entidades;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -62,6 +63,7 @@ public class Intervencion implements Serializable {
 	public Intervencion() {}
 	
 	public Intervencion(LocalDate fechaAsig, LocalTime horaAsig) {
+		estadoIntervencionMuchos = new ArrayList<>();
 		this.fechaAsignacion = fechaAsig;
 		this.horaAsignacion = horaAsig;
 	}
@@ -120,7 +122,13 @@ public class Intervencion implements Serializable {
 		return estadoIntervencionMuchos;
 	}
 	
-	public void add(EstadoIntervencion ei){
-		estadoIntervencion1 = ei;
+	public void setEstadoIntervencionActual(EstadoIntervencion ei){
+		estadoIntervencion1=ei;
 	}
+	public void add(EstadoIntervencion ei){
+		estadoIntervencionMuchos.add(ei);
+	}
+	
+	
+	
 }

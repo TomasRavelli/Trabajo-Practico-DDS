@@ -15,10 +15,11 @@ public class GestorTicket {
 	private GestorUsuario gestorUsuario;
 	private GestorIntervencion gestorIntervencion;
 	
-	public GestorTicket(GestorBD gBD, GestorEmpleado gestorE, GestorIntervencion gestorI) {
+	public GestorTicket(GestorBD gBD, GestorEmpleado gestorE, GestorIntervencion gestorI, GestorUsuario u) {
 		gestorBD = gBD;
 		gestorEmpleado = gestorE;
 		gestorIntervencion = gestorI;
+		gestorUsuario = u;
 	}
 	
 	public Ticket crearTicket() {
@@ -30,15 +31,15 @@ public class GestorTicket {
 	public Ticket crearTicket(TicketDTO ticketDTO) {
 		Ticket ticket = new Ticket(ticketDTO);
 		ticket.setEmpleado(gestorEmpleado.getEmpleado(ticketDTO.getLegajo()));
-		//ticket.add(new DuracionClasificacion(ticketDTO.getFechaApertura()));
+		//ticket.add(new DuracionClasificacion(ticketDTO.getFechaApertura())); Crear Clase.
 		ticket.setUsuario(gestorUsuario.getUsuarioActual());
 		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), gestorUsuario.getUsuarioActual());
-		durEstado.setEstado(gestorBD.getEstado(0));
+		durEstado.setEstado(gestorBD.getEstado(1));
 		durEstado.setUsuario(gestorUsuario.getUsuarioActual());
 		ticket.setDuracionEstadoActual(durEstado);
 		ticket.add(durEstado);
 		ticket.add(gestorIntervencion.crearIntervencion(LocalDate.now(),LocalTime.now()));
-		return gestorBD.guardarTicket(ticket);
+		return gestorBD.actualizarTicket(ticket);
 	}
 
 }

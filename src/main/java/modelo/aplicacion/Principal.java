@@ -24,15 +24,16 @@ public class Principal extends JFrame{
 	private static GestorIntervencion gestorIntervencion;
 	private static GestorGrupo gestorGrupo;
 	
+	
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				gestorBD = new GestorBD();
-				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion);
-				gestorEmpleado = new GestorEmpleado(gestorBD);
-				gestorClasificacion = new GestorClasificacion(gestorBD);
 				gestorUsuario = new GestorUsuario(new Usuario(123, "Tomas",11111));
+				gestorBD = new GestorBD();
+				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD);
+				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario);
+				gestorClasificacion = new GestorClasificacion(gestorBD);
 				new Principal();
 			}
 		});

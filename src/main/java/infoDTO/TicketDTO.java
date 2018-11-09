@@ -54,6 +54,7 @@ public class TicketDTO {
 		this.horaCierre = horaCierre;
 	}
 	public Integer getLegajo() {
+		System.out.println("es TicketDTO - getLegajo()");
 		return legajo;
 	}
 	public void setLegajo(Integer legajo) {
@@ -78,6 +79,8 @@ public class TicketDTO {
 	public void setNumero(Integer numero) {
 		this.numero = numero;
 	}
+	
+	
 	
 	
 	

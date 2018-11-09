@@ -22,8 +22,17 @@ public class GestorBD {
 		emf = Persistence.createEntityManagerFactory("Persistencia");
 		manager = emf.createEntityManager();
 	}
+	
+	
+	public List<Empleado> getEmpleados (){
+		System.out.println("Male");
+		List<Empleado> empleados = manager.createQuery("from Empleado").getResultList();
+		System.out.println("Male - segunda salida");
+		return empleados;
+	}
+	
 
-	public Empleado getEmpleado (Integer legajo) {
+	/*public Empleado getEmpleado (Integer legajo) {
 		Empleado emp = new Empleado();
 		String consulta = "select e from Empleado e where e.numeroLegajo = " + legajo;
 		manager.getTransaction().begin();
@@ -40,11 +49,21 @@ public class GestorBD {
 		System.out.print(emp.getNumeroLegajo());
 		
 		return emp;
-	}
+	}*/
+	
 	
 	public Ticket guardarTicket (Ticket ticket) {
 		manager.getTransaction().begin();
 		manager.persist(ticket);
+		manager.getTransaction().commit();
+		return ticket;
+	}
+	
+	public Ticket actualizarTicket (Ticket ticket) {
+		manager.getTransaction().begin();
+		ticket = manager.merge(ticket);
+		manager.persist(ticket);
+	
 		manager.getTransaction().commit();
 		return ticket;
 	}
@@ -56,18 +75,23 @@ public class GestorBD {
 		manager.getTransaction().commit();
 		return clasificaciones;
 	}
+	
+	
 	public Estado getEstado(Integer id_estado) {
 		Estado estadoEncontrado;
+		String consulta = "FROM Estado where id_estado = " + id_estado;
 		manager.getTransaction().begin();
-		estadoEncontrado = (Estado) manager.createQuery("FROM Estado where id_estado = :id_estado");
+		estadoEncontrado = (Estado) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
+		System.out.println(estadoEncontrado.getNombre());
 		return estadoEncontrado;
 	}
 	
-	public GrupoDeResolucion getGrupoResolucion (String nombreGrupo) {
+	public GrupoDeResolucion getGrupoResolucion (Integer id) {
 		GrupoDeResolucion grupoEncontrado;
+		String consulta = "FROM GrupoDeResolucion where id_grupo = " + id;
 		manager.getTransaction().begin();
-		grupoEncontrado = (GrupoDeResolucion) manager.createQuery("FROM Grupo_De_Resolucion where nombre = :nombreGrupo");
+		grupoEncontrado = (GrupoDeResolucion) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
 		return grupoEncontrado;
 	}
