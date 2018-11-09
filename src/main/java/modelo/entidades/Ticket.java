@@ -38,15 +38,16 @@ public class Ticket implements Serializable {
 	
 	//NUMERO_LEGAJO Y ID_CLASIFICACION SON FK
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket", cascade = {CascadeType.ALL})
+
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "ticket")
 	private List<DuracionEstado> duracionEstado;
 	
 	@OneToOne (cascade = {CascadeType.ALL}) //(fetch = FetchType.LAZY)
 	@JoinColumn (name = "ID_DURACION_ESTADO")
 	private DuracionEstado duracionEstadoActual;
 	
-	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket", cascade = {CascadeType.ALL})
+
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "ticket")
 	private List<Intervencion> intervenciones;
 	
 	@ManyToOne (cascade = {CascadeType.ALL})

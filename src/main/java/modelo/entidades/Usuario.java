@@ -3,6 +3,7 @@ package modelo.entidades;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +20,6 @@ import javax.persistence.Table;
 public class Usuario implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	
 	//TAMBIEN ES LA FK
 	
 	@Id
@@ -31,10 +31,10 @@ public class Usuario implements Serializable {
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Empleado empleado;
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "usuario")
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "usuario")
 	private List<DuracionEstado> duracionEstado;
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "usuario")
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "usuario")
 	private List<EstadoIntervencion> estadoIntervencion;
 	
 	

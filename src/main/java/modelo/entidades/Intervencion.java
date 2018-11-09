@@ -41,11 +41,12 @@ public class Intervencion implements Serializable {
 	@JoinColumn (name = "ID_GRUPO")
 	private GrupoDeResolucion grupo;
 	
-	@OneToOne
+	@OneToOne (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "ID_ESTADO_INTERVENCION")
 	private EstadoIntervencion estadoIntervencion1;
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "intervencionMuchos", cascade = {CascadeType.ALL})
+
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "intervencionMuchos")
 	private List<EstadoIntervencion> estadoIntervencionMuchos;
 	
 	
@@ -65,6 +66,7 @@ public class Intervencion implements Serializable {
 	
 	public Intervencion(LocalDate fechaAsig, LocalTime horaAsig) {
 		estadoIntervencionMuchos = new ArrayList<>();
+		
 		this.fechaAsignacion = fechaAsig;
 		this.horaAsignacion = horaAsig;
 	}
@@ -126,6 +128,11 @@ public class Intervencion implements Serializable {
 	public void setEstadoIntervencionActual(EstadoIntervencion ei){
 		estadoIntervencion1=ei;
 	}
+	
+	public EstadoIntervencion getEstadoIntervencionActual(){
+		return estadoIntervencion1;
+	}
+	
 	public void add(EstadoIntervencion ei){
 		estadoIntervencionMuchos.add(ei);
 	}

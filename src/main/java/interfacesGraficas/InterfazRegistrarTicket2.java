@@ -138,6 +138,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 					errorObsVacio.setVisible(true);
 				}
 				else {
+					errorObsVacio.setVisible(false);
 					ventana.setContentPane(new InterfazDerivarTicket1(ventana,txtNumeroTicket.getText(), txtNumeroLegajo.getText(), ticketDTO.getClasificacion().toString()));
 					ventana.pack();
 				}
@@ -147,8 +148,17 @@ public class InterfazRegistrarTicket2 extends JPanel {
 
 		btnCerrarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ventana.setContentPane(new HomeMesaAyuda(ventana));
-				ventana.pack();
+				if (textAreaObservaciones.getText().isEmpty()) {
+					errorObsVacio.setVisible(true);
+				}
+				else {
+					errorObsVacio.setVisible(false);
+					ventana.getGestorTicket().cerrarTicket(Integer.valueOf(txtNumeroTicket.getText()),textAreaObservaciones.getText());
+					
+					ventana.setContentPane(new HomeMesaAyuda(ventana));
+					ventana.pack();
+				}
+				
 			}
 		});	
 	}

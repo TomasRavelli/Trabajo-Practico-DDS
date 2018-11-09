@@ -49,5 +49,17 @@ public class GestorTicket {
 		ticket.add(gestorIntervencion.crearIntervencion(LocalDate.now(),LocalTime.now()));
 		return gestorBD.actualizarTicket(ticket);
 	}
+	
+	
+	public void cerrarTicket (Integer numeroTicket, String observaciones) {
+		
+		gestorIntervencion.actualizarEstadoIntervencion(numeroTicket, observaciones);
+		
+	}
+	
+	
+	public void eliminarTicket (String numeroTicket) {
+		gestorBD.eliminarTicket(numeroTicket);
+	}
 
 }

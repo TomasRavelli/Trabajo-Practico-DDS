@@ -28,7 +28,7 @@ public class Principal extends JFrame{
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				gestorUsuario = new GestorUsuario(new Usuario(123, "Tomas",11111));
+				gestorUsuario = new GestorUsuario();
 				gestorBD = new GestorBD();
 				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD);

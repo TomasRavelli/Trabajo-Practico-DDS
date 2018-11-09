@@ -2,6 +2,7 @@ package modelo.entidades;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +29,7 @@ public class Estado {
 	
 	//HACER EL MAPPEDBY
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "estado")
+	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "estado")
 	private List<DuracionEstado> duracionesEstado;
 	
 	public Estado() {}
