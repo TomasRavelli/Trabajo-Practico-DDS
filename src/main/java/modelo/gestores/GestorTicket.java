@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import infoDTO.TicketDTO;
+import modelo.entidades.ClasificacionTicket;
+import modelo.entidades.DuracionClasificacion;
 import modelo.entidades.DuracionEstado;
 import modelo.entidades.Ticket;
 
@@ -14,12 +16,15 @@ public class GestorTicket {
 	private GestorEmpleado gestorEmpleado;
 	private GestorUsuario gestorUsuario;
 	private GestorIntervencion gestorIntervencion;
+	private GestorClasificacion gestorClasificacion;
 	
-	public GestorTicket(GestorBD gBD, GestorEmpleado gestorE, GestorIntervencion gestorI, GestorUsuario u) {
+	
+	public GestorTicket(GestorBD gBD, GestorEmpleado gestorE, GestorIntervencion gestorI, GestorUsuario u, GestorClasificacion gC) {
 		gestorBD = gBD;
 		gestorEmpleado = gestorE;
 		gestorIntervencion = gestorI;
 		gestorUsuario = u;
+		gestorClasificacion = gC;
 	}
 	
 	public Ticket crearTicket() {
@@ -31,7 +36,10 @@ public class GestorTicket {
 	public Ticket crearTicket(TicketDTO ticketDTO) {
 		Ticket ticket = new Ticket(ticketDTO);
 		ticket.setEmpleado(gestorEmpleado.getEmpleado(ticketDTO.getLegajo()));
-		//ticket.add(new DuracionClasificacion(ticketDTO.getFechaApertura())); Crear Clase.
+		ClasificacionTicket clasificacion = gestorClasificacion.getClasificacion(ticketDTO.getClasificacion().toString());
+		DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,ticketDTO.getFechaApertura());//Adentro ya se inserta la clasificacion
+		ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
+		ticket.add(nuevaDuracionClasificacion);
 		ticket.setUsuario(gestorUsuario.getUsuarioActual());
 		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), gestorUsuario.getUsuarioActual());
 		durEstado.setEstado(gestorBD.getEstado(1));

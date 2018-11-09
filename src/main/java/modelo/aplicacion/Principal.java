@@ -32,8 +32,8 @@ public class Principal extends JFrame{
 				gestorBD = new GestorBD();
 				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD);
-				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario);
 				gestorClasificacion = new GestorClasificacion(gestorBD);
+				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario, gestorClasificacion);
 				new Principal();
 			}
 		});

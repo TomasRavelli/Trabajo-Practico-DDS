@@ -27,15 +27,15 @@ public class DuracionEstado implements Serializable {
 	
 	//NUMERO_TICKET , NUMERO_LEGAJO, ID_ESTADO SON FK
 	
-	@ManyToOne
+	@ManyToOne  (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Usuario usuario;
 	
-	@ManyToOne
+	@ManyToOne  (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "ID_ESTADO")
 	private Estado estado;
 	
-	@ManyToOne (cascade = {CascadeType.ALL})//fijarse su va
+	@ManyToOne (cascade = {CascadeType.ALL})//fijarse si va
 	@JoinColumn (name = "NUMERO_TICKET")
 	private Ticket ticket;
 	

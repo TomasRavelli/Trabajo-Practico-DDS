@@ -50,8 +50,17 @@ public class EstadoIntervencion implements Serializable {
 	private LocalTime horaInicio;
 	@Column (name = "HORA_FIN")
 	private LocalTime horaFin;
+	@Column (name = "OBSERVACIONES")
+	private String observaciones;
 	
-	
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
 
 	public EstadoIntervencion() {}
 	

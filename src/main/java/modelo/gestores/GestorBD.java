@@ -20,14 +20,15 @@ public class GestorBD {
 	
 	public GestorBD() {
 		emf = Persistence.createEntityManagerFactory("Persistencia");
-		manager = emf.createEntityManager();
 	}
 	
 	
 	public List<Empleado> getEmpleados (){
-		System.out.println("Male");
+		manager = emf.createEntityManager();
+		manager.getTransaction().begin();
 		List<Empleado> empleados = manager.createQuery("from Empleado").getResultList();
-		System.out.println("Male - segunda salida");
+		manager.getTransaction().commit();
+		manager.close();
 		return empleados;
 	}
 	
@@ -53,46 +54,55 @@ public class GestorBD {
 	
 	
 	public Ticket guardarTicket (Ticket ticket) {
+		manager = emf.createEntityManager();
 		manager.getTransaction().begin();
 		manager.persist(ticket);
 		manager.getTransaction().commit();
+		manager.close();
 		return ticket;
 	}
 	
 	public Ticket actualizarTicket (Ticket ticket) {
+		manager = emf.createEntityManager();
 		manager.getTransaction().begin();
 		ticket = manager.merge(ticket);
 		manager.persist(ticket);
-	
 		manager.getTransaction().commit();
+		manager.close();
 		return ticket;
 	}
 	
 	public List<ClasificacionTicket> getClasificaciones() {
 		List<ClasificacionTicket> clasificaciones;
+		manager = emf.createEntityManager();
 		manager.getTransaction().begin();
 		clasificaciones = (List<ClasificacionTicket>) manager.createQuery("FROM ClasificacionTicket").getResultList();
 		manager.getTransaction().commit();
+		manager.close();
 		return clasificaciones;
 	}
 	
 	
 	public Estado getEstado(Integer id_estado) {
 		Estado estadoEncontrado;
+		manager = emf.createEntityManager();
 		String consulta = "FROM Estado where id_estado = " + id_estado;
 		manager.getTransaction().begin();
 		estadoEncontrado = (Estado) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
 		System.out.println(estadoEncontrado.getNombre());
+		manager.close();
 		return estadoEncontrado;
 	}
 	
 	public GrupoDeResolucion getGrupoResolucion (Integer id) {
 		GrupoDeResolucion grupoEncontrado;
+		manager = emf.createEntityManager();
 		String consulta = "FROM GrupoDeResolucion where id_grupo = " + id;
 		manager.getTransaction().begin();
 		grupoEncontrado = (GrupoDeResolucion) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
+		manager.close();
 		return grupoEncontrado;
 	}
 	

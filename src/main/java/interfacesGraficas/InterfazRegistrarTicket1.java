@@ -47,7 +47,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	private JTextField txtNumeroLegajo;
 	private JLabel errorLegajoExistente;
 	private JLabel errorLegajoVacio;
-	
+	private JLabel nombreEmpleado;
 	
 	public InterfazRegistrarTicket1(Principal frame) {
 
@@ -139,7 +139,11 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		this.add(errorLegajoExistente);
 		errorLegajoExistente.setVisible(false);
 		
-		
+		nombreEmpleado = new JLabel();
+		nombreEmpleado.setForeground(Color.GREEN);
+		nombreEmpleado.setFont(new Font("Segoe UI Symbol", Font.BOLD, 16));
+		nombreEmpleado.setBounds(988, 253, 339, 24);
+		this.add(nombreEmpleado);
 		
 		txtFechaApertura = new JTextField();
 		txtFechaApertura.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -187,7 +191,6 @@ public class InterfazRegistrarTicket1 extends JPanel{
 
 	        public void focusLost(FocusEvent arg0) {
 	            validarLegajo();
-
 	        }
 
 			@Override
@@ -223,6 +226,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea cancelar el registro del ticket? Los cambios no seran guardados.","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
+					//ventana.getGestorTicket().borrarTicket(Integer.valueOf(txtNumeroLegajo.getText()));					
 					ventana.setContentPane(new HomeMesaAyuda(ventana));
 					ventana.pack();
 				}
@@ -272,15 +276,20 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		if(txtNumeroLegajo.getText().isEmpty()) {
 			errorLegajoExistente.setVisible(false);
 			errorLegajoVacio.setVisible(true);
+			nombreEmpleado.setVisible(false);
 		} else {
+			nombreEmpleado.setVisible(false);
 			errorLegajoVacio.setVisible(false);
 		}
-		if( !txtNumeroLegajo.getText().isEmpty() && existeEmpleado()) {
+		if( !txtNumeroLegajo.getText().isEmpty() && !existeEmpleado()) {
+			nombreEmpleado.setVisible(false);
 			errorLegajoVacio.setVisible(false);
-			errorLegajoExistente.setVisible(false);
+			errorLegajoExistente.setVisible(true);
 			}
 		else {
-				errorLegajoExistente.setVisible(true);
+				errorLegajoExistente.setVisible(false);
+				nombreEmpleado.setText((ventana.getGestorEmpleado().getEmpleado(Integer.valueOf(txtNumeroLegajo.getText())).getNombre()));
+				nombreEmpleado.setVisible(true);
 			}
 		
 	} 

@@ -28,16 +28,17 @@ public class ClasificacionTicket implements Serializable {
 	private String nombre;
 	
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "clasificacion")
-	private List<Ticket> tickets;
+	/*@OneToMany (fetch = FetchType.LAZY, mappedBy = "clasificacion")
+	private List<Ticket> tickets;*/
 	
 	@ManyToMany (mappedBy = "clasificaciones")
 	private List<GrupoDeResolucion> grupos;
 	
-	@ManyToMany (mappedBy = "clasificaciones")
-	private List<Ticket> ticketsClasif;
+	/*@ManyToMany (mappedBy = "clasificaciones")
+	private List<Ticket> ticketsClasif;*/
 	
-
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "clasificacion")
+	private List<DuracionClasificacion> clasificaciones;
 	
 	public ClasificacionTicket() {}
 	

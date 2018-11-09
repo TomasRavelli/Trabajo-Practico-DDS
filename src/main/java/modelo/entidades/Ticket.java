@@ -38,32 +38,33 @@ public class Ticket implements Serializable {
 	
 	//NUMERO_LEGAJO Y ID_CLASIFICACION SON FK
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket")
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket", cascade = {CascadeType.ALL})
 	private List<DuracionEstado> duracionEstado;
 	
 	@OneToOne (cascade = {CascadeType.ALL}) //(fetch = FetchType.LAZY)
 	@JoinColumn (name = "ID_DURACION_ESTADO")
 	private DuracionEstado duracionEstadoActual;
 	
-	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket")
+	
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket", cascade = {CascadeType.ALL})
 	private List<Intervencion> intervenciones;
 	
-	@ManyToOne
+	@ManyToOne (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Empleado empleado;
+		
+	@OneToOne (fetch = FetchType.LAZY, mappedBy = "t",cascade = {CascadeType.ALL})
+	private DuracionClasificacion duracionClasificacionActual;
 	
-	
-	@ManyToOne
-	@JoinColumn (name = "ID_CLASIFICACION")
-	private ClasificacionTicket clasificacion;
-	
-	@ManyToOne
+	@ManyToOne  (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_LEGAJO_Usuario")
 	private Usuario usuario;
 	
-	@ManyToMany
+	/*@ManyToMany
 	@JoinTable (name = "HISTORIAL_CT", joinColumns = {@JoinColumn (name = "NUMERO_TICKET")}, inverseJoinColumns = {@JoinColumn (name = "ID_CLASIFICACION")})
-	private List<ClasificacionTicket> clasificaciones;
+	*/
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket", cascade = {CascadeType.ALL} )
+	private List<DuracionClasificacion> clasificaciones;
 	
 
 	@Column (name = "FECHA_APERTURA")
@@ -90,14 +91,8 @@ public class Ticket implements Serializable {
 	public Ticket(TicketDTO t) {
 		clasificaciones = new ArrayList<>();
 		duracionEstado = new ArrayList<>();
-		empleado = new Empleado();
-		usuario = new Usuario();
-		clasificacion = new ClasificacionTicket();
 		intervenciones = new ArrayList<>();
-		
 		this.numeroTicket = t.getNumero();
-		this.clasificacion = t.getClasificacion();
-		this.clasificaciones.add(t.getClasificacion());
 		this.fechaApertura = t.getFechaApertura();
 		this.fechaFin = null;
 		this.horaApertura = t.getHoraApertura();
@@ -184,6 +179,22 @@ public class Ticket implements Serializable {
 	
 	public void add(Intervencion interv) {
 		intervenciones.add(interv);
+	}
+	
+	public DuracionClasificacion getDuracionClasificacionActual(){
+		return duracionClasificacionActual;
+	}
+	
+	public void setDuracionClasificacionActual(DuracionClasificacion dc) {
+		duracionClasificacionActual = dc;
+	}
+	
+	public List<DuracionClasificacion> getClasificaciones(){
+		return clasificaciones;
+	}
+	
+	public void add(DuracionClasificacion durClasif) {
+		clasificaciones.add(durClasif);
 	}
 	
 
