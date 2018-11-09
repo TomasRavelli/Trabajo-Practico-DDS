@@ -45,8 +45,21 @@ public class GestorTicket {
 	
 	public void cerrarTicket (Integer numeroTicket, String observaciones) {
 		
+		Ticket ticket = new Ticket();
+		LocalDate fecha= LocalDate.now();
+		//crear fecha para mandar a todos la misma
 		gestorIntervencion.actualizarEstadoIntervencion(numeroTicket, observaciones);
-		
+		//ticket = gestorBD.getTicket(numeroTicket);
+		DuracionEstado durEstado= new DuracionEstado();
+		durEstado= ticket.getDuracionEstadoActual();
+		durEstado.setFechaFin(fecha);
+		DuracionEstado durEstadoNueva= new DuracionEstado();
+		durEstadoNueva.setEstado(gestorBD.getEstado(3));
+		durEstadoNueva.setUsuario(gestorUsuario.getUsuarioActual());
+		ticket.setDuracionEstadoActual(durEstado);
+		ticket.add(durEstado);
+		ticket.setFechaFin(fecha);
+		//ticket.setHoraFin(fecha);
 	}
 	
 	

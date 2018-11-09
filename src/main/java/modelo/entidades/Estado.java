@@ -27,8 +27,6 @@ public class Estado {
 	@Column (name = "DESCRIPCION")
 	private String descripcion;
 	
-	//HACER EL MAPPEDBY
-	
 	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "estado")
 	private List<DuracionEstado> duracionesEstado;
 	

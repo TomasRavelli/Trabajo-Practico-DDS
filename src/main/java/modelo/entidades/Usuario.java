@@ -27,7 +27,7 @@ public class Usuario implements Serializable {
 	@Column (name = "NUMERO_LEGAJO")
 	private Integer numeroLegajo;
 	
-	@OneToOne
+	@OneToOne (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Empleado empleado;
 	

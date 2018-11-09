@@ -41,7 +41,7 @@ public class Ticket implements Serializable {
 	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "ticket")
 	private List<DuracionEstado> duracionEstado;
 	
-	@OneToOne (cascade = {CascadeType.ALL}) //(fetch = FetchType.LAZY)
+	@OneToOne (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "ID_DURACION_ESTADO")
 	private DuracionEstado duracionEstadoActual;
 	
