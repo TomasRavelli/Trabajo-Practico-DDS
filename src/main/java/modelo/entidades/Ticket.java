@@ -38,6 +38,7 @@ public class Ticket implements Serializable {
 	
 	//NUMERO_LEGAJO Y ID_CLASIFICACION SON FK
 	
+
 	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "ticket")
 	private List<DuracionEstado> duracionEstado;
 	
@@ -45,25 +46,24 @@ public class Ticket implements Serializable {
 	@JoinColumn (name = "ID_DURACION_ESTADO")
 	private DuracionEstado duracionEstadoActual;
 	
+
 	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "ticket")
 	private List<Intervencion> intervenciones;
 	
-	@ManyToOne
+	@ManyToOne (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Empleado empleado;
+		
+	@OneToOne (cascade = {CascadeType.ALL})
+	@JoinColumn (name= "ID_DURACION_CLASIFICACION")
+	private DuracionClasificacion duracionClasificacionActual;
 	
-	
-	@ManyToOne
-	@JoinColumn (name = "ID_CLASIFICACION")
-	private ClasificacionTicket clasificacion;
-	
-	@ManyToOne
+	@ManyToOne  (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_LEGAJO_Usuario")
 	private Usuario usuario;
 	
-	@ManyToMany
-	@JoinTable (name = "HISTORIAL_CT", joinColumns = {@JoinColumn (name = "NUMERO_TICKET")}, inverseJoinColumns = {@JoinColumn (name = "ID_CLASIFICACION")})
-	private List<ClasificacionTicket> clasificaciones;
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "ticket", cascade = {CascadeType.ALL} )
+	private List<DuracionClasificacion> historialClasificacion;
 	
 
 	@Column (name = "FECHA_APERTURA")
@@ -74,7 +74,8 @@ public class Ticket implements Serializable {
 	private LocalTime horaApertura;
 	@Column (name = "HORA_FIN")
 	private LocalTime horaFin;
-	
+	@Column (name = "DESCRIPCION_PROBLEMA")
+	private String descripcion;
 	
 	
 	public Ticket() {
@@ -88,16 +89,10 @@ public class Ticket implements Serializable {
 	}
 	
 	public Ticket(TicketDTO t) {
-		clasificaciones = new ArrayList<>();
+		historialClasificacion = new ArrayList<>();
 		duracionEstado = new ArrayList<>();
-		empleado = new Empleado();
-		usuario = new Usuario();
-		clasificacion = new ClasificacionTicket();
 		intervenciones = new ArrayList<>();
-		
 		this.numeroTicket = t.getNumero();
-		this.clasificacion = t.getClasificacion();
-		this.clasificaciones.add(t.getClasificacion());
 		this.fechaApertura = t.getFechaApertura();
 		this.fechaFin = null;
 		this.horaApertura = t.getHoraApertura();
@@ -135,9 +130,7 @@ public class Ticket implements Serializable {
 	public void setHoraApertura(LocalTime horaApertura) {
 		this.horaApertura = horaApertura;
 	}
-	
-	
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -186,5 +179,28 @@ public class Ticket implements Serializable {
 		intervenciones.add(interv);
 	}
 	
+	public DuracionClasificacion getDuracionClasificacionActual(){
+		return duracionClasificacionActual;
+	}
+	
+	public void setDuracionClasificacionActual(DuracionClasificacion dc) {
+		duracionClasificacionActual = dc;
+	}
+	
+	public List<DuracionClasificacion> getClasificaciones(){
+		return historialClasificacion;
+	}
+	
+	public void add(DuracionClasificacion durClasif) {
+		historialClasificacion.add(durClasif);
+	}
 
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	
 }

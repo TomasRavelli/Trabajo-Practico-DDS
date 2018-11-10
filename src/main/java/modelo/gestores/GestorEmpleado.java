@@ -1,10 +1,8 @@
 package modelo.gestores;
 
 import java.util.List;
-
-import interfacesGraficas.InterfazRegistrarTicket1;
-import interfacesGraficas.InterfazRegistrarTicket2;
 import modelo.entidades.Empleado;
+
 
 public class GestorEmpleado {
 	
@@ -25,6 +23,7 @@ public class GestorEmpleado {
 		}
 		return empleado;
 	}
+
 	
 	public List<Empleado> getEmpleados (){
 		List<Empleado> empleados = gestorBD.getEmpleados();

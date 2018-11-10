@@ -45,6 +45,7 @@ public class Intervencion implements Serializable {
 	@JoinColumn (name = "ID_ESTADO_INTERVENCION")
 	private EstadoIntervencion estadoIntervencion1;
 	
+
 	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "intervencionMuchos")
 	private List<EstadoIntervencion> estadoIntervencionMuchos;
 	
@@ -63,11 +64,11 @@ public class Intervencion implements Serializable {
 	
 	public Intervencion() {}
 	
-	public Intervencion(LocalDate fechaAsig, LocalTime horaAsig) {
+	public Intervencion(LocalDate fechaAsig, LocalTime horaAsig, Ticket t) {
 		estadoIntervencionMuchos = new ArrayList<>();
-		
 		this.fechaAsignacion = fechaAsig;
 		this.horaAsignacion = horaAsig;
+		this.ticket = t;
 	}
 
 	
@@ -135,7 +136,4 @@ public class Intervencion implements Serializable {
 	public void add(EstadoIntervencion ei){
 		estadoIntervencionMuchos.add(ei);
 	}
-	
-	
-	
 }

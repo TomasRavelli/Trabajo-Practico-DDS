@@ -19,7 +19,6 @@ public class DuracionEstado implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column (name = "ID_DURACION_ESTADO")
@@ -27,33 +26,32 @@ public class DuracionEstado implements Serializable {
 	
 	//NUMERO_TICKET , NUMERO_LEGAJO, ID_ESTADO SON FK
 	
-	@ManyToOne
+	@ManyToOne  (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Usuario usuario;
 	
-	@ManyToOne
+	@ManyToOne  (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "ID_ESTADO")
 	private Estado estado;
 	
-	@ManyToOne (cascade = {CascadeType.ALL})//fijarse su va
+	@ManyToOne (cascade = {CascadeType.ALL})
 	@JoinColumn (name = "NUMERO_TICKET")
 	private Ticket ticket;
-	
 	
 	
 	@Column (name = "FECHA_INICIO")
 	private LocalDate fechaInicio;
 	@Column (name = "FECHA_FIN")
 	private LocalDate fechaFin;
-	@Column (name = "OBSERVACIONES")
-	private String observaciones;
+	
 	
 	
 	public DuracionEstado() {}
 	
-	public DuracionEstado(LocalDate fInicio, Usuario u) {
+	public DuracionEstado(LocalDate fInicio, Usuario u, Ticket t) {
 		this.fechaInicio = fInicio;
 		this.usuario = u;
+		this.ticket=t;
 	}
 
 
@@ -72,14 +70,6 @@ public class DuracionEstado implements Serializable {
 
 	public void setFechaFin(LocalDate fechaFin) {
 		this.fechaFin = fechaFin;
-	}
-
-	public String getObservaciones() {
-		return observaciones;
-	}
-
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
 	}
 	
 	public Estado getEstado() {

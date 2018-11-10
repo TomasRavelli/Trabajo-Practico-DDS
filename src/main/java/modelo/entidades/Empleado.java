@@ -41,7 +41,6 @@ public class Empleado implements Serializable {
 	private List<Ticket> tickets;
 	
 	
-	
 	@Column (name = "NOMBRE")
 	private String nombre;
 	@Column (name = "TELEFONO_INTERNO")
@@ -100,5 +99,4 @@ public class Empleado implements Serializable {
 	public void setNumeroLegajo(Integer numeroLegajo) {
 		this.numeroLegajo = numeroLegajo;
 	}
-
 }

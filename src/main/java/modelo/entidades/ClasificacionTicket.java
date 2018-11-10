@@ -2,8 +2,6 @@ package modelo.entidades;
 
 import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +17,6 @@ import javax.persistence.Table;
 public class ClasificacionTicket implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
 	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -29,19 +26,15 @@ public class ClasificacionTicket implements Serializable {
 	@Column (name ="NOMBRE")
 	private String nombre;
 	
-	
-	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "clasificacion")
-	private List<Ticket> tickets;
-	
 	@ManyToMany (mappedBy = "clasificaciones")
 	private List<GrupoDeResolucion> grupos;
 	
-	@ManyToMany (mappedBy = "clasificaciones")
-	private List<Ticket> ticketsClasif;
+	@OneToMany (fetch = FetchType.LAZY, mappedBy = "clasificacion")
+	private List<DuracionClasificacion> clasificaciones;
 	
-
 	
 	public ClasificacionTicket() {}
+	
 	
 	public ClasificacionTicket(String n) {
 		this.nombre = n;
@@ -68,5 +61,4 @@ public class ClasificacionTicket implements Serializable {
 	public String toString() {
 		return nombre;
 	}
-
 }

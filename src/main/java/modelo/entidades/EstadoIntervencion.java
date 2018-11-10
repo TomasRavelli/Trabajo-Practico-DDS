@@ -1,19 +1,16 @@
 package modelo.entidades;
 
 import java.io.Serializable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,14 +26,13 @@ public class EstadoIntervencion implements Serializable {
 	private Integer id_EstadoIntervencion;
 	
 	//ID_INTERVENCION ES LA FK
+	//INSERTAR LEGAJO SIEMPRE?
 	
-	@OneToOne (fetch = FetchType.LAZY, mappedBy = "estadoIntervencion1")
-	private Intervencion intervencion1;
 	
 	@ManyToOne 
 	@JoinColumn (name = "ID_INTERVENCION")
 	private Intervencion intervencionMuchos;
-	
+
 	@ManyToOne
 	@JoinColumn (name = "NUMERO_LEGAJO")
 	private Usuario usuario;
@@ -55,14 +51,22 @@ public class EstadoIntervencion implements Serializable {
 	@Column (name = "OBSERVACIONES")
 	private String observaciones;
 	
-	
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
 
 	public EstadoIntervencion() {}
 	
-	public EstadoIntervencion(String estado, LocalDate fInicio, LocalTime hInicio) {
+	public EstadoIntervencion(String estado, LocalDate fInicio, LocalTime hInicio, Intervencion i) {
 		this.estado = estado;
 		this.fechaInicio = fInicio;
 		this.horaInicio = hInicio;
+		this.intervencionMuchos=i;
 	}
 	
 	public EstadoIntervencion(LocalDate fInicio, LocalTime hInicio) {
@@ -112,25 +116,19 @@ public class EstadoIntervencion implements Serializable {
 		this.id_EstadoIntervencion = id_EstadoIntervencion;
 	}
 	
-	public String getObservaciones() {
-		return observaciones;
-	}
-
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
-	}
-
 	public String getEstado() {
 		return estado;
 	}
 
 	public void setEstado(String estado) {
-		if (estado.equals("TERMINADA")) {
-			//VER FECHAS ACTUALES
-			this.setFechaFin(null);
-			this.setHoraFin(null);
-		}
 		this.estado = estado;
 	}
+	
+	public Intervencion getIntervencion() {
+		return intervencionMuchos;
+	}
 
+	public void setIntervencion(Intervencion intervencionMuchos) {
+		this.intervencionMuchos = intervencionMuchos;
+	}
 }

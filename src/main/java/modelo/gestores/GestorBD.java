@@ -1,13 +1,9 @@
 package modelo.gestores;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
-// interfacesGraficas.Query;
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.Empleado;
 import modelo.entidades.Estado;
@@ -27,33 +23,11 @@ public class GestorBD {
 	
 	
 	public List<Empleado> getEmpleados (){
-		System.out.println("Male");
 		List<Empleado> empleados = manager.createQuery("from Empleado").getResultList();
-		System.out.println("Male - segunda salida");
 		return empleados;
 	}
 	
 
-	/*public Empleado getEmpleado (Integer legajo) {
-		Empleado emp = new Empleado();
-		String consulta = "select e from Empleado e where e.numeroLegajo = " + legajo;
-		manager.getTransaction().begin();
-		try {
-			
-			emp = (Empleado) manager.createQuery(consulta).getSingleResult();
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			emp.setNumeroLegajo(null);
-			//e.printStackTrace();
-		}
-		manager.getTransaction().commit();
-		System.out.print(emp.getNumeroLegajo());
-		
-		return emp;
-	}*/
-	
-	
 	public Ticket guardarTicket (Ticket ticket) {
 		manager.getTransaction().begin();
 		manager.persist(ticket);
@@ -61,21 +35,22 @@ public class GestorBD {
 		return ticket;
 	}
 	
+	
 	public void guardarIntervencion(Intervencion interv) {
 		manager.getTransaction().begin();
 		manager.persist(interv);
 		manager.getTransaction().commit();
-		
 	}
+	
 	
 	public Ticket actualizarTicket (Ticket ticket) {
 		manager.getTransaction().begin();
 		ticket = manager.merge(ticket);
 		manager.persist(ticket);
-	
 		manager.getTransaction().commit();
 		return ticket;
 	}
+	
 	
 	public List<ClasificacionTicket> getClasificaciones() {
 		List<ClasificacionTicket> clasificaciones;
@@ -92,9 +67,9 @@ public class GestorBD {
 		manager.getTransaction().begin();
 		estadoEncontrado = (Estado) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
-		System.out.println(estadoEncontrado.getNombre());
 		return estadoEncontrado;
 	}
+	
 	
 	public GrupoDeResolucion getGrupoResolucion (Integer id) {
 		GrupoDeResolucion grupoEncontrado;
@@ -124,4 +99,13 @@ public class GestorBD {
 		manager.getTransaction().commit();
 	}
 	
+	
+	public Ticket getTicket(Integer numeroTicket) {
+		Ticket ticket;
+		String consulta = "FROM Ticket WHERE numero_ticket = " + numeroTicket;
+		manager.getTransaction().begin();
+		ticket = (Ticket) manager.createQuery(consulta).getSingleResult();
+		manager.getTransaction().commit();
+		return ticket;
+	}
 }

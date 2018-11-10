@@ -1,33 +1,23 @@
 package interfacesGraficas;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.transaction.Transactional.TxType;
-
 import infoDTO.TicketDTO;
 import modelo.aplicacion.Principal;
 import modelo.entidades.ClasificacionTicket;
-import modelo.entidades.Empleado;
 import modelo.entidades.Ticket;
-import modelo.gestores.GestorClasificacion;
-import modelo.gestores.GestorEmpleado;
 import modelo.gestores.GestorTicket;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.persistence.EntityManager;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.awt.event.ActionEvent;
@@ -49,6 +39,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	private JLabel errorLegajoVacio;
 	private JTextField nombre;
 	
+
 	
 	public InterfazRegistrarTicket1(Principal frame) {
 
@@ -139,7 +130,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		errorLegajoExistente.setBounds(988, 253, 339, 24);
 		this.add(errorLegajoExistente);
 		errorLegajoExistente.setVisible(false);
-		
+
 		
 		nombre = new JTextField();
 		nombre.setBounds(988, 255, 200, 22);
@@ -192,17 +183,19 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		txtNumeroLegajo.setBackground(Color.WHITE);
 		txtNumeroLegajo.setBounds(611, 253, 365, 24);
 		this.add(txtNumeroLegajo);
+		
 		txtNumeroLegajo.addFocusListener(new FocusListener() {
 			String nombreEmpleado;
-	        public void focusLost(FocusEvent arg0) {
+	        public void focusLost(FocusEvent arg0) { 
 	        	if(txtNumeroLegajo.getText().isEmpty()) {
 	    			errorLegajoExistente.setVisible(false);
 	    			errorLegajoVacio.setVisible(true);
 	    			nombre.setVisible(false);
-	    		} else {
+	    		}
+	        	else {
 	    			errorLegajoVacio.setVisible(false);
 	    		}
-	        	if(!txtNumeroLegajo.getText().isEmpty()) {
+	        	if (!txtNumeroLegajo.getText().isEmpty()) {
 	        		nombreEmpleado = ventana.getGestorEmpleado().validarLegajo(txtNumeroLegajo.getText());
 	        		if (nombreEmpleado == null) {
 	        			errorLegajoExistente.setVisible(true);
@@ -216,18 +209,14 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	        			nombre.setVisible(true);
 	        		}
 	        	}
-	        }
-	        
-	        
+	        }  
 			@Override
 			public void focusGained(FocusEvent e) {
 			}
 		});
 				
 		JComboBox<ClasificacionTicket> comboBoxClasificacionTicket = new JComboBox<ClasificacionTicket>();
-		//JComboBox<String> comboBoxClasificacionTicket = new JComboBox<String>();
 		comboBoxClasificacionTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		//comboBoxClasificacionTicket.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una opcion...", "Configuracion de Sistema Operativo", "Mal funcionamiento de Hardware", "Modificaci\u00F3n en los perfiles de usuarios", "Problemas con el correo electr\u00F3nico", "Problemas de acceso a la red local o remota", "Problemas en el funcionamiento del Sistema Operativo", "Problemas en la autenticaci\u00F3n", "Problemas en los sistemas de la empresa", "Solicitud de cambio de contrase\u00F1as", "Solicitud de instalaci\u00F3n de aplicaciones", "Solicitud de nuevos puestos de trabajo", "Solicitud de usuarios de red", "Solicitud de usuarios de Sistemas informaticos", "Solicitud soporte en el uso de alguna aplicaci\u00F3n o sistema", "Otros"}));
 		comboBoxClasificacionTicket.setModel(new DefaultComboBoxModel<ClasificacionTicket>(clasificaciones));
 		comboBoxClasificacionTicket.setBounds(611, 605, 365, 24);
 		this.add(comboBoxClasificacionTicket);
@@ -245,11 +234,8 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		
 		
 		
-		
-		
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea cancelar el registro del ticket? Los cambios no seran guardados.","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
@@ -263,26 +249,24 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-			 if (textAreaDescripcion.getText().isEmpty() || (comboBoxClasificacionTicket.getSelectedIndex()==0) ) {
-					if(textAreaDescripcion.getText().isEmpty()) {
-				 	errorDescripcionVacio.setVisible(true);
-						}
-					if (comboBoxClasificacionTicket.getSelectedIndex()==0) {
-					errorDebeElegir.setVisible(true);
-				}
+			 if (textAreaDescripcion.getText().isEmpty() || (comboBoxClasificacionTicket.getSelectedIndex()==0)) {
+					if (textAreaDescripcion.getText().isEmpty()) {
+						errorDescripcionVacio.setVisible(true);
 					}
-				else {
-					
-					ticketDTO = new TicketDTO(Integer.valueOf(txtNumeroTicket.getText()),Integer.valueOf(txtNumeroLegajo.getText()), (ClasificacionTicket) comboBoxClasificacionTicket.getSelectedItem(), textAreaDescripcion.getText(), fechaApertura, horaApertura, null, null);
-					System.out.println(ticketDTO.getClasificacion());
-					ventana.getGestorTicket().crearTicket(ticketDTO);
-					ventana.setContentPane(new InterfazRegistrarTicket2(ventana,ticketDTO));
-					ventana.pack();
-				}
+					if (comboBoxClasificacionTicket.getSelectedIndex()==0) {
+						errorDebeElegir.setVisible(true);
+					}
+			}
+			else {
+				ticketDTO = new TicketDTO(Integer.valueOf(txtNumeroTicket.getText()),Integer.valueOf(txtNumeroLegajo.getText()), (ClasificacionTicket) comboBoxClasificacionTicket.getSelectedItem(), textAreaDescripcion.getText(), fechaApertura, horaApertura, null, null);
+				ventana.getGestorTicket().crearTicket(ticketDTO);
+				ventana.setContentPane(new InterfazRegistrarTicket2(ventana,ticketDTO));
+				ventana.pack();
+			}
 			}
 		});
 	}
+	
 	
 	private ClasificacionTicket[] cargarClasificaciones() {
 		ClasificacionTicket[] clasificaciones = new ClasificacionTicket[ventana.getGestorClasificacion().getClasificaciones().size()+1];
@@ -293,12 +277,10 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		return clasificaciones;
 	}
 	
+	
 	private String obtenerNumeroTicketNuevo() {
 		GestorTicket gestorT = ventana.getGestorTicket();
 		Ticket nuevoTicket = gestorT.crearTicket();
 		return nuevoTicket.getNumero().toString();
 	}
-
-
 }
-
