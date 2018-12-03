@@ -1,11 +1,15 @@
 package interfacesGraficas;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import infoDTO.DerivarDTO;
 import modelo.aplicacion.Principal;
+import modelo.entidades.ClasificacionTicket;
+import modelo.entidades.GrupoDeResolucion;
+import modelo.entidades.Ticket;
+import modelo.entidades.Usuario;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -29,11 +33,13 @@ public class InterfazDerivarTicket2 extends JPanel {
 	private JTextField txtLegajo;
 	private JTextField txtEstadoActual;
 	private JTextField txtNuevoEstado;
+	private JTextField txtClasificacion;
+	private GrupoDeResolucion[] grupos;
 	
-	public InterfazDerivarTicket2(Principal frame) {
+	public InterfazDerivarTicket2(Principal frame, DerivarDTO derivarDTO) {
 		
-		//SI EL GRUPO AL CUAL SE ESTA DERIVANDO EL TICKET TIENE UNA INTERVENCION EN ESPERA
-		//SE LLEVA A CABO UNA REASIGNACION DE DICHA INTERVENCION (NO SE CREA UNA NUEVA)
+		//SI EL GRUPO AL CUAL SE ESTA DERIVANDO EL TICKET TIENE UNA INTERVENCION EN ESPERA SE LLEVA A CABO UNA REASIGNACION DE DICHA INTERVENCION (NO SE CREA UNA NUEVA)
+		//TODO FILTRAR GRUPOS EN EL COMBO BOX
 		
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -42,8 +48,10 @@ public class InterfazDerivarTicket2 extends JPanel {
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
 		
+		grupos = cargarGrupos();
+		Ticket ticket = ventana.getGestorTicket().getTicket(Integer.valueOf(derivarDTO.getNumeroTicket()));
 		
-		
+			
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
 		separator.setBounds(295, 80, 760, 2);
@@ -65,6 +73,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 		JTextArea txtDescripcion = new JTextArea();
 		txtDescripcion.setBackground(SystemColor.controlHighlight);
 		txtDescripcion.setEditable(false);
+		txtDescripcion.setText(ticket.getDescripcion());
 		scrollPane2.setViewportView(txtDescripcion);
 		
 		
@@ -131,15 +140,20 @@ public class InterfazDerivarTicket2 extends JPanel {
 		
 		
 		txtNumeroTicket = new JTextField();
+		txtNumeroTicket.setEditable(false);
 		txtNumeroTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		txtNumeroTicket.setBounds(692, 137, 252, 22);
 		txtNumeroTicket.setColumns(10);
+		txtNumeroTicket.setText(derivarDTO.getNumeroTicket().toString());
 		this.add(txtNumeroTicket);
 		
+		
 		txtLegajo = new JTextField();
+		txtLegajo.setEditable(false);
 		txtLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		txtLegajo.setColumns(10);
 		txtLegajo.setBounds(692, 187, 252, 22);
+		txtLegajo.setText(derivarDTO.getNumeroLegajo().toString());
 		this.add(txtLegajo);
 		
 		txtEstadoActual = new JTextField();
@@ -149,6 +163,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 		txtEstadoActual.setBackground(new Color(220, 220, 220));
 		txtEstadoActual.setColumns(10);
 		txtEstadoActual.setBounds(692, 237, 252, 22);
+		txtEstadoActual.setText(ticket.getDuracionEstadoActual().getEstado().getNombre());
 		this.add(txtEstadoActual);
 		
 		txtNuevoEstado = new JTextField();
@@ -158,25 +173,25 @@ public class InterfazDerivarTicket2 extends JPanel {
 		txtNuevoEstado.setBounds(692, 390, 252, 22);
 		txtNuevoEstado.setText("Abierto derivado");
 		txtNuevoEstado.setBorder(new LineBorder(Color.gray));
+		txtNuevoEstado.setText("Abierto derivado");
 		this.add(txtNuevoEstado);
 		txtNuevoEstado.setColumns(10);
 		
+		txtClasificacion = new JTextField();
+		txtClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
+		txtClasificacion.setEditable(false);
+		txtClasificacion.setBounds(692, 441, 252, 22);
+		txtClasificacion.setText(derivarDTO.getClasificacion().toString());
+		add(txtClasificacion);
+		txtClasificacion.setColumns(10);
+		
 
 		
-		JComboBox<String> comboBoxGrupo = new JComboBox<String>();
-		comboBoxGrupo.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una opcion...", "Administrador DEBIAN", "Administrador de Base de Datos", "Administrador LAN", "Administrador Proxy y correo electronico", "Administrador SUSE Linux", "Comunicaciones", "Desarrollo Sistema Comercial", "Desarrollo Sistema de Reclamos", "Desarrollo Sistema RRHH", "Mesa de ayuda", "Servicio tecnico", "Unidades de soporte"}));
+		JComboBox<GrupoDeResolucion> comboBoxGrupo = new JComboBox<GrupoDeResolucion>();
+		comboBoxGrupo.setModel(new DefaultComboBoxModel<GrupoDeResolucion>(grupos));
 		comboBoxGrupo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxGrupo.setBounds(692, 490, 252, 22);
 		this.add(comboBoxGrupo);
-		
-		
-		//SE DEBE MOSTRAR LA ACTUAL POR DEFECTO
-		JComboBox<String> comboBoxClasificacion = new JComboBox<String>();
-		comboBoxClasificacion.setBackground(new Color(255, 255, 255));
-		comboBoxClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		comboBoxClasificacion.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una opcion...", "Configuracion de Sistema Operativo", "Mal funcionamiento de Hardware", "Modificacion en los perfiles de usuarios", "Problemas con el correo electronico", "Problemas de acceso a la red local o remota", "Problemas en el funcionamiento del Sistema Operativo", "Problemas en la autenticacion", "Problemas en los sistemas de la empresa", "Solicitud de cambio de contrase\u00F1as", "Solicitud de instalaci\u00F3n de aplicaciones", "Solicitud de nuevos puestos de trabajo", "Solicitud de usuarios de red", "Solicitud de usuarios de Sistemas informaticos", "Solicitud soporte en el uso de alguna aplicacion o sistema", "Otros"}));
-		comboBoxClasificacion.setBounds(692, 440, 252, 22);
-		this.add(comboBoxClasificacion);
 		
 		
 		
@@ -199,6 +214,13 @@ public class InterfazDerivarTicket2 extends JPanel {
 				else if(comboBoxGrupo.getSelectedIndex() == 0) {
 					errorGrupo.setVisible(true);
 				}
+				else {
+					
+					ventana.getGestorTicket().derivarTicket(derivarDTO, (GrupoDeResolucion)comboBoxGrupo.getSelectedItem(), txtAreaObservaciones.getText());
+					
+					ventana.setContentPane(new HomeMesaAyuda(ventana));
+					ventana.pack();
+				}
 			}
 		});	
 		
@@ -208,5 +230,15 @@ public class InterfazDerivarTicket2 extends JPanel {
 				//VUELVE
 			}
 		});
+	}
+	
+	
+	private GrupoDeResolucion[] cargarGrupos() {
+		GrupoDeResolucion[] grupos = new GrupoDeResolucion[ventana.getGestorGrupo().getGrupos().size()+1];
+		for(int i=0; i < ventana.getGestorGrupo().getGrupos().size(); i++) {
+			grupos[i+1] = ventana.getGestorGrupo().getGrupos().get(i);
+		}
+		grupos[0] = new GrupoDeResolucion("Seleccione una opcion...");
+		return grupos;
 	}
 }

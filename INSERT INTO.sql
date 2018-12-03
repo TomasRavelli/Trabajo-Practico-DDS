@@ -46,7 +46,7 @@ INSERT INTO tpds.empleado VALUES (77777,'empleado8','Hernan','12345','12345',8);
 INSERT INTO tpds.empleado VALUES (88888,'empleado9','Juan Martin','12345','12345',9);
 INSERT INTO tpds.empleado VALUES (99999,'empleado10','Santiago','12345','12345',10);
 
-INSERT INTO tpds.usuario  VALUES (11111,'Malena','10101');
+INSERT INTO tpds.usuario  VALUES (00000,'Malena','10101');
 INSERT INTO tpds.usuario  VALUES (99999,'Santiago','11111');
 INSERT INTO tpds.usuario VALUES (88888,'Juan Martin','22222');
 INSERT INTO tpds.usuario VALUES (77777,'Hernan','33333');

@@ -2,12 +2,9 @@ package interfacesGraficas;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import modelo.aplicacion.Principal;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JSeparator;

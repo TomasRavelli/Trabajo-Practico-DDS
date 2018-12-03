@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import infoDTO.DerivarDTO;
 import infoDTO.TicketDTO;
 import modelo.aplicacion.Principal;
 import javax.swing.JLabel;
@@ -134,7 +136,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 				}
 				else {
 					errorObsVacio.setVisible(false);
-					ventana.setContentPane(new InterfazDerivarTicket1(ventana,txtNumeroTicket.getText(), txtNumeroLegajo.getText(), ticketDTO.getClasificacion().toString()));
+					ventana.setContentPane(new InterfazDerivarTicket2(ventana, new DerivarDTO(Integer.valueOf(txtNumeroTicket.getText()), Integer.valueOf(txtNumeroLegajo.getText()), ticketDTO.getClasificacion(), textAreaObservaciones.getText())));
 					ventana.pack();
 				}
 			}

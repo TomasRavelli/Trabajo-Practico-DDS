@@ -2,7 +2,6 @@ package interfacesGraficas;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
@@ -14,9 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import modelo.aplicacion.Principal;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 

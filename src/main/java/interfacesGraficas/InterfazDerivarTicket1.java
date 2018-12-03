@@ -2,19 +2,17 @@ package interfacesGraficas;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import infoDTO.DerivarDTO;
 import modelo.aplicacion.Principal;
-
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
@@ -26,9 +24,9 @@ public class InterfazDerivarTicket1 extends JPanel {
 	private JTextField txtNumeroDeLegajo;
 	private JTextField txtClasificacionDeTicket;
 
-	public InterfazDerivarTicket1(Principal frame, String numeroTicket, String numeroLegajo, Object clasificacion) {
+	public InterfazDerivarTicket1(Principal frame, DerivarDTO derivarDTO) {
 		
-		//LA LISTA DE GRUPO RESOLUCION DEPENDE DE LA CLASIFICACION DEL PROBLEMA
+		//TODO LA LISTA DE GRUPO RESOLUCION DEPENDE DE LA CLASIFICACION DEL TICKET
 		
 		
 		this.ventana=frame;
@@ -90,7 +88,7 @@ public class InterfazDerivarTicket1 extends JPanel {
 		txtNumeroDeTicket.setBounds(620, 150, 407, 24);
 		add(txtNumeroDeTicket);
 		txtNumeroDeTicket.setColumns(10);
-		txtNumeroDeTicket.setText(numeroTicket);
+		txtNumeroDeTicket.setText(derivarDTO.getNumeroTicket().toString());
 		
 		txtNumeroDeLegajo = new JTextField();
 		txtNumeroDeLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
@@ -98,7 +96,7 @@ public class InterfazDerivarTicket1 extends JPanel {
 		txtNumeroDeLegajo.setColumns(10);
 		txtNumeroDeLegajo.setBounds(620, 194, 407, 24);
 		add(txtNumeroDeLegajo);
-		txtNumeroDeLegajo.setText(numeroLegajo);
+		txtNumeroDeLegajo.setText(derivarDTO.getNumeroLegajo().toString());
 		
 		txtClasificacionDeTicket = new JTextField();
 		txtClasificacionDeTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
@@ -106,7 +104,7 @@ public class InterfazDerivarTicket1 extends JPanel {
 		txtClasificacionDeTicket.setColumns(10);
 		txtClasificacionDeTicket.setBounds(620, 238, 407, 24);
 		add(txtClasificacionDeTicket);
-		txtClasificacionDeTicket.setText(clasificacion.toString());
+		txtClasificacionDeTicket.setText(derivarDTO.getClasificacion().toString());
 		
 		
 		
@@ -123,8 +121,8 @@ public class InterfazDerivarTicket1 extends JPanel {
 		
 		btnDerivarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventana.setContentPane(new InterfazRegistrarTicket2(ventana, numeroTicket, numeroLegajo, clasificacion));
-				ventana.pack();
+				//ventana.setContentPane(new InterfazDerivarTicket2(ventana, derivarDTO, comboBox.getSelectedItem().toString()));
+				//ventana.pack();
 			}
 		});
 		

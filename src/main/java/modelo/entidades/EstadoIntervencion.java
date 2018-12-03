@@ -131,4 +131,12 @@ public class EstadoIntervencion implements Serializable {
 	public void setIntervencion(Intervencion intervencionMuchos) {
 		this.intervencionMuchos = intervencionMuchos;
 	}
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario u) {
+		this.usuario = u;
+	
+	}
 }

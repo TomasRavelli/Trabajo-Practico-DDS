@@ -5,11 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +29,7 @@ public class Intervencion implements Serializable {
 	@Column (name = "ID_INTERVENCION")
 	private Integer id_Intervencion;
 	
-	//ID_GRUPO, NUMERO_TICKET Y ID_INTERVALO_TRABAJO SON LAS FK
+	//ID_GRUPO, NUMERO_TICKET Y ID_ESTADO_INTERVENCION SON LAS FK
 	
 	@ManyToOne
 	@JoinColumn (name = "NUMERO_TICKET")
@@ -135,5 +133,13 @@ public class Intervencion implements Serializable {
 	
 	public void add(EstadoIntervencion ei){
 		estadoIntervencionMuchos.add(ei);
+	}
+	
+	public void setTicket (Ticket t) {
+		this.ticket = t;
+	}
+	
+	public Ticket getTicket () {
+		return this.ticket;
 	}
 }

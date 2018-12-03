@@ -10,6 +10,7 @@ import modelo.entidades.Estado;
 import modelo.entidades.GrupoDeResolucion;
 import modelo.entidades.Intervencion;
 import modelo.entidades.Ticket;
+import modelo.entidades.Usuario;
 
 public class GestorBD {
 
@@ -61,6 +62,15 @@ public class GestorBD {
 	}
 	
 	
+	public List<GrupoDeResolucion> getGrupos() {
+		List<GrupoDeResolucion> grupos;
+		manager.getTransaction().begin();
+		grupos = (List<GrupoDeResolucion>) manager.createQuery("FROM GrupoDeResolucion").getResultList();
+		manager.getTransaction().commit();
+		return grupos;
+	}
+	
+	
 	public Estado getEstado(Integer id_estado) {
 		Estado estadoEncontrado;
 		String consulta = "FROM Estado where id_estado = " + id_estado;
@@ -107,5 +117,15 @@ public class GestorBD {
 		ticket = (Ticket) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
 		return ticket;
+	}
+
+
+	public Usuario getUsuario(int i) {
+		// TODO Auto-generated method stub
+		Usuario u;
+		manager.getTransaction().begin();
+		u = (Usuario) manager.createQuery("from Usuario where NUMERO_LEGAJO = " + i).getSingleResult();
+		manager.getTransaction().commit();
+		return u;
 	}
 }

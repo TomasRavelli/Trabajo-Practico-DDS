@@ -3,11 +3,15 @@ package modelo.gestores;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import infoDTO.DerivarDTO;
 import infoDTO.TicketDTO;
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.DuracionClasificacion;
 import modelo.entidades.DuracionEstado;
+import modelo.entidades.GrupoDeResolucion;
+import modelo.entidades.Intervencion;
 import modelo.entidades.Ticket;
+import modelo.entidades.Usuario;
 
 public class GestorTicket {
 	
@@ -78,5 +82,26 @@ public class GestorTicket {
 	
 	public void eliminarTicket (String numeroTicket) {
 		gestorBD.eliminarTicket(numeroTicket);
+	}
+	
+	
+	public Ticket getTicket(Integer numero) {
+		return gestorBD.getTicket(numero);
+	}
+	
+	public void derivarTicket (DerivarDTO derivarDTO, GrupoDeResolucion grupo, String observacionesNueva) {
+		Ticket ticket = this.getTicket(derivarDTO.getNumeroTicket());
+		LocalDate fecha= LocalDate.now();
+		Usuario usuario = gestorUsuario.getUsuarioActual();
+		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo, observacionesNueva);
+		
+		ticket.add(nuevaIntervencion);
+		ticket.getDuracionEstadoActual().setFechaFin(fecha);
+		
+		DuracionEstado nuevaDuracionEstado = new DuracionEstado(fecha, usuario, ticket);
+		nuevaDuracionEstado.setEstado(gestorBD.getEstado(2));
+		ticket.setDuracionEstadoActual(nuevaDuracionEstado);
+		ticket.add(nuevaDuracionEstado);
+		gestorBD.guardarTicket(ticket);
 	}
 }

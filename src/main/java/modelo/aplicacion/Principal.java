@@ -22,11 +22,12 @@ public class Principal extends JFrame{
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				gestorUsuario = new GestorUsuario(new Usuario(123456, "Pilar", 2));//Hacemos el new porque todavia no implementamos el log in
 				gestorBD = new GestorBD();
+				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(11111));//Hacemos el new porque todavia no implementamos el log in
 				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD);
 				gestorClasificacion = new GestorClasificacion(gestorBD);
+				gestorGrupo = new GestorGrupo(gestorBD);
 				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario, gestorClasificacion);
 				new Principal();
 			}
@@ -53,8 +54,6 @@ public class Principal extends JFrame{
 			this.setContentPane(new HomeGrupoResolucion(this));
 			this.pack();
 		}*/
-		
-		
 	}
 
 
@@ -85,5 +84,4 @@ public class Principal extends JFrame{
 	public GestorGrupo getGestorGrupo() {
 		return gestorGrupo;
 	}
-
 }

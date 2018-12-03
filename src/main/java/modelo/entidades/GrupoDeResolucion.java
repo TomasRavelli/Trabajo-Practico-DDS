@@ -50,7 +50,7 @@ public class GrupoDeResolucion implements Serializable {
 	}
 
 	
-
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -66,5 +66,10 @@ public class GrupoDeResolucion implements Serializable {
 	public void setId_Grupo(Integer id_Grupo) {
 		this.id_Grupo = id_Grupo;
 	}
-
+	
+	@Override
+	public String toString() {
+		return this.getNombre();
+	}
+	
 }
