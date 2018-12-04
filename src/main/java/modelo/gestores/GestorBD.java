@@ -128,4 +128,14 @@ public class GestorBD {
 		manager.getTransaction().commit();
 		return u;
 	}
+
+
+	public GrupoDeResolucion getGrupoResolucion(String nombre) {
+		// TODO Auto-generated method stub
+		GrupoDeResolucion grupo;
+		manager.getTransaction().begin();
+		grupo = (GrupoDeResolucion) manager.createQuery("FROM GrupoDeResolucion WHERE nombre = " + nombre ).getSingleResult();
+		manager.getTransaction().commit();
+		return grupo;
+	}
 }

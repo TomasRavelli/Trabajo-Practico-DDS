@@ -36,4 +36,11 @@ public class GestorGrupo {
 		this.gestorBD = gestorBD;
 	}
 
+
+	public GrupoDeResolucion getGrupo(String nombre) {
+		// TODO Auto-generated method stub
+		
+		return gestorBD.getGrupoResolucion(nombre);
+	}
+
 }
