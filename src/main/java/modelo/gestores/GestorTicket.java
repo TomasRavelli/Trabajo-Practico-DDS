@@ -2,7 +2,10 @@ package modelo.gestores;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import infoDTO.DatosDTO;
 import infoDTO.DerivarDTO;
 import infoDTO.TicketDTO;
 import modelo.entidades.ClasificacionTicket;
@@ -103,5 +106,19 @@ public class GestorTicket {
 		ticket.setDuracionEstadoActual(nuevaDuracionEstado);
 		ticket.add(nuevaDuracionEstado);
 		gestorBD.guardarTicket(ticket);
+	}
+	
+	
+	
+	public List<TicketDTO> getTickets(DatosDTO datosDTO){
+		List<TicketDTO> encontrados = new ArrayList<>();
+		List<Ticket> encontradosAux = gestorBD.getTickets(datosDTO);
+		
+		for(Ticket t: encontradosAux) {
+			TicketDTO auxDTO = new TicketDTO(t.getNumero(), t.getEmpleado().getNumeroLegajo(), t.getDuracionClasificacionActual().getClasificacion(), t.getFechaApertura(), t.getIntervenciones().get(t.getIntervenciones().size()-1).getGrupoResolucion(), t.getDuracionEstadoActual().getFechaInicio(), t.getDuracionEstadoActual().getEstado());
+			encontrados.add(auxDTO);
+		}
+		
+		return encontrados;
 	}
 }

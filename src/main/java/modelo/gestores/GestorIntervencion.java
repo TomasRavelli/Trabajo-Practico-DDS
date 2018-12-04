@@ -10,8 +10,9 @@ public class GestorIntervencion {
 	GestorBD gestorBD;
 	GestorUsuario gestorUsuario;
 	
-	public GestorIntervencion(GestorBD gBD){
+	public GestorIntervencion(GestorBD gBD, GestorUsuario gUsu){
 		gestorBD=gBD;
+		gestorUsuario = gUsu;
 	}
 
 	
@@ -63,6 +64,7 @@ public class GestorIntervencion {
 		
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("En espera", fecha, hora, intervencion);
 		nuevoEstadoIntervencion.setObservaciones(observacionesNueva);
+		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
 		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 		intervencion.add(nuevoEstadoIntervencion);
 		gestorBD.guardarIntervencion(intervencion);
@@ -71,6 +73,7 @@ public class GestorIntervencion {
 		Intervencion intervencionGrupo = new Intervencion(fecha, hora, gestorBD.getTicket(numeroTicket));
 		intervencionGrupo.setGrupoResolucion(grupo);
 		EstadoIntervencion estadoIntervencionGrupo = new EstadoIntervencion("Asignada", fecha, hora, intervencionGrupo);
+		estadoIntervencionGrupo.setUsuario(gestorUsuario.getUsuarioActual());
 		intervencionGrupo.setEstadoIntervencionActual(estadoIntervencionGrupo);
 		intervencionGrupo.add(estadoIntervencionGrupo);
 		gestorBD.guardarIntervencion(intervencionGrupo);

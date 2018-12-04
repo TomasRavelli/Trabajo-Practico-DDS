@@ -79,4 +79,9 @@ public class DuracionClasificacion implements Serializable {
 	public void setTicket(Ticket ticket2) {
 		t = ticket2;
 	}
+
+	public ClasificacionTicket getClasificacion() {
+		return clasificacion;
+	}
+	
 }

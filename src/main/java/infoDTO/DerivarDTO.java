@@ -27,6 +27,11 @@ public class DerivarDTO {
 		this.clasificacion = clasificacion;
 		this.observaciones = observaciones;
 	}
+	public DerivarDTO (Integer numeroTicket, Integer numeroLegajo, ClasificacionTicket clasificacion) {
+		this.numeroLegajo = numeroLegajo;
+		this.numeroTicket = numeroTicket;
+		this.clasificacion = clasificacion;
+	}
 
 	public Integer getNumeroLegajo() {
 		return numeroLegajo;

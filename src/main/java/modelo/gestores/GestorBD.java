@@ -1,9 +1,13 @@
 package modelo.gestores;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import infoDTO.DatosDTO;
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.Empleado;
 import modelo.entidades.Estado;
@@ -121,11 +125,61 @@ public class GestorBD {
 
 
 	public Usuario getUsuario(int i) {
-		// TODO Auto-generated method stub
 		Usuario u;
 		manager.getTransaction().begin();
 		u = (Usuario) manager.createQuery("from Usuario where NUMERO_LEGAJO = " + i).getSingleResult();
 		manager.getTransaction().commit();
 		return u;
+	}
+
+
+	public GrupoDeResolucion getGrupoResolucion(String nombre) {
+		GrupoDeResolucion grupo;
+		manager.getTransaction().begin();
+		grupo = (GrupoDeResolucion) manager.createQuery("FROM GrupoDeResolucion WHERE nombre = " + nombre ).getSingleResult();
+		manager.getTransaction().commit();
+		return grupo;
+	}
+
+
+	public List<Ticket> getTickets(DatosDTO datosDTO) {
+		List<Ticket> encontrados = new ArrayList<>();
+		
+		String consulta1 = "Select t FROM Ticket t, DuracionClasificacion dc, DuracionEstado de, ClasificacionTicket ct, Estado e, Intervencion i, GrupoDeResolucion gr  "
+				+ " where t.duracionClasificacionActual = dc and dc.clasificacion = ct and t.duracionEstadoActual = de and de.estado = e and t = i.ticket and i.grupo = gr";
+		
+		if(!(datosDTO.getNumeroTicket()==null)) {
+			consulta1+=" and t.numeroTicket = " + datosDTO.getNumeroTicket();
+		}
+		
+		if(!(datosDTO.getNumeroLegajo()==null)) {
+			consulta1+=" and t.empleado = " + datosDTO.getNumeroLegajo();
+		}
+		
+		if(!(datosDTO.getFechaApertura()==null)) {
+			consulta1+= " and t.fechaApertura = '" + datosDTO.getFechaApertura() + "'";
+		}
+		
+		if(!(datosDTO.getFechaUltimoCambioEstado()==null)) {
+			consulta1+=" and de.fechaInicio = '" + datosDTO.getFechaUltimoCambioEstado() + "'";
+		}
+		
+		if(!datosDTO.getClasificacion().equalsIgnoreCase("Todas")) {
+			consulta1+=" and ct.nombre = '" + datosDTO.getClasificacion() + "'";
+		}
+		if(!datosDTO.getEstado().equalsIgnoreCase("Todos")) {
+			consulta1+=" and e.nombre = '" + datosDTO.getEstado() + "'";
+		}
+		if(!datosDTO.getGrupo().equalsIgnoreCase("Todos")) {
+			consulta1+="  and gr.nombre = '" + datosDTO.getGrupo() + "'";
+		}
+		
+		
+		manager.getTransaction().begin();
+		encontrados = (List<Ticket>) manager.createQuery(consulta1).getResultList();
+		manager.getTransaction().commit();
+
+		
+		return encontrados;
 	}
 }

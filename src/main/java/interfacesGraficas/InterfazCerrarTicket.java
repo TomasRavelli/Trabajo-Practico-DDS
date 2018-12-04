@@ -3,6 +3,9 @@ package interfacesGraficas;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import infoDTO.TicketDTO;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
@@ -22,7 +25,7 @@ public class InterfazCerrarTicket extends JPanel {
 	private JTextField textFieldLegajo;
 	private JTextField textFieldNuevoEstado;
 
-	public InterfazCerrarTicket(JFrame frame) {
+	public InterfazCerrarTicket(JFrame frame, TicketDTO ticketSeleccionado) {
 		
 		//SOLO PUEDE CERRARSE SI PREVIAMENTE SE ENCUENTRA EN "Solucionado a la espera OK"
 		

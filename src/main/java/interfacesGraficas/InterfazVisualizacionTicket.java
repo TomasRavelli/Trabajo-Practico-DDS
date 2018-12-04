@@ -32,7 +32,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 	private JTable table;
 
 
-	public InterfazVisualizacionTicket(Principal frame) {
+	public InterfazVisualizacionTicket(Principal frame, Integer numeroTicket) {
 
 		this.ventana=frame;
 		ventana.setContentPane(this);
