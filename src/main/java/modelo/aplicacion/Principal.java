@@ -4,7 +4,6 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import interfacesGraficas.HomeMesaAyuda;
-import modelo.entidades.Usuario;
 import modelo.gestores.*;
 
 
@@ -23,7 +22,8 @@ public class Principal extends JFrame{
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				gestorBD = new GestorBD();
-				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(11111));//Hacemos el new porque todavia no implementamos el log in
+				//TODO ver lo del log in
+				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(11111));
 				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD);
 				gestorClasificacion = new GestorClasificacion(gestorBD);

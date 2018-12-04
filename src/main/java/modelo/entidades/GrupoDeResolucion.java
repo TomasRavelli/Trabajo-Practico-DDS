@@ -42,7 +42,6 @@ public class GrupoDeResolucion implements Serializable {
 	private String nombre;
 	
 	
-
 	public GrupoDeResolucion() {}
 	
 	public GrupoDeResolucion(String n) {
@@ -70,6 +69,5 @@ public class GrupoDeResolucion implements Serializable {
 	@Override
 	public String toString() {
 		return this.getNombre();
-	}
-	
+	}	
 }

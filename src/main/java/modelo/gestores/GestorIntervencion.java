@@ -42,7 +42,6 @@ public class GestorIntervencion {
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("Terminada",fecha,hora,intervencion);
 		nuevoEstadoIntervencion.setHoraFin(hora);
 		nuevoEstadoIntervencion.setFechaFin(fecha);
-		//nuevoEstadoIntervencion.setObservaciones(observaciones);
 		
 		
 		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
@@ -70,7 +69,6 @@ public class GestorIntervencion {
 		
 		
 		Intervencion intervencionGrupo = new Intervencion(fecha, hora, gestorBD.getTicket(numeroTicket));
-		//Cuando este hecho el for que traiga todos los grupos de la otra interfaz
 		intervencionGrupo.setGrupoResolucion(grupo);
 		EstadoIntervencion estadoIntervencionGrupo = new EstadoIntervencion("Asignada", fecha, hora, intervencionGrupo);
 		intervencionGrupo.setEstadoIntervencionActual(estadoIntervencionGrupo);
