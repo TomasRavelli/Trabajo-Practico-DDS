@@ -255,6 +255,7 @@ public class InterfazConsultarTicket extends JPanel {
 		btnCerrarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(table_1.getSelectedRow() != -1 || table_1.getSelectedRow() < ticketsEncontrados.size()) {
+
 					Integer numeroTicketSeleccionado = Integer.valueOf(((Vector) modeloTablaTicket.getDataVector().elementAt(table_1.getSelectedRow())).elementAt(0).toString());
 					ticketSeleccionado = buscarTicket(numeroTicketSeleccionado, ticketsEncontrados);
 				
@@ -267,6 +268,7 @@ public class InterfazConsultarTicket extends JPanel {
 					}
 				}
 			}
+
 		});
 		
 		
@@ -287,11 +289,13 @@ public class InterfazConsultarTicket extends JPanel {
 				if(table_1.getSelectedRow() != -1 && table_1.getSelectedRow() < ticketsEncontrados.size()) {
 					Integer numeroTicketSeleccionado = Integer.valueOf(((Vector) modeloTablaTicket.getDataVector().elementAt(table_1.getSelectedRow())).elementAt(0).toString());
 					ticketSeleccionado = buscarTicket(numeroTicketSeleccionado, ticketsEncontrados);
+
 					
 					if(ticketSeleccionado.getEstado().getNombre().equalsIgnoreCase("Solucionado a la espera OK") || ticketSeleccionado.getEstado().getNombre().equalsIgnoreCase("Abierto en Mesa de Ayuda")) {
 						DerivarDTO derivarDTO1 = new DerivarDTO(ticketSeleccionado.getNumero(),ticketSeleccionado.getLegajo(),ticketSeleccionado.getClasificacion());
 						ventana.setContentPane(new InterfazDerivarTicket2(ventana, derivarDTO1));
 						ventana.pack();
+
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "ESTADO de ticket no permitido para derivar ticket.");
@@ -304,6 +308,7 @@ public class InterfazConsultarTicket extends JPanel {
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
 				//TODO agregar anios hasta el 2008 en los combo box
 				modeloTablaTicket.setRowCount(0);;
 				DatosDTO datosDTO = new DatosDTO();
@@ -328,6 +333,7 @@ public class InterfazConsultarTicket extends JPanel {
 					LocalDate fechaUltimoCambioEstado = LocalDate.parse(new String(comboBoxDiaCambio.getSelectedItem().toString() + "/" + comboBoxMesCambio.getSelectedItem().toString() + "/" + comboBoxAnioCambio.getSelectedItem().toString()), formatter);
 					
 					if(fechaApertura.isAfter(LocalDate.now()) || fechaUltimoCambioEstado.isAfter(LocalDate.now())) {
+
 						JOptionPane.showMessageDialog(null, "Fecha(s) no valida(s).");
 					}
 					
@@ -341,6 +347,7 @@ public class InterfazConsultarTicket extends JPanel {
 				else {
 					 ticketsEncontrados = ventana.getGestorTicket().getTickets(datosDTO);
 				}
+
 				
 				if(ticketsEncontrados.size() > 0) {
 					cargarTabla(ticketsEncontrados);
@@ -349,6 +356,7 @@ public class InterfazConsultarTicket extends JPanel {
 				else {
 					JOptionPane.showMessageDialog(null, "No existen tickets que cumplan con los criterios ingresados.");
 				}
+
 			}
 		});
 		
