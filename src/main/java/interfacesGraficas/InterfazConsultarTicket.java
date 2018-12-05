@@ -299,9 +299,14 @@ public class InterfazConsultarTicket extends JPanel {
 					Integer numeroTicketSeleccionado = Integer.valueOf(((Vector) modeloTablaTicket.getDataVector().elementAt(table_1.getSelectedRow())).elementAt(0).toString());
 					System.out.println(numeroTicketSeleccionado);
 					ticketSeleccionado = buscarTicket(numeroTicketSeleccionado, ticketsEncontrados);
+					if(!ticketSeleccionado.getEstado().getNombre().equalsIgnoreCase("Solucionado a la espera OK") && !ticketSeleccionado.getEstado().getNombre().equalsIgnoreCase("Abierto en Mesa de Ayuda")) {
 					DerivarDTO derivarDTO1 = new DerivarDTO(ticketSeleccionado.getNumero(),ticketSeleccionado.getLegajo(),ticketSeleccionado.getClasificacion());
 					ventana.setContentPane(new InterfazDerivarTicket1(ventana,derivarDTO1));
 					ventana.pack();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "ESTADO de ticket no permitido para derivar ticket.");
+					}
 				}
 				
 			}
