@@ -99,4 +99,8 @@ public class Empleado implements Serializable {
 	public void setNumeroLegajo(Integer numeroLegajo) {
 		this.numeroLegajo = numeroLegajo;
 	}
+	
+	public GrupoDeResolucion getGrupo() {
+		return this.grupo;
+	}
 }

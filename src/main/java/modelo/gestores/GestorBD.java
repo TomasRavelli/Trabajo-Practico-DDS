@@ -1,13 +1,12 @@
 package modelo.gestores;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 import infoDTO.DatosDTO;
+import infoDTO.IntervencionBusquedaDTO;
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.Empleado;
 import modelo.entidades.Estado;
@@ -56,6 +55,14 @@ public class GestorBD {
 		return ticket;
 	}
 	
+	public Intervencion actualizarIntervencion (Intervencion intervencion) {
+		manager.getTransaction().begin();
+		intervencion = manager.merge(intervencion);
+		manager.persist(intervencion);
+		manager.getTransaction().commit();
+		return intervencion;
+	}
+	
 	
 	public List<ClasificacionTicket> getClasificaciones() {
 		List<ClasificacionTicket> clasificaciones;
@@ -97,7 +104,7 @@ public class GestorBD {
 	
 	public Intervencion getIntervencionMDA (Integer numeroTicket) {
 		Intervencion intervencionEncontrada;
-		String consulta = "FROM Intervencion WHERE numero_ticket = " + numeroTicket;
+		String consulta = "Select i FROM Intervencion i, GrupoDeResolucion gr WHERE i.grupo = gr and numero_ticket = " + numeroTicket + " and gr.nombre = 'Mesa de Ayuda'";
 		manager.getTransaction().begin();
 		intervencionEncontrada = (Intervencion) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
@@ -145,7 +152,7 @@ public class GestorBD {
 	public List<Ticket> getTickets(DatosDTO datosDTO) {
 		List<Ticket> encontrados = new ArrayList<>();
 		
-		String consulta1 = "Select t FROM Ticket t, DuracionClasificacion dc, DuracionEstado de, ClasificacionTicket ct, Estado e, Intervencion i, GrupoDeResolucion gr  "
+		String consulta1 = "Select distinct t FROM Ticket t, DuracionClasificacion dc, DuracionEstado de, ClasificacionTicket ct, Estado e, Intervencion i, GrupoDeResolucion gr  "
 				+ " where t.duracionClasificacionActual = dc and dc.clasificacion = ct and t.duracionEstadoActual = de and de.estado = e and t = i.ticket and i.grupo = gr";
 		
 		if(!(datosDTO.getNumeroTicket()==null)) {
@@ -167,19 +174,62 @@ public class GestorBD {
 		if(!datosDTO.getClasificacion().equalsIgnoreCase("Todas")) {
 			consulta1+=" and ct.nombre = '" + datosDTO.getClasificacion() + "'";
 		}
+		
 		if(!datosDTO.getEstado().equalsIgnoreCase("Todos")) {
 			consulta1+=" and e.nombre = '" + datosDTO.getEstado() + "'";
 		}
+		
 		if(!datosDTO.getGrupo().equalsIgnoreCase("Todos")) {
 			consulta1+="  and gr.nombre = '" + datosDTO.getGrupo() + "'";
 		}
-		
 		
 		manager.getTransaction().begin();
 		encontrados = (List<Ticket>) manager.createQuery(consulta1).getResultList();
 		manager.getTransaction().commit();
 
-		
 		return encontrados;
+	}
+	
+	
+	public List<Intervencion> getIntervenciones(IntervencionBusquedaDTO intervencionDTO) {
+		List<Intervencion> encontradas = new ArrayList<>();
+		
+		String consulta = "Select distinct i FROM Intervencion i, Ticket t, EstadoIntervencion ei where i.ticket = t and i.estadoIntervencion1 = ei";
+		
+		if (!(intervencionDTO.getNumeroTicket()==null)) {
+			consulta += " and i.ticket = " + intervencionDTO.getNumeroTicket();
+		}
+		
+		if (!(intervencionDTO.getNumeroLegajo()==null)) {
+			consulta += " and t.empleado = " + intervencionDTO.getNumeroLegajo();
+		}
+		
+		if (!intervencionDTO.getEstado().equalsIgnoreCase("Todos")) {
+			consulta += " and ei.estado = '" + intervencionDTO.getEstado() + "'";
+		}
+		
+		manager.getTransaction().begin();
+		encontradas = (List<Intervencion>) manager.createQuery(consulta).getResultList();
+		manager.getTransaction().commit();
+		
+		return encontradas;
+	}
+
+
+	public Intervencion getUltimaIntervencion(Integer numeroTicket, GrupoDeResolucion grupo) {
+		Intervencion resultado;
+		List<Intervencion> intervencionesTicket;
+		String consulta = "from Intervencion where ticket = " + numeroTicket + " and grupo = " + grupo.getId_Grupo();
+		
+		manager.getTransaction().begin();
+		intervencionesTicket = (List<Intervencion>) manager.createQuery(consulta).getResultList();
+		manager.getTransaction().commit();
+		if(intervencionesTicket.size() == 0) {
+			resultado = null;
+		}
+		else {
+			resultado = intervencionesTicket.get(intervencionesTicket.size());
+		}
+		return resultado;
 	}
 }

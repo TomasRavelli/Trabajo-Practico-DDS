@@ -3,6 +3,8 @@ package modelo.aplicacion;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+
+import interfacesGraficas.HomeGrupoResolucion;
 import interfacesGraficas.HomeMesaAyuda;
 import modelo.gestores.*;
 
@@ -46,14 +48,16 @@ public class Principal extends JFrame{
 		
 		
 		//DEPENDIENDO SI SE REGISTRE COMO MESA DE AYUDA O GRUPO DE RESOLUCION
-		if (true) {
+		/*if (false) {
 			this.setContentPane(new HomeMesaAyuda(this));
 			this.pack();
 		}
-		/*else {
+		else {
 			this.setContentPane(new HomeGrupoResolucion(this));
 			this.pack();
 		}*/
+		this.setContentPane(new HomeGrupoResolucion(this));
+		this.pack();
 	}
 
 

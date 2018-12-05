@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import infoDTO.DatosDTO;
 import infoDTO.DerivarDTO;
 import infoDTO.TicketDTO;
@@ -68,9 +67,11 @@ public class GestorTicket {
 		
 		gestorIntervencion.actualizarEstadoIntervencion(numeroTicket, observaciones);
 		ticket = gestorBD.getTicket(numeroTicket);
+		
 		DuracionEstado durEstado= new DuracionEstado();
 		durEstado= ticket.getDuracionEstadoActual();
 		durEstado.setFechaFin(fecha);
+		
 		DuracionEstado durEstadoNueva= new DuracionEstado(fecha,gestorUsuario.getUsuarioActual(),ticket);
 		durEstadoNueva.setEstado(gestorBD.getEstado(3));
 		durEstadoNueva.setUsuario(gestorUsuario.getUsuarioActual());
@@ -92,20 +93,31 @@ public class GestorTicket {
 		return gestorBD.getTicket(numero);
 	}
 	
-	public void derivarTicket (DerivarDTO derivarDTO, GrupoDeResolucion grupo, String observacionesNueva) {
+	
+	public void derivarTicket (DerivarDTO derivarDTO, boolean cambioClasificacion, GrupoDeResolucion grupo, String observacionesNueva) {
 		Ticket ticket = this.getTicket(derivarDTO.getNumeroTicket());
 		LocalDate fecha= LocalDate.now();
 		Usuario usuario = gestorUsuario.getUsuarioActual();
 		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo, observacionesNueva);
 		
-		ticket.add(nuevaIntervencion);
-		ticket.getDuracionEstadoActual().setFechaFin(fecha);
+		if(nuevaIntervencion!=null) {
+			nuevaIntervencion.setTicket(ticket);
+			ticket.add(nuevaIntervencion);
+			ticket.getDuracionEstadoActual().setFechaFin(fecha);
+		}		
 		
 		DuracionEstado nuevaDuracionEstado = new DuracionEstado(fecha, usuario, ticket);
 		nuevaDuracionEstado.setEstado(gestorBD.getEstado(2));
-		ticket.setDuracionEstadoActual(nuevaDuracionEstado);
+		nuevaDuracionEstado.setUsuario(usuario);
 		ticket.add(nuevaDuracionEstado);
-		gestorBD.guardarTicket(ticket);
+		ticket.setDuracionEstadoActual(nuevaDuracionEstado);
+		if(cambioClasificacion) {
+			ClasificacionTicket clasificacion = gestorClasificacion.getClasificacion(derivarDTO.getClasificacion().getNombre());
+			DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,LocalDate.now(),ticket);
+			ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
+			ticket.add(nuevaDuracionClasificacion);	
+		}
+		gestorBD.actualizarTicket(ticket);
 	}
 	
 	
@@ -115,7 +127,7 @@ public class GestorTicket {
 		List<Ticket> encontradosAux = gestorBD.getTickets(datosDTO);
 		
 		for(Ticket t: encontradosAux) {
-			TicketDTO auxDTO = new TicketDTO(t.getNumero(), t.getEmpleado().getNumeroLegajo(), t.getDuracionClasificacionActual().getClasificacion(), t.getFechaApertura(), t.getIntervenciones().get(t.getIntervenciones().size()-1).getGrupoResolucion(), t.getDuracionEstadoActual().getFechaInicio(), t.getDuracionEstadoActual().getEstado());
+			TicketDTO auxDTO = new TicketDTO(t.getNumero(), t.getEmpleado().getNumeroLegajo(), t.getDuracionClasificacionActual().getClasificacion(), t.getFechaApertura(),t.getHoraApertura(), t.getIntervenciones().get(t.getIntervenciones().size()-1).getGrupoResolucion(), t.getDuracionEstadoActual().getFechaInicio(), t.getDuracionEstadoActual().getEstado(), t.getUsuario());
 			encontrados.add(auxDTO);
 		}
 		

@@ -140,7 +140,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 					int dialogButton = JOptionPane.YES_NO_OPTION;
 					int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket a otro Grupo de Resolucion?","Warning",dialogButton);
 					if(dialogResult == JOptionPane.YES_OPTION){
-						ventana.setContentPane(new InterfazDerivarTicket2(ventana, new DerivarDTO(Integer.valueOf(txtNumeroTicket.getText()), Integer.valueOf(txtNumeroLegajo.getText()), ticketDTO.getClasificacion(), textAreaObservaciones.getText())));
+						ventana.setContentPane(new InterfazDerivarTicket1(ventana, new DerivarDTO(Integer.valueOf(txtNumeroTicket.getText()), Integer.valueOf(txtNumeroLegajo.getText()), ticketDTO.getClasificacion(), textAreaObservaciones.getText())));
 						ventana.pack();
 					}
 				}

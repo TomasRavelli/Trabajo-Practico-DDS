@@ -1,10 +1,14 @@
 package interfacesGraficas;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import infoDTO.IntervencionBusquedaDTO;
+import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
+import modelo.entidades.GrupoDeResolucion;
+import modelo.entidades.Intervencion;
+import modelo.entidades.Ticket;
 
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -12,6 +16,7 @@ import java.awt.Dimension;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -36,7 +41,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 	private JTextField textFieldFechaDesde;
 	private JTextField textFieldFechaHasta;
 
-	public InterfazConsultarIntervencionesPaginacion(Principal frame, String legajo, String ticket, String fechaDesde, String fechaHasta, Object estado) {
+	public InterfazConsultarIntervencionesPaginacion(Principal frame, List<IntervencionBusquedaDTO> intervencionesEncontradas, IntervencionBusquedaDTO criteriosBusqueda) {
 
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -44,7 +49,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
-		
+
 		
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -107,7 +112,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		lblCriteriosDeBusqueda.setBounds(80, 35, 516, 31);
 		this.add(lblCriteriosDeBusqueda);
 		
-		JLabel lblClasificacionDeTicket = new JLabel("Clasificacion de ticket        de ");
+		JLabel lblClasificacionDeTicket = new JLabel("Intervencion asignada        de ");
 		lblClasificacionDeTicket.setFont(new Font("Segoe UI Symbol", Font.BOLD, 18));
 		lblClasificacionDeTicket.setBounds(532, 200, 271, 22);
 		this.add(lblClasificacionDeTicket);
@@ -207,6 +212,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		txtCantidad.setColumns(10);
 		txtCantidad.setEditable(false);
 		this.add(txtCantidad);
+		//txtCantidad.setText(intervencionesEncontradas.size());
 		
 		
 		textFieldNumeroTicket = new JTextField();
@@ -215,8 +221,9 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		textFieldNumeroTicket.setColumns(10);
 		textFieldNumeroTicket.setEditable(false);
 		this.add(textFieldNumeroTicket);
-		
-		textFieldNumeroTicket.setText(ticket);
+		if(!(criteriosBusqueda.getNumeroTicket()==null)) {
+			textFieldNumeroTicket.setText(criteriosBusqueda.getNumeroTicket().toString());
+		}
 		
 		textFieldEstado = new JTextField();
 		textFieldEstado.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -224,8 +231,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		textFieldEstado.setBounds(297, 126, 130, 21);
 		textFieldEstado.setEditable(false);
 		this.add(textFieldEstado);
-		
-		textFieldEstado.setText((String)estado);
+		textFieldEstado.setText(criteriosBusqueda.getEstado());
 		
 		textFieldNumeroLegajo = new JTextField();
 		textFieldNumeroLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -233,8 +239,10 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		textFieldNumeroLegajo.setBounds(297, 160, 130, 21);
 		textFieldNumeroLegajo.setEditable(false);
 		this.add(textFieldNumeroLegajo);
+		if(!(criteriosBusqueda.getNumeroLegajo()==null)) {
+			textFieldNumeroLegajo.setText(criteriosBusqueda.getNumeroLegajo().toString());
+		}
 		
-		textFieldNumeroLegajo.setText(legajo);
 		
 		textFieldFechaDesde = new JTextField();
 		textFieldFechaDesde.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -242,17 +250,20 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		textFieldFechaDesde.setBounds(616, 92, 116, 21);
 		textFieldFechaDesde.setEditable(false);
 		this.add(textFieldFechaDesde);
-		
-		textFieldFechaDesde.setText(fechaDesde);
-		
+		if(!(criteriosBusqueda.getFechaDesde()==null)) {
+			textFieldFechaDesde.setText(criteriosBusqueda.getFechaDesde().toString());
+		}
+			
 		textFieldFechaHasta = new JTextField();
 		textFieldFechaHasta.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		textFieldFechaHasta.setColumns(10);
 		textFieldFechaHasta.setBounds(616, 126, 116, 21);
 		textFieldFechaHasta.setEditable(false);
 		this.add(textFieldFechaHasta);
+		if(!(criteriosBusqueda.getFechaHasta()==null)) {
+			textFieldFechaHasta.setText(criteriosBusqueda.getFechaHasta().toString());
+		}
 		
-		textFieldFechaHasta.setText(fechaHasta);
 		
 		
 		
@@ -280,6 +291,32 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		btnDerecha.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 12));
 		btnDerecha.setBounds(926, 202, 42, 25);
 		this.add(btnDerecha);
+		
+		
+		Ticket ticket = ventana.getGestorTicket().getTicket(intervencionesEncontradas.get(0).getNumeroTicket());
+		//GrupoDeResolucion grupo = ventana.getGestorGrupo().getGrupo(intervencionesEncontradas.get(0).getNumeroLegajo());
+		txtNumeroTicket.setText(ticket.getNumero().toString());
+		txtNumeroLegajo.setText(ticket.getEmpleado().getNumeroLegajo().toString());
+		txtClasificacion.setText(ticket.getDuracionClasificacionActual().getClasificacion().toString());
+		txtEstadoTicket.setText(ticket.getDuracionEstadoActual().getEstado().getNombre());
+		txtFechaApertura.setText(ticket.getFechaApertura().toString());
+		//txtFechaAsignacion.setText(ticket.getIntervenciones().);
+		txtEstadoIntervencion.setText(intervencionesEncontradas.get(0).getEstado());
+		
+		
+		
+		btnDerecha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		btnIzquierda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
 		
 		
 		btnModificarEstado.addActionListener(new ActionListener() {

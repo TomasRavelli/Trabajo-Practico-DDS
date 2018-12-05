@@ -32,12 +32,10 @@ public class InterfazDerivarTicket2 extends JPanel {
 	private JTextField txtLegajo;
 	private JTextField txtEstadoActual;
 	private JTextField txtNuevoEstado;
-	private JTextField txtClasificacion;
 	private GrupoDeResolucion[] grupos;
 	
+	
 	public InterfazDerivarTicket2(Principal frame, DerivarDTO derivarDTO) {
-		
-		//TODO SI EL GRUPO AL CUAL SE ESTA DERIVANDO EL TICKET TIENE UNA INTERVENCION EN ESPERA SE LLEVA A CABO UNA REASIGNACION DE DICHA INTERVENCION (NO SE CREA UNA NUEVA)
 		
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -45,6 +43,8 @@ public class InterfazDerivarTicket2 extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
+		
+		ClasificacionTicket clasificacionOriginal = derivarDTO.getClasificacion();
 		
 		grupos = cargarGrupos(derivarDTO.getClasificacion());
 		Ticket ticket = ventana.getGestorTicket().getTicket(Integer.valueOf(derivarDTO.getNumeroTicket()));
@@ -175,14 +175,6 @@ public class InterfazDerivarTicket2 extends JPanel {
 		this.add(txtNuevoEstado);
 		txtNuevoEstado.setColumns(10);
 		
-		txtClasificacion = new JTextField();
-		txtClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		txtClasificacion.setEditable(false);
-		txtClasificacion.setBounds(692, 441, 252, 22);
-		txtClasificacion.setText(derivarDTO.getClasificacion().toString());
-		add(txtClasificacion);
-		txtClasificacion.setColumns(10);
-		
 
 		
 		JComboBox<GrupoDeResolucion> comboBoxGrupo = new JComboBox<GrupoDeResolucion>();
@@ -203,6 +195,24 @@ public class InterfazDerivarTicket2 extends JPanel {
 		btnDerivar.setBounds(1020, 650, 133, 37);
 		this.add(btnDerivar);
 		
+		JComboBox<ClasificacionTicket> comboBoxClasificacion = new JComboBox<ClasificacionTicket>(cargarClasificaciones(derivarDTO.getClasificacion()));
+		comboBoxClasificacion.setEditable(false);
+		comboBoxClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
+		comboBoxClasificacion.setBounds(692, 441, 252, 22);
+		add(comboBoxClasificacion);
+		 ActionListener cbActionListener = new ActionListener() {//add actionlistner to listen for change
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	remove(comboBoxGrupo);
+	            	remove(comboBoxClasificacion);
+	            	comboBoxGrupo.setModel(new DefaultComboBoxModel<GrupoDeResolucion>(cargarGrupos((ClasificacionTicket)comboBoxClasificacion.getSelectedItem())));
+	            	comboBoxClasificacion.setModel(new DefaultComboBoxModel<ClasificacionTicket>(cargarClasificaciones((ClasificacionTicket)comboBoxClasificacion.getSelectedItem())));
+	            	add(comboBoxGrupo);
+	            	add(comboBoxClasificacion);	
+	                }
+	        };
+	        comboBoxClasificacion.addActionListener(cbActionListener);
+
 
 		btnDerivar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -220,7 +230,13 @@ public class InterfazDerivarTicket2 extends JPanel {
 					int dialogButton = JOptionPane.YES_NO_OPTION;
 					int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket?","Warning",dialogButton);
 					if(dialogResult == JOptionPane.YES_OPTION){
-						ventana.getGestorTicket().derivarTicket(derivarDTO, (GrupoDeResolucion)comboBoxGrupo.getSelectedItem(), txtAreaObservaciones.getText());
+						derivarDTO.setClasificacion((ClasificacionTicket)comboBoxClasificacion.getSelectedItem());
+						if(((ClasificacionTicket)comboBoxClasificacion.getSelectedItem()).getId_ClasificacionTicket() == clasificacionOriginal.getId_ClasificacionTicket()) {
+							ventana.getGestorTicket().derivarTicket(derivarDTO,false,(GrupoDeResolucion)comboBoxGrupo.getSelectedItem(), txtAreaObservaciones.getText());	
+						}
+						else {
+							ventana.getGestorTicket().derivarTicket(derivarDTO,true,(GrupoDeResolucion)comboBoxGrupo.getSelectedItem(), txtAreaObservaciones.getText());
+						}
 						ventana.setContentPane(new HomeMesaAyuda(ventana));
 						ventana.pack();
 					}
@@ -382,5 +398,23 @@ public class InterfazDerivarTicket2 extends JPanel {
 		
 		grupos[0] = new GrupoDeResolucion("Seleccione una opcion...");
 		return grupos;
+	}
+	
+	
+	private ClasificacionTicket[] cargarClasificaciones(ClasificacionTicket actual) {
+		ClasificacionTicket[] clasificaciones = new ClasificacionTicket[ventana.getGestorClasificacion().getClasificaciones().size()];
+		ClasificacionTicket aux;
+		Integer indiceAux = 0;
+		for(int i=0; i < ventana.getGestorClasificacion().getClasificaciones().size(); i++) {
+			clasificaciones[i] = ventana.getGestorClasificacion().getClasificaciones().get(i);
+			if(clasificaciones[i].getNombre().equalsIgnoreCase(actual.getNombre())) {
+				indiceAux = i;
+				}
+		}
+		aux = clasificaciones[0];
+		clasificaciones[indiceAux] = aux;
+		clasificaciones[0] = actual;
+		
+		return clasificaciones;
 	}
 }
