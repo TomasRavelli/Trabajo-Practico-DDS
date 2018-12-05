@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.Estado;
 import modelo.entidades.GrupoDeResolucion;
+import modelo.entidades.Usuario;
 
 public class TicketDTO {
 
@@ -20,7 +21,7 @@ public class TicketDTO {
 	private GrupoDeResolucion grupo;
 	private LocalDate fechaUltimoCambioEstado;
 	private Estado estado;
-	
+	private Usuario usuario;
 
 	
 	public TicketDTO(Integer numero, Integer legajo, ClasificacionTicket clasificacion, String descripcion, LocalDate fechaApertura, LocalTime horaApertura, LocalDate fechaCierre, LocalTime horaCierre) {
@@ -34,14 +35,16 @@ public class TicketDTO {
 		this.horaCierre = horaCierre;
 	}
 	
-	public TicketDTO(Integer numero, Integer legajo, ClasificacionTicket clasificacion, LocalDate fechaApertura, GrupoDeResolucion grupo, LocalDate fechaUltimo, Estado estado) {
+	public TicketDTO(Integer numero, Integer legajo, ClasificacionTicket clasificacion, LocalDate fechaApertura, LocalTime horaApertura, GrupoDeResolucion grupo, LocalDate fechaUltimo, Estado estado, Usuario u) {
 		this.numero = numero;
 		this.legajo = legajo;
 		this.clasificacion = clasificacion;
 		this.fechaApertura = fechaApertura;
+		this.horaApertura = horaApertura;
 		this.grupo = grupo;
 		this.fechaUltimoCambioEstado = fechaUltimo;
 		this.estado = estado;
+		this.usuario = u;
 	}
 	
 	
@@ -140,4 +143,13 @@ public class TicketDTO {
 	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 }

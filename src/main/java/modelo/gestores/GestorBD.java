@@ -145,7 +145,7 @@ public class GestorBD {
 	public List<Ticket> getTickets(DatosDTO datosDTO) {
 		List<Ticket> encontrados = new ArrayList<>();
 		
-		String consulta1 = "Select t FROM Ticket t, DuracionClasificacion dc, DuracionEstado de, ClasificacionTicket ct, Estado e, Intervencion i, GrupoDeResolucion gr  "
+		String consulta1 = "Select distinct t FROM Ticket t, DuracionClasificacion dc, DuracionEstado de, ClasificacionTicket ct, Estado e, Intervencion i, GrupoDeResolucion gr  "
 				+ " where t.duracionClasificacionActual = dc and dc.clasificacion = ct and t.duracionEstadoActual = de and de.estado = e and t = i.ticket and i.grupo = gr";
 		
 		if(!(datosDTO.getNumeroTicket()==null)) {

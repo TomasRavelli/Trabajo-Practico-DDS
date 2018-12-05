@@ -41,6 +41,7 @@ public class InterfazConsultarTicket extends JPanel {
 	private JTable table_1;
 	private JTextField txtNumeroTicket;
 	private JTextField txtNumeroLegajo;
+	DefaultTableModel modeloTablaTicket;
 	List<TicketDTO> ticketsEncontrados;
 	TicketDTO ticketSeleccionado;
 
@@ -127,31 +128,9 @@ public class InterfazConsultarTicket extends JPanel {
 		lblFechaApertura.setBounds(46, 178, 119, 21);
 		this.add(lblFechaApertura);
 		
-		DefaultTableModel modeloTablaTicket = new DefaultTableModel(
+		modeloTablaTicket = new DefaultTableModel(
 				new Object[][] {
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
-					{null, null, null, null, null, null, null, null},
+					
 				},
 				new String[] {"Ticket", "Legajo", "Fecha apertura", "Hora apertura", "Operador", "Clasificacion actual", "Estado actual", "Ultimo cambio estado"}
 			);
@@ -212,7 +191,7 @@ public class InterfazConsultarTicket extends JPanel {
 		this.add(comboBoxMesCambio);
 		
 		JComboBox<String> comboBoxAnioCambio = new JComboBox<String>();
-		comboBoxAnioCambio.setModel(new DefaultComboBoxModel<String>(new String[] {"AAAA", "2018"}));
+		comboBoxAnioCambio.setModel(new DefaultComboBoxModel<String>(new String[] {"AAAA", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2017", "2028"}));
 		comboBoxAnioCambio.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxAnioCambio.setEditable(true);
 		comboBoxAnioCambio.setBounds(1258, 155, 62, 22);
@@ -234,7 +213,7 @@ public class InterfazConsultarTicket extends JPanel {
 		
 		JComboBox<String> comboBoxAnioApertura = new JComboBox<String>();
 		comboBoxAnioApertura.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		comboBoxAnioApertura.setModel(new DefaultComboBoxModel<String>(new String[] {"AAAA", "2018"}));
+		comboBoxAnioApertura.setModel(new DefaultComboBoxModel<String>(new String[] {"AAAA", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2017", "2028"}));
 		comboBoxAnioApertura.setEditable(true);
 		comboBoxAnioApertura.setBounds(313, 179, 62, 22);
 		this.add(comboBoxAnioApertura);
@@ -271,6 +250,16 @@ public class InterfazConsultarTicket extends JPanel {
 		btnBuscar.setBounds(1119, 218, 133, 37);
 		this.add(btnBuscar);
 		
+
+		/*btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(table_1.getSelectedRow() != -1 || table_1.getSelectedRow() < ticketsEncontrados.size()) {
+					ventana.setContentPane(new InterfazConfigurarReporte(ventana, ticketsEncontrados));
+					ventana.pack();
+			}}
+		});*/
+		
+		
 		
 		btnCerrarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -283,11 +272,10 @@ public class InterfazConsultarTicket extends JPanel {
 					ventana.pack();
 				}else {
 					//TODO mostrar error del estado
+					JOptionPane.showMessageDialog(null, "ESTADO de ticket no permitido para cerrar ticket.");
 				}
 				
 			}}
-
-			
 		});
 		
 		
@@ -307,7 +295,7 @@ public class InterfazConsultarTicket extends JPanel {
 		
 		btnDerivar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(table_1.getSelectedRow() != -1 || table_1.getSelectedRow() < ticketsEncontrados.size()) {
+				if(table_1.getSelectedRow() != -1 && table_1.getSelectedRow() < ticketsEncontrados.size()) {
 					Integer numeroTicketSeleccionado = Integer.valueOf(((Vector) modeloTablaTicket.getDataVector().elementAt(table_1.getSelectedRow())).elementAt(0).toString());
 					System.out.println(numeroTicketSeleccionado);
 					ticketSeleccionado = buscarTicket(numeroTicketSeleccionado, ticketsEncontrados);
@@ -322,6 +310,7 @@ public class InterfazConsultarTicket extends JPanel {
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				modeloTablaTicket.setRowCount(0);;
 				//TODO ver donde colocar cada uno de estos errores
 				//JOptionPane.showMessageDialog(null, "No existen tickets que cumplan con los criterios ingresados.");
 				//JOptionPane.showMessageDialog(null, "Fecha de apertura invalida. Vuelva a ingresarla.");
@@ -351,6 +340,7 @@ public class InterfazConsultarTicket extends JPanel {
 					
 					if(fechaApertura.isAfter(LocalDate.now()) || fechaUltimoCambioEstado.isAfter(LocalDate.now())) {
 						//TODO Crear ventana error: "Fecha(s) no valida(s)"
+						JOptionPane.showMessageDialog(null, "Fecha(s) no valida(s).");
 					}
 					
 					else {
@@ -361,11 +351,15 @@ public class InterfazConsultarTicket extends JPanel {
 				}
 				
 				else {
-					List<TicketDTO> ticketsEncontrados = ventana.getGestorTicket().getTickets(datosDTO);
+					 ticketsEncontrados = ventana.getGestorTicket().getTickets(datosDTO);
 				}
-
-				
-				//TODO MOSTRAR RESULTADOS EN LA TABLA
+				if(ticketsEncontrados.size() > 0) {
+				cargarTabla(ticketsEncontrados);
+				System.out.println(ticketsEncontrados.size());
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "No existen tickets que cumplan con los criterios ingresados.");
+				}
 			}
 		});
 		
@@ -387,4 +381,14 @@ public class InterfazConsultarTicket extends JPanel {
 		}
 		return aux;
 	}
+
+
+	private void cargarTabla(List<TicketDTO> ticketsEncontrados) {
+		System.out.println(ticketsEncontrados);
+		for(TicketDTO t: ticketsEncontrados) {
+			modeloTablaTicket.addRow(new String[]{t.getNumero().toString(), t.getLegajo().toString(),t.getFechaApertura().toString(), t.getHoraApertura().toString(), t.getUsuario().getNombre(), t.getClasificacion().toString(), t.getEstado().getNombre(), t.getFechaUltimoCambioEstado().toString()});
+		}
+	}
+
+	
 }
