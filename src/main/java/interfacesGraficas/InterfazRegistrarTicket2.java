@@ -35,8 +35,6 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
 		
-		
-		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
 		separator.setBounds(301, 90, 760, 2);
@@ -51,14 +49,12 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		scrollPane.setViewportView(textAreaObservaciones);
 		textAreaObservaciones.setLineWrap(true);
 		
-		
 		JLabel errorObsVacio = new JLabel("* Este campo no puede estar vacio.");
 		errorObsVacio.setForeground(Color.RED);
 		errorObsVacio.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		errorObsVacio.setBounds(1057, 300, 219, 24);
 		this.add(errorObsVacio);
 		errorObsVacio.setVisible(false);
-		
 		
 		JLabel lblRegistrarTicket = new JLabel("Registrar ticket");
 		lblRegistrarTicket.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
@@ -84,9 +80,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		lblClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
 		lblClasificacion.setBounds(319, 232, 172, 27);
 		add(lblClasificacion);
-		
-		
-		
+				
 		txtNumeroTicket = new JTextField();
 		txtNumeroTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
 		txtNumeroTicket.setBackground(new Color(220, 220, 220));
@@ -95,7 +89,6 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		txtNumeroTicket.setEditable(false);
 		this.add(txtNumeroTicket);
 		txtNumeroTicket.setText(ticketDTO.getNumero().toString());
-		
 		
 		txtNumeroLegajo = new JTextField();
 		txtNumeroLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
@@ -106,7 +99,6 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		this.add(txtNumeroLegajo);
 		txtNumeroLegajo.setText(ticketDTO.getLegajo().toString());
 		
-		
 		txtClasificacion = new JTextField();
 		txtClasificacion.setBackground(new Color(227, 227, 227));
 		txtClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
@@ -115,9 +107,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		add(txtClasificacion);
 		txtClasificacion.setColumns(10);
 		txtClasificacion.setText(ticketDTO.getClasificacion().toString());
-		
-		
-		
+			
 		JButton btnDerivarTicket = new JButton("Derivar ticket");
 		btnDerivarTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		btnDerivarTicket.setBounds(1020, 655, 133, 37);
@@ -138,7 +128,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 				else {
 					errorObsVacio.setVisible(false);
 					int dialogButton = JOptionPane.YES_NO_OPTION;
-					int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket a otro Grupo de Resolucion?","Warning",dialogButton);
+					int dialogResult = JOptionPane.showConfirmDialog (null, "¿Desea derivar el ticket a otro Grupo de Resolucion?","Warning",dialogButton);
 					if(dialogResult == JOptionPane.YES_OPTION){
 						ventana.setContentPane(new InterfazDerivarTicket2(ventana, new DerivarDTO(Integer.valueOf(txtNumeroTicket.getText()), Integer.valueOf(txtNumeroLegajo.getText()), ticketDTO.getClasificacion(), textAreaObservaciones.getText())));
 						ventana.pack();

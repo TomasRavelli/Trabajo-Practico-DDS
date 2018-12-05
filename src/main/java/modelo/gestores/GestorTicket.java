@@ -50,8 +50,8 @@ public class GestorTicket {
 		ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
 		ticket.add(nuevaDuracionClasificacion);
 		ticket.setUsuario(gestorUsuario.getUsuarioActual());
-		ticket.setDescripcion(ticketDTO.getDescripcion());
 		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), gestorUsuario.getUsuarioActual(),ticket);
+		//Se deberia crear una constante porque si se usa en muchos lugares, al cambiar ese numero hay que cambiarlo en muchos lados.
 		durEstado.setEstado(gestorBD.getEstado(1));
 		durEstado.setUsuario(gestorUsuario.getUsuarioActual());
 		ticket.setDuracionEstadoActual(durEstado);

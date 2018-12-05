@@ -28,7 +28,7 @@ public class GestorIntervencion {
 	
 	
 	public void actualizarEstadoIntervencion (Integer numeroTicket, String observaciones) {
-		//NO INICIALIZAR ASI, YA DARLE EL VALOR QUE VA A TENER
+		//TODO NO INICIALIZAR ASI, YA DARLE EL VALOR QUE VA A TENER
 		Intervencion intervencion = new Intervencion();
 		EstadoIntervencion estadoIntervencion = new EstadoIntervencion();
 		intervencion = gestorBD.getIntervencionMDA(numeroTicket);
@@ -39,11 +39,9 @@ public class GestorIntervencion {
 		estadoIntervencion.setFechaFin(fecha);
 		estadoIntervencion.setHoraFin(hora);
 		
-		
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("Terminada",fecha,hora,intervencion);
 		nuevoEstadoIntervencion.setHoraFin(hora);
 		nuevoEstadoIntervencion.setFechaFin(fecha);
-		
 		
 		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 		intervencion.add(nuevoEstadoIntervencion);
