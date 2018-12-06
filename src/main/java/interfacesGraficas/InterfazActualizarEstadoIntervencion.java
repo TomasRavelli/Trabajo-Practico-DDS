@@ -3,6 +3,8 @@ package interfacesGraficas;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+
+import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -23,7 +25,7 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 	private JTextField txtEstadoActual;
 
 
-	public InterfazActualizarEstadoIntervencion(Principal frame) {
+	public InterfazActualizarEstadoIntervencion(Principal frame, IntervencionResultadoDTO intervencion) {
 		
 		//ACTOR : GRUPO DE RESOLUCION
 		
