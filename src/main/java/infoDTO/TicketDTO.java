@@ -2,7 +2,6 @@ package infoDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.Estado;
 import modelo.entidades.GrupoDeResolucion;

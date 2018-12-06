@@ -1,6 +1,12 @@
 package modelo.gestores;
 
 import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import infoDTO.IntervencionBusquedaDTO;
+import infoDTO.IntervencionResultadoDTO;
+import infoDTO.TicketDTO;
 import modelo.entidades.EstadoIntervencion;
 import modelo.entidades.GrupoDeResolucion;
 import modelo.entidades.Intervencion;
@@ -11,7 +17,7 @@ public class GestorIntervencion {
 	GestorUsuario gestorUsuario;
 	
 	public GestorIntervencion(GestorBD gBD, GestorUsuario gUsu){
-		gestorBD=gBD;
+		gestorBD = gBD;
 		gestorUsuario = gUsu;
 	}
 
@@ -67,15 +73,69 @@ public class GestorIntervencion {
 		intervencion.add(nuevoEstadoIntervencion);
 		gestorBD.guardarIntervencion(intervencion);
 		
+		Intervencion intervencionRetorno;
 		
-		Intervencion intervencionGrupo = new Intervencion(fecha, hora, gestorBD.getTicket(numeroTicket));
-		intervencionGrupo.setGrupoResolucion(grupo);
-		EstadoIntervencion estadoIntervencionGrupo = new EstadoIntervencion("Asignada", fecha, hora, intervencionGrupo);
-		estadoIntervencionGrupo.setUsuario(gestorUsuario.getUsuarioActual());
-		intervencionGrupo.setEstadoIntervencionActual(estadoIntervencionGrupo);
-		intervencionGrupo.add(estadoIntervencionGrupo);
-		gestorBD.guardarIntervencion(intervencionGrupo);
+		Intervencion intervencionGrupoNueva = gestorBD.getUltimaIntervencion(numeroTicket,grupo);
+		EstadoIntervencion estadoIntervencionGrupo = new EstadoIntervencion(fecha, hora);
+		estadoIntervencionGrupo.setEstado("Asignada");
+	
 		
-		return intervencionGrupo;
+		if(intervencionGrupoNueva==null || intervencionGrupoNueva.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Terminada")) {
+			Intervencion intervencionGrupo = new Intervencion();
+			intervencionGrupo.setFechaAsignacion(fecha);
+			intervencionGrupo.setHoraAsignacion(hora);
+			intervencionGrupo.setGrupoResolucion(grupo);
+			estadoIntervencionGrupo.setIntervencion(intervencionGrupo);
+			estadoIntervencionGrupo.setUsuario(gestorUsuario.getUsuarioActual());
+			intervencionGrupo.setEstadoIntervencionActual(estadoIntervencionGrupo);
+			intervencionGrupo.add(estadoIntervencionGrupo);
+			intervencionRetorno = intervencionGrupo;
+		}
+		
+		else {
+			LocalTime horaFin = LocalTime.now();
+			LocalDate fechaFin = LocalDate.now();
+			
+			intervencionGrupoNueva.getEstadoIntervencionActual().setFechaFin(fechaFin);
+			intervencionGrupoNueva.getEstadoIntervencionActual().setHoraFin(horaFin);
+			intervencionGrupoNueva.setEstadoIntervencionActual(estadoIntervencionGrupo);
+			intervencionGrupoNueva.add(estadoIntervencionGrupo);
+			estadoIntervencionGrupo.setIntervencion(intervencionGrupoNueva);
+			estadoIntervencionGrupo.setUsuario(gestorUsuario.getUsuarioActual());
+			gestorBD.actualizarIntervencion(intervencionGrupoNueva);
+			
+			intervencionRetorno = null;
+		}
+		
+		return intervencionRetorno;
+	}
+	
+	
+	public void actualizarEstado(Integer numeroTicket) {
+		
+		LocalDate fechaFin = LocalDate.now();
+		LocalTime horaFin = LocalTime.now();
+		
+		Intervencion intervencionMDA = gestorBD.getIntervencionMDA(numeroTicket);
+		intervencionMDA.getEstadoIntervencionActual().setFechaFin(fechaFin);
+		intervencionMDA.getEstadoIntervencionActual().setHoraFin(horaFin);
+		
+		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion();
+		nuevoEstadoIntervencion.setEstado("Trabajando");
+		intervencionMDA.setEstadoIntervencionActual(nuevoEstadoIntervencion);
+		intervencionMDA.add(nuevoEstadoIntervencion);
+	}
+	
+	
+	public List<IntervencionBusquedaDTO> getIntervenciones(IntervencionBusquedaDTO intervencionDTO) {
+		List<IntervencionBusquedaDTO> encontradas = new ArrayList<>();
+		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO);
+		
+		for(Intervencion i: encontradasAux) {
+			IntervencionBusquedaDTO auxDTO = new IntervencionBusquedaDTO(i.getEstadoIntervencionActual().getEstado(), intervencionDTO.getFechaDesde(), intervencionDTO.getFechaHasta(), i.getTicket().getNumero().toString(), i.getTicket().getEmpleado().getNumeroLegajo().toString());
+			encontradas.add(auxDTO);
+		}
+		
+		return encontradas;
 	}
 }

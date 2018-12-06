@@ -60,7 +60,9 @@ public class EstadoIntervencion implements Serializable {
 		this.observaciones = observaciones;
 	}
 
-	public EstadoIntervencion() {}
+	public EstadoIntervencion() {
+		
+	}
 	
 	public EstadoIntervencion(String estado, LocalDate fInicio, LocalTime hInicio, Intervencion i) {
 		this.estado = estado;
@@ -128,8 +130,8 @@ public class EstadoIntervencion implements Serializable {
 		return intervencionMuchos;
 	}
 
-	public void setIntervencion(Intervencion intervencionMuchos) {
-		this.intervencionMuchos = intervencionMuchos;
+	public void setIntervencion(Intervencion interv) {
+		this.intervencionMuchos = interv;
 	}
 	public Usuario getUsuario() {
 		return usuario;

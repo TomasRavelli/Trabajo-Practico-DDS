@@ -1,11 +1,9 @@
 package interfacesGraficas;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import infoDTO.TicketDTO;
-
+import modelo.aplicacion.Principal;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
@@ -18,16 +16,16 @@ import java.awt.Dimension;
 import java.awt.TextArea;
 import javax.swing.JSeparator;
 
+
 public class InterfazCerrarTicket extends JPanel {
 
-	private JFrame ventana;
+	private Principal ventana;
 	private JTextField textFieldTicket;
 	private JTextField textFieldLegajo;
 	private JTextField textFieldNuevoEstado;
 
-	public InterfazCerrarTicket(JFrame frame, TicketDTO ticketSeleccionado) {
-		
-		//SOLO PUEDE CERRARSE SI PREVIAMENTE SE ENCUENTRA EN "Solucionado a la espera OK"
+	public InterfazCerrarTicket(Principal frame, TicketDTO ticketSeleccionado) {
+
 		
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -87,12 +85,14 @@ public class InterfazCerrarTicket extends JPanel {
 		textFieldTicket.setBounds(701, 184, 200, 24);
 		textFieldTicket.setColumns(10);
 		this.add(textFieldTicket);
+		textFieldTicket.setText(ticketSeleccionado.getNumero().toString());
 		
 		textFieldLegajo = new JTextField();
 		textFieldLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		textFieldLegajo.setBounds(701, 266, 200, 24);
 		textFieldLegajo.setColumns(10);
 		this.add(textFieldLegajo);
+		textFieldLegajo.setText(ticketSeleccionado.getLegajo().toString());
 		
 		textFieldNuevoEstado = new JTextField();
 		textFieldNuevoEstado.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
@@ -114,6 +114,8 @@ public class InterfazCerrarTicket extends JPanel {
 		btnCancelar.setBounds(1207, 650, 133, 37);
 		this.add(btnCancelar);
 		
+		ventana.getGestorIntervencion().actualizarEstado(ticketSeleccionado.getNumero());
+		
 		
 		btnCerrarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -124,7 +126,7 @@ public class InterfazCerrarTicket extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea cerrar el ticket?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
-				  //PASA ALGO
+				  ventana.getGestorTicket().cerrarTicket(ticketSeleccionado.getNumero(), textAreaObservaciones.getText());
 				}
 			}
 		});
@@ -132,7 +134,12 @@ public class InterfazCerrarTicket extends JPanel {
 		
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//VUELVE
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea cancelar el cierre del ticket? los cambios no seran guardados.","Warning",dialogButton);
+				if(dialogResult == JOptionPane.YES_OPTION){
+				  ventana.setContentPane(new HomeMesaAyuda(ventana));
+				  ventana.pack();
+				}
 			}
 		});
 	}

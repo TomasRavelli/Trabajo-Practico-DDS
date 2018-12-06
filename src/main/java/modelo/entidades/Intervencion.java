@@ -60,7 +60,9 @@ public class Intervencion implements Serializable {
 	
 	
 	
-	public Intervencion() {}
+	public Intervencion() {
+		estadoIntervencionMuchos = new ArrayList<>();
+	}
 	
 	public Intervencion(LocalDate fechaAsig, LocalTime horaAsig, Ticket t) {
 		estadoIntervencionMuchos = new ArrayList<>();

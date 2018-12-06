@@ -1,10 +1,14 @@
 package interfacesGraficas;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.hibernate.type.descriptor.java.LocalDateJavaDescriptor;
+
+import infoDTO.IntervencionBusquedaDTO;
+import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
+import modelo.entidades.Intervencion;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,6 +21,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class InterfazConsultarIntervenciones extends JPanel {
@@ -26,12 +33,14 @@ public class InterfazConsultarIntervenciones extends JPanel {
 	public static JTextField txtNumeroLegajo;
 	public static JTextField txtFechaDesde;
 	public static JTextField txtFechaHasta;
+	List<IntervencionBusquedaDTO> intervencionesEncontradas;
 
 	public InterfazConsultarIntervenciones(Principal frame) {
 		
 		//ACTOR : GRUPO DE RESOLUCION
 		//PUEDE NO INGRESAR NINGUN CRITERIO
 		//UN GRUPO DE RESOLUCION SOLO PUEDE MODIFICAR EL ESTADO DE UNA INTERVENCION ASIGNADA A EL
+		//Las fechas son del ultimo cambio de estado
 		
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -136,10 +145,38 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
-
-				ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, txtNumeroLegajo.getText(), txtNumeroTicket.getText(), txtFechaDesde.getText(), txtFechaHasta.getText(), comboBoxEstado.getSelectedItem()));
-				ventana.pack();
+				//TODO ver que el pelotudo ingresa bien la fecha con try catch
+				
+				IntervencionBusquedaDTO intervencionDTO = new IntervencionBusquedaDTO();
+				
+				if(!txtFechaDesde.getText().isEmpty() && !txtFechaHasta.getText().isEmpty()) {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					LocalDate fechaDesde = LocalDate.parse(txtFechaDesde.getText(), formatter);
+					LocalDate fechaHasta = LocalDate.parse(txtFechaHasta.getText(), formatter);
+					
+					if (fechaHasta.isAfter(LocalDate.now()) || fechaDesde.isAfter(LocalDate.now())) {
+						JOptionPane.showMessageDialog(null, "Fecha(s) no valida(s).");
+					}
+					
+					else {
+						intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
+						intervencionesEncontradas = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO);
+					}
+				}
+				
+				else {
+					intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), txtNumeroTicket.getText(), txtNumeroLegajo.getText());
+					intervencionesEncontradas = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO);
+				}
+				
+				if (intervencionesEncontradas.size()>0) {
+					ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionesEncontradas, intervencionDTO));
+					ventana.pack();
+				}
+				
+				else {
+					JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
+				}
 			}
 		});
 		

@@ -7,8 +7,13 @@ import javax.swing.border.EmptyBorder;
 
 import infoDTO.DerivarDTO;
 import modelo.aplicacion.Principal;
+import modelo.entidades.ClasificacionTicket;
+import modelo.entidades.GrupoDeResolucion;
+
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -23,10 +28,10 @@ public class InterfazDerivarTicket1 extends JPanel {
 	private JTextField txtNumeroDeTicket;
 	private JTextField txtNumeroDeLegajo;
 	private JTextField txtClasificacionDeTicket;
+	private GrupoDeResolucion[] grupos;
+	
 
 	public InterfazDerivarTicket1(Principal frame, DerivarDTO derivarDTO) {
-		
-		//TODO LA LISTA DE GRUPO RESOLUCION DEPENDE DE LA CLASIFICACION DEL TICKET
 		
 		
 		this.ventana=frame;
@@ -36,7 +41,7 @@ public class InterfazDerivarTicket1 extends JPanel {
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
 		
-		
+		grupos = cargarGrupos(derivarDTO.getClasificacion());
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
@@ -72,10 +77,9 @@ public class InterfazDerivarTicket1 extends JPanel {
 		
 		
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setEditable(true);
+		JComboBox<GrupoDeResolucion> comboBox = new JComboBox<GrupoDeResolucion>();
 		comboBox.setBackground(Color.WHITE);
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una opcion...", "Mesa de ayuda", "Unidades de soporte", "Servicio tecnico", "Administrador de Base de Datos", "Administrador SUSE Linux", "Administrador Proxy y correo electronico", "Administrador DEBIAN", "Redes LAN", "Comunicaciones", "Desarrollo Sistema Comercial", "Desarrollo Sistema RRHH", "Desarrollo Sistema de reclamos"}));
+		comboBox.setModel(new DefaultComboBoxModel<GrupoDeResolucion>(grupos));
 		comboBox.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		comboBox.setBounds(620, 308, 407, 25);
 		add(comboBox);
@@ -106,8 +110,6 @@ public class InterfazDerivarTicket1 extends JPanel {
 		add(txtClasificacionDeTicket);
 		txtClasificacionDeTicket.setText(derivarDTO.getClasificacion().toString());
 		
-		
-		
 		JButton btnDerivarTicket = new JButton("Derivar Ticket");
 		btnDerivarTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		btnDerivarTicket.setBounds(1020, 655, 133, 37);
@@ -121,8 +123,13 @@ public class InterfazDerivarTicket1 extends JPanel {
 		
 		btnDerivarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//ventana.setContentPane(new InterfazDerivarTicket2(ventana, derivarDTO, comboBox.getSelectedItem().toString()));
-				//ventana.pack();
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket?","Warning",dialogButton);
+				if(dialogResult == JOptionPane.YES_OPTION){
+					ventana.getGestorTicket().derivarTicket(derivarDTO, false, (GrupoDeResolucion)comboBox.getSelectedItem(), derivarDTO.getObservaciones());
+					ventana.setContentPane(new HomeMesaAyuda(ventana));
+					ventana.pack();
+				}
 			}
 		});
 		
@@ -133,5 +140,147 @@ public class InterfazDerivarTicket1 extends JPanel {
 				ventana.pack();
 			}
 		});
+	}
+	
+	private GrupoDeResolucion[] cargarGrupos(ClasificacionTicket clasifTicket) {
+		int n = 0;
+		GrupoDeResolucion[] grupos = new GrupoDeResolucion[n];
+		if(clasifTicket.getNombre().equalsIgnoreCase("Cambios de Configuracion de Sistema Operativo de PC") || clasifTicket.getNombre().equalsIgnoreCase("Problemas en el funcionamiento del SO de PC y utilitarios") ) {
+			n = 4;
+			grupos = new GrupoDeResolucion[n+1];
+			grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+			grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+			grupos[3] = ventana.getGestorGrupo().getGrupo("'Administrador SUSE Linux'");
+			grupos[4] = ventana.getGestorGrupo().getGrupo("'Administrador DEBIAN'");
+		}
+		
+		else {
+				if (clasifTicket.getNombre().equalsIgnoreCase("Solicitud de usuarios para Sistemas informaticos que utiliza la empresa")) {
+					n = 7;
+					grupos = new GrupoDeResolucion[n+1];
+					grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+					grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+					grupos[3] = ventana.getGestorGrupo().getGrupo("'Administrador SUSE Linux'");
+					grupos[4] = ventana.getGestorGrupo().getGrupo("'Administrador de Base de Datos'");			
+					grupos[5] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema Comercial'");
+					grupos[6] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema RRHH'");
+					grupos[7] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema de Reclamos'");
+				}
+				else {
+					if(clasifTicket.getNombre().equalsIgnoreCase("Solicitud de Cambio de Contrasenias") || clasifTicket.getNombre().equalsIgnoreCase("Solicitud de instalacion de aplicaciones") || clasifTicket.getNombre().equalsIgnoreCase("Modificacion en los perfiles de usuarios")) {
+						n = 7;
+						grupos = new GrupoDeResolucion[n+1];
+						grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+						grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+						grupos[3] = ventana.getGestorGrupo().getGrupo("'Administrador SUSE Linux'");
+						grupos[4] = ventana.getGestorGrupo().getGrupo("'Administrador Proxy y correo electronico'");
+						grupos[5] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema Comercial'");
+						grupos[6] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema RRHH'");
+						grupos[7] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema de Reclamos'");
+					}
+				
+				else {
+					if(clasifTicket.getNombre().equalsIgnoreCase("Mal funcionamiento de Hardware")) {
+						n =7;
+						grupos = new GrupoDeResolucion[n+1];
+						grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+						grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+						grupos[3] = ventana.getGestorGrupo().getGrupo("'Servicio tecnico'");
+						grupos[4] = ventana.getGestorGrupo().getGrupo("'Administrador SUSE Linux'");
+						grupos[5] = ventana.getGestorGrupo().getGrupo("'Administrador DEBIAN'");
+						grupos[6] = ventana.getGestorGrupo().getGrupo("'Redes LAN'");
+						grupos[7] = ventana.getGestorGrupo().getGrupo("'Comunicaciones'");
+						
+					}
+					else {
+						if(clasifTicket.getNombre().equalsIgnoreCase("Problemas en la autenticacion en los distintos sistemas")) {
+							n = 6;
+							grupos = new GrupoDeResolucion[n+1];
+							grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+							grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+							grupos[3] = ventana.getGestorGrupo().getGrupo("'Administrador de Base de Datos'");							
+							grupos[4] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema Comercial'");
+							grupos[5] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema RRHH'");
+							grupos[6] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema de Reclamos'");
+						}
+						else {
+							if(clasifTicket.getNombre().equalsIgnoreCase("Problemas de acceso a la red local o remota")){
+								n = 6;
+								grupos = new GrupoDeResolucion[n+1];
+								grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+								grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+								grupos[3] = ventana.getGestorGrupo().getGrupo("'Servicio tecnico'");
+								grupos[4] = ventana.getGestorGrupo().getGrupo("'Administrador Proxy y correo electronico'");
+								grupos[5] = ventana.getGestorGrupo().getGrupo("'Redes LAN'");				
+								grupos[5] = ventana.getGestorGrupo().getGrupo("'Comunicaciones'");		
+							}
+							else {
+								if(clasifTicket.getNombre().equalsIgnoreCase("Solicitud de usuarios de red")){
+									n = 4;
+									grupos = new GrupoDeResolucion[n+1];
+									grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+									grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+									grupos[3] = ventana.getGestorGrupo().getGrupo("'Administrador SUSE Linux'");
+									grupos[4] = ventana.getGestorGrupo().getGrupo("'Administrador Proxy y correo electronico'");
+								}
+								else {
+										if(clasifTicket.getNombre().equalsIgnoreCase("Problemas con el correo electronico")) {
+											n = 3;
+											grupos = new GrupoDeResolucion[n+1];
+											grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+											grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+											grupos[3] = ventana.getGestorGrupo().getGrupo("'Administrador Proxy y correo electronico'");
+										}
+										else {
+											if(clasifTicket.getNombre().equalsIgnoreCase("Solicitud de cuentas de correo electronico")) {
+												n = 2;
+												grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+												grupos[2] = ventana.getGestorGrupo().getGrupo("'Administrador Proxy y correo electronico'");
+											}
+											else {
+												if(clasifTicket.getNombre().equalsIgnoreCase("Solicitud de nuevos puestos de trabajo")) {
+													n = 2;
+													grupos = new GrupoDeResolucion[n+1];
+													grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+													grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+												}
+												else {
+													if(clasifTicket.getNombre().equalsIgnoreCase("Solicitud de soporte en el uso de alguna aplicacion o sistema")) {
+														n = 8;
+														grupos = new GrupoDeResolucion[n+1];
+														grupos[1] = ventana.getGestorGrupo().getGrupo("'Mesa de Ayuda'");
+														grupos[2] = ventana.getGestorGrupo().getGrupo("'Unidades de soporte'");
+														grupos[3] = ventana.getGestorGrupo().getGrupo("'Administrador de Base de Datos'");
+														grupos[4] = ventana.getGestorGrupo().getGrupo("'Administrador SUSE Linux'");
+														grupos[5] = ventana.getGestorGrupo().getGrupo("'Administrador Proxy y correo electronico'");
+														grupos[6] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema Comercial'");
+														grupos[7] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema RRHH'");
+														grupos[8] = ventana.getGestorGrupo().getGrupo("'Desarrollo Sistema de Reclamos'");
+													}
+													
+														else {
+															 grupos = new GrupoDeResolucion[ventana.getGestorGrupo().getGrupos().size()+1];
+																for(int i=0; i < ventana.getGestorGrupo().getGrupos().size(); i++) {
+																	grupos[i+1] = ventana.getGestorGrupo().getGrupos().get(i);
+																}																		
+														}
+													
+														
+													
+														}
+												}
+											}
+										}
+									}
+										
+								}
+								
+							}
+						}
+					}
+				}
+		
+		grupos[0] = new GrupoDeResolucion("Seleccione una opcion...");
+		return grupos;
 	}
 }
