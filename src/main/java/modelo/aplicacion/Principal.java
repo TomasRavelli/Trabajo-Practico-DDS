@@ -25,7 +25,7 @@ public class Principal extends JFrame{
 			public void run() {
 				gestorBD = new GestorBD();
 				//TODO ver lo del log in
-				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(11111));
+				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(88888));
 				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD, gestorUsuario);
 				gestorClasificacion = new GestorClasificacion(gestorBD);
@@ -48,16 +48,16 @@ public class Principal extends JFrame{
 		
 		
 		//DEPENDIENDO SI SE REGISTRE COMO MESA DE AYUDA O GRUPO DE RESOLUCION
-		/*if (false) {
+		if(true) {
 			this.setContentPane(new HomeMesaAyuda(this));
 			this.pack();
 		}
 		else {
 			this.setContentPane(new HomeGrupoResolucion(this));
 			this.pack();
-		}*/
-		this.setContentPane(new HomeGrupoResolucion(this));
-		this.pack();
+		}
+		//this.setContentPane(new HomeGrupoResolucion(this));
+		//this.pack();
 	}
 
 

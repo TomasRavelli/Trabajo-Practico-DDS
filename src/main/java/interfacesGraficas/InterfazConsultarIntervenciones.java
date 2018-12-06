@@ -8,6 +8,7 @@ import org.hibernate.type.descriptor.java.LocalDateJavaDescriptor;
 import infoDTO.IntervencionBusquedaDTO;
 import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
+import modelo.entidades.GrupoDeResolucion;
 import modelo.entidades.Intervencion;
 
 import javax.swing.JLabel;
@@ -33,7 +34,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 	public static JTextField txtNumeroLegajo;
 	public static JTextField txtFechaDesde;
 	public static JTextField txtFechaHasta;
-	List<IntervencionBusquedaDTO> intervencionesEncontradas;
+
 
 	public InterfazConsultarIntervenciones(Principal frame) {
 		
@@ -148,6 +149,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 				//TODO ver que el pelotudo ingresa bien la fecha con try catch
 				
 				IntervencionBusquedaDTO intervencionDTO = new IntervencionBusquedaDTO();
+				GrupoDeResolucion grupo = ventana.getGestorEmpleado().getEmpleado(ventana.getGestorUsuario().getUsuarioActual().getNumeroLegajo()).getGrupo();
 				
 				if(!txtFechaDesde.getText().isEmpty() && !txtFechaHasta.getText().isEmpty()) {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -160,23 +162,17 @@ public class InterfazConsultarIntervenciones extends JPanel {
 					
 					else {
 						intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-						intervencionesEncontradas = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO);
+						ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
+						ventana.pack();
 					}
 				}
 				
 				else {
 					intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-					intervencionesEncontradas = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO);
-				}
-				
-				if (intervencionesEncontradas.size()>0) {
-					ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionesEncontradas, intervencionDTO));
+					ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
 					ventana.pack();
 				}
 				
-				else {
-					JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
-				}
 			}
 		});
 		

@@ -11,6 +11,8 @@ import modelo.entidades.Intervencion;
 import modelo.entidades.Ticket;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JTextField;
@@ -41,7 +43,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 	private JTextField textFieldFechaDesde;
 	private JTextField textFieldFechaHasta;
 
-	public InterfazConsultarIntervencionesPaginacion(Principal frame, List<IntervencionBusquedaDTO> intervencionesEncontradas, IntervencionBusquedaDTO criteriosBusqueda) {
+	public InterfazConsultarIntervencionesPaginacion(Principal frame, IntervencionBusquedaDTO criteriosBusqueda) {
 
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -205,6 +207,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		txtNumeroPagina.setBounds(731, 203, 34, 22);
 		txtNumeroPagina.setColumns(10);
 		this.add(txtNumeroPagina);
+		txtNumeroPagina.setText("1");
 		
 		txtCantidad = new JTextField();
 		txtCantidad.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
@@ -212,7 +215,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		txtCantidad.setColumns(10);
 		txtCantidad.setEditable(false);
 		this.add(txtCantidad);
-		//txtCantidad.setText(intervencionesEncontradas.size());
+		
 		
 		
 		textFieldNumeroTicket = new JTextField();
@@ -292,16 +295,31 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		btnDerecha.setBounds(926, 202, 42, 25);
 		this.add(btnDerecha);
 		
+		//TODO ver que sea menor al size y la flecha tambien que no se pase
+		Integer i = Integer.valueOf(txtNumeroPagina.getText());
+		GrupoDeResolucion grupo = ventana.getGestorEmpleado().getEmpleado(ventana.getGestorUsuario().getUsuarioActual().getNumeroLegajo()).getGrupo();
+		List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(criteriosBusqueda, grupo.getId_Grupo());
 		
-		Ticket ticket = ventana.getGestorTicket().getTicket(intervencionesEncontradas.get(0).getNumeroTicket());
-		//GrupoDeResolucion grupo = ventana.getGestorGrupo().getGrupo(intervencionesEncontradas.get(0).getNumeroLegajo());
-		txtNumeroTicket.setText(ticket.getNumero().toString());
-		txtNumeroLegajo.setText(ticket.getEmpleado().getNumeroLegajo().toString());
-		txtClasificacion.setText(ticket.getDuracionClasificacionActual().getClasificacion().toString());
-		txtEstadoTicket.setText(ticket.getDuracionEstadoActual().getEstado().getNombre());
-		txtFechaApertura.setText(ticket.getFechaApertura().toString());
-		//txtFechaAsignacion.setText(ticket.getIntervenciones().);
-		txtEstadoIntervencion.setText(intervencionesEncontradas.get(0).getEstado());
+		txtCantidad.setText(((Integer)intervenciones.size()).toString());
+		
+		
+		if (intervenciones.size()>0) {
+			txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
+			txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
+			txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
+			txtEstadoTicket.setText(intervenciones.get(i-1).getEstadoTicket());
+			txtFechaApertura.setText(intervenciones.get(i-1).getFechaApertura().toString());
+			txtFechaAsignacion.setText(intervenciones.get(i-1).getFechaAsignacionIntervencion().toString());
+			txtEstadoIntervencion.setText(intervenciones.get(i-1).getEstadoIntervencion());
+			txtGrupoResolucion.setText(intervenciones.get(i-1).getGrupo());
+			textAreaObservaciones.setText(intervenciones.get(i-1).getObservacionIntervencion());
+		}
+		
+		else {
+			JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
+			ventana.setContentPane(new InterfazConsultarIntervenciones(ventana));
+			ventana.pack();
+		}
 		
 		
 		
@@ -321,7 +339,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		btnModificarEstado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventana.setContentPane(new InterfazActualizarEstadoIntervencion(ventana));
+				ventana.setContentPane(new InterfazActualizarEstadoIntervencion(ventana, intervenciones.get(i-1)));
 				ventana.pack();
 			}
 		});
@@ -329,8 +347,14 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		btnIngresarComentario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventana.setContentPane(new InterfazModificarComentarios(ventana));
-				ventana.pack();
+				//TODO verificar que el estado sea TRABAJANDO
+				if (intervenciones.get(i-1).getEstadoIntervencion().equalsIgnoreCase("Trabajando")) {
+					ventana.setContentPane(new InterfazModificarComentarios(ventana, intervenciones.get(i-1)));
+					ventana.pack();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "No se pueden modificar los comentarios de esta intervencion.");
+				}
 			}
 		});
 		

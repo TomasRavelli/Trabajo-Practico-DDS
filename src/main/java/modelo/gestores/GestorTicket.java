@@ -49,7 +49,7 @@ public class GestorTicket {
 		ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
 		ticket.add(nuevaDuracionClasificacion);
 		ticket.setUsuario(gestorUsuario.getUsuarioActual());
-		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), gestorUsuario.getUsuarioActual(),ticket);
+		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), ticketDTO.getHoraApertura(), gestorUsuario.getUsuarioActual(),ticket);
 		//Se deberia crear una constante porque si se usa en muchos lugares, al cambiar ese numero hay que cambiarlo en muchos lados.
 		durEstado.setEstado(gestorBD.getEstado(1));
 		durEstado.setUsuario(gestorUsuario.getUsuarioActual());
@@ -71,8 +71,9 @@ public class GestorTicket {
 		DuracionEstado durEstado= new DuracionEstado();
 		durEstado= ticket.getDuracionEstadoActual();
 		durEstado.setFechaFin(fecha);
+		durEstado.setHoraFin(hora);
 		
-		DuracionEstado durEstadoNueva= new DuracionEstado(fecha,gestorUsuario.getUsuarioActual(),ticket);
+		DuracionEstado durEstadoNueva= new DuracionEstado(fecha,hora, gestorUsuario.getUsuarioActual(),ticket);
 		durEstadoNueva.setEstado(gestorBD.getEstado(3));
 		durEstadoNueva.setUsuario(gestorUsuario.getUsuarioActual());
 		durEstadoNueva.setFechaFin(fecha);
@@ -97,6 +98,7 @@ public class GestorTicket {
 	public void derivarTicket (DerivarDTO derivarDTO, boolean cambioClasificacion, GrupoDeResolucion grupo, String observacionesNueva) {
 		Ticket ticket = this.getTicket(derivarDTO.getNumeroTicket());
 		LocalDate fecha= LocalDate.now();
+		LocalTime hora= LocalTime.now();
 		Usuario usuario = gestorUsuario.getUsuarioActual();
 		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo, observacionesNueva);
 		
@@ -104,9 +106,10 @@ public class GestorTicket {
 			nuevaIntervencion.setTicket(ticket);
 			ticket.add(nuevaIntervencion);
 			ticket.getDuracionEstadoActual().setFechaFin(fecha);
+			ticket.getDuracionEstadoActual().setHoraFin(hora);
 		}		
 		
-		DuracionEstado nuevaDuracionEstado = new DuracionEstado(fecha, usuario, ticket);
+		DuracionEstado nuevaDuracionEstado = new DuracionEstado(fecha, hora, usuario, ticket);
 		nuevaDuracionEstado.setEstado(gestorBD.getEstado(2));
 		nuevaDuracionEstado.setUsuario(usuario);
 		ticket.add(nuevaDuracionEstado);

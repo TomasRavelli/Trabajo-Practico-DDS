@@ -191,7 +191,7 @@ public class GestorBD {
 	}
 	
 	
-	public List<Intervencion> getIntervenciones(IntervencionBusquedaDTO intervencionDTO) {
+	/*public List<Intervencion> getIntervenciones(IntervencionBusquedaDTO intervencionDTO) {
 		List<Intervencion> encontradas = new ArrayList<>();
 		
 		String consulta = "Select distinct i FROM Intervencion i, Ticket t, EstadoIntervencion ei where i.ticket = t and i.estadoIntervencion1 = ei";
@@ -213,8 +213,34 @@ public class GestorBD {
 		manager.getTransaction().commit();
 		
 		return encontradas;
+	}*/
+	
+	
+	public List<Intervencion> getIntervenciones(IntervencionBusquedaDTO criteriosBusqueda, Integer idGrupo){
+		String consulta = "Select i FROM Intervencion i, Ticket t, EstadoIntervencion ei where i.ticket = t and i.estadoIntervencion1 = ei and i.grupo = " + idGrupo;
+		
+		if (criteriosBusqueda.getNumeroTicket()!=null) {
+			consulta += " and t.numeroTicket = " + criteriosBusqueda.getNumeroTicket();
+		}
+		
+		if (!(criteriosBusqueda.getNumeroLegajo()==null)) {
+			consulta += " and t.empleado = " + criteriosBusqueda.getNumeroLegajo();
+		}
+		
+		if (!criteriosBusqueda.getEstado().equalsIgnoreCase("Todos")) {
+			consulta += " and ei.estado = '" + criteriosBusqueda.getEstado() + "'";
+		}
+		
+		if (criteriosBusqueda.getFechaDesde()!=null && criteriosBusqueda.getFechaHasta()!=null) {
+			consulta += " and ei.fechaInicio between " + criteriosBusqueda.getFechaDesde() + " and " + criteriosBusqueda.getFechaHasta();
+		}
+		
+		manager.getTransaction().begin();
+		List<Intervencion> intervenciones = (List<Intervencion>) manager.createQuery(consulta).getResultList();
+		manager.getTransaction().commit();
+		return intervenciones;
 	}
-
+	
 
 	public Intervencion getUltimaIntervencion(Integer numeroTicket, GrupoDeResolucion grupo) {
 		Intervencion resultado;

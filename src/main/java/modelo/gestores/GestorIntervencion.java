@@ -127,15 +127,19 @@ public class GestorIntervencion {
 	}
 	
 	
-	public List<IntervencionBusquedaDTO> getIntervenciones(IntervencionBusquedaDTO intervencionDTO) {
-		List<IntervencionBusquedaDTO> encontradas = new ArrayList<>();
-		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO);
-		
+	
+	public List<IntervencionResultadoDTO> getIntervenciones(IntervencionBusquedaDTO intervencionDTO, Integer idGrupo) {
+		List<IntervencionResultadoDTO> encontradas = new ArrayList<>();
+		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO, idGrupo);
 		for(Intervencion i: encontradasAux) {
-			IntervencionBusquedaDTO auxDTO = new IntervencionBusquedaDTO(i.getEstadoIntervencionActual().getEstado(), intervencionDTO.getFechaDesde(), intervencionDTO.getFechaHasta(), i.getTicket().getNumero().toString(), i.getTicket().getEmpleado().getNumeroLegajo().toString());
+			Ticket t1 = i.getTicket();
+			IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), intervencionDTO.getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones());
 			encontradas.add(auxDTO);
 		}
-		
+		/*for(Intervencion i: encontradasAux) {
+			IntervencionResultadoDTO auxDTO = new IntervencionBusquedaDTO(i.getEstadoIntervencionActual().getEstado(), intervencionDTO.getFechaDesde(), intervencionDTO.getFechaHasta(), i.getTicket().getNumero().toString(), i.getTicket().getEmpleado().getNumeroLegajo().toString());
+			encontradas.add(auxDTO);
+		}*/
 		return encontradas;
 	}
 }

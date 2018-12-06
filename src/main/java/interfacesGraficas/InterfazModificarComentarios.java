@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
+import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
 
 import javax.swing.JLabel;
@@ -21,7 +22,7 @@ public class InterfazModificarComentarios extends JPanel {
 
 	private Principal ventana;
 
-	public InterfazModificarComentarios(Principal frame) {
+	public InterfazModificarComentarios(Principal frame, IntervencionResultadoDTO intervencion) {
 		
 		//ACTOR : GRUPO DE RESOLUCION
 		//INGRESA INFO ADICIONAL O MODIFICA LO QUE YA ESTABA

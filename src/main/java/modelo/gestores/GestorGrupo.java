@@ -35,8 +35,5 @@ public class GestorGrupo {
 	public GrupoDeResolucion getGrupo(String nombre) {
 		return gestorBD.getGrupoResolucion(nombre);
 	}
-	
-	public GrupoDeResolucion getGrupo(Integer legajo) {
-		return gestorBD.
-	}
+
 }
