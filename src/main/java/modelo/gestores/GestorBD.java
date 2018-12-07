@@ -208,7 +208,7 @@ public class GestorBD {
 		
 		if (criteriosBusqueda.getFechaDesde()!=null && criteriosBusqueda.getFechaHasta()!=null) {
 			consulta += " and ei.fechaInicio between " + criteriosBusqueda.getFechaDesde() + " and " + criteriosBusqueda.getFechaHasta();
-		}
+		}		
 		
 		manager.getTransaction().begin();
 		List<Intervencion> intervenciones = (List<Intervencion>) manager.createQuery(consulta).getResultList();

@@ -18,10 +18,12 @@ import modelo.entidades.Usuario;
 public class GestorIntervencion {
 	GestorBD gestorBD;
 	GestorUsuario gestorUsuario;
+	GestorEmpleado gestorEmpleado;
 	
-	public GestorIntervencion(GestorBD gBD, GestorUsuario gUsu){
+	public GestorIntervencion(GestorBD gBD, GestorUsuario gUsu, GestorEmpleado gE){
 		gestorBD = gBD;
 		gestorUsuario = gUsu;
+		this.gestorEmpleado = gE;
 	}
 
 	
@@ -128,15 +130,18 @@ public class GestorIntervencion {
 	
 	
 	
-	public List<IntervencionResultadoDTO> getIntervenciones(IntervencionBusquedaDTO intervencionDTO, Integer idGrupo) {
+	public List<IntervencionResultadoDTO> getIntervenciones(IntervencionBusquedaDTO intervencionDTO, Integer legajo) {
 		List<IntervencionResultadoDTO> encontradas = new ArrayList<>();
+		Integer idGrupo = gestorEmpleado.getGrupoId(legajo);
 		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO, idGrupo);
-		for(Intervencion i: encontradasAux) {
-			Ticket t1 = i.getTicket();
-			IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), intervencionDTO.getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
-			encontradas.add(auxDTO);
+		if (encontradasAux.size()>0) {
+			for(Intervencion i: encontradasAux) {
+				Ticket t1 = i.getTicket();
+				IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), intervencionDTO.getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
+				encontradas.add(auxDTO);
+			}
 		}
-
+		
 		return encontradas;
 	}
 	

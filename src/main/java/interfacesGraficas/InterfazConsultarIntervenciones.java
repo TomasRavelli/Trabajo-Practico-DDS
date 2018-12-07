@@ -10,6 +10,8 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.HeadlessException;
+
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -130,25 +132,35 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		btnBuscar.setBounds(1020, 650, 133, 37);
 		this.add(btnBuscar);
 		
+		JLabel lblFormatoFechas = new JLabel("Formato de fechas: dd/mm/aaaa");
+		lblFormatoFechas.setForeground(Color.GRAY);
+		lblFormatoFechas.setBackground(Color.WHITE);
+		lblFormatoFechas.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
+		lblFormatoFechas.setBounds(652, 492, 226, 20);
+		add(lblFormatoFechas);
+		
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO ver que el pelotudo ingresa bien la fecha con try catch
 				IntervencionBusquedaDTO intervencionDTO = new IntervencionBusquedaDTO();
 				
 				if(!txtFechaDesde.getText().isEmpty() && !txtFechaHasta.getText().isEmpty()) {
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-					LocalDate fechaDesde = LocalDate.parse(txtFechaDesde.getText(), formatter);
-					LocalDate fechaHasta = LocalDate.parse(txtFechaHasta.getText(), formatter);
-					
-					if (fechaHasta.isAfter(LocalDate.now()) || fechaDesde.isAfter(LocalDate.now())) {
-						JOptionPane.showMessageDialog(null, "Fecha(s) no valida(s).");
-					}
-					
-					else {
-						intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-						ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
-						ventana.pack();
+					try {
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+						LocalDate fechaDesde = LocalDate.parse(txtFechaDesde.getText(), formatter);
+						LocalDate fechaHasta = LocalDate.parse(txtFechaHasta.getText(), formatter);
+						
+						if (fechaHasta.isAfter(LocalDate.now()) || fechaDesde.isAfter(LocalDate.now())) {
+							JOptionPane.showMessageDialog(null, "Fecha(s) no valida(s).");
+						}
+						
+						else {
+							intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
+							ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
+							ventana.pack();
+						}
+					} catch (HeadlessException e) {
+						e.printStackTrace();
 					}
 				}
 				
@@ -157,7 +169,6 @@ public class InterfazConsultarIntervenciones extends JPanel {
 					ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
 					ventana.pack();
 				}
-				
 			}
 		});
 		

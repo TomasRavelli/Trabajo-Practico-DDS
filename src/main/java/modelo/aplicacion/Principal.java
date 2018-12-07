@@ -26,7 +26,7 @@ public class Principal extends JFrame{
 				//TODO ver lo del log in
 				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(66666));
 				gestorEmpleado = new GestorEmpleado(gestorBD);
-				gestorIntervencion = new GestorIntervencion(gestorBD, gestorUsuario);
+				gestorIntervencion = new GestorIntervencion(gestorBD, gestorUsuario, gestorEmpleado);
 				gestorClasificacion = new GestorClasificacion(gestorBD);
 				gestorGrupo = new GestorGrupo(gestorBD);
 				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario, gestorClasificacion);

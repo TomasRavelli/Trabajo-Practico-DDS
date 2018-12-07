@@ -67,6 +67,8 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		textAreaDescripcion.setEditable(false);
 		textAreaDescripcion.setBackground(SystemColor.controlHighlight);
 		scrollPane.setViewportView(textAreaDescripcion);
+		//TODO ver que ande
+		scrollPane.setToolTipText(ticket.getDescripcion());
 		textAreaDescripcion.setText(ticket.getDescripcion());
 		
 		

@@ -140,6 +140,7 @@ public class GestorTicket {
 	
 	
 	public void actualizarEstadoIntervencion (IntervencionResultadoDTO intervencion, String nuevoEstado, String observaciones, Boolean asignacionIncorrecta, ClasificacionTicket clasificacionNueva) {
+		//TODO ticket no recibe los cambios porque se pasa por referencia
 		Ticket ticket = this.getTicket(intervencion.getNumeroTicket());
 		ticket = gestorIntervencion.actualizarIntervencion(intervencion, nuevoEstado, observaciones, ticket);
 		

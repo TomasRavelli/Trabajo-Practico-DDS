@@ -39,4 +39,9 @@ public class GestorEmpleado {
 		}
 		return null;	
 	}
+	
+	
+	public Integer getGrupoId (Integer legajo) {
+		return this.getEmpleado(legajo).getGrupoId();
+	}
 }
