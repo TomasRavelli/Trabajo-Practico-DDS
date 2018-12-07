@@ -116,7 +116,7 @@ public class GestorTicket {
 		ticket.setDuracionEstadoActual(nuevaDuracionEstado);
 		if(cambioClasificacion) {
 			ClasificacionTicket clasificacion = gestorClasificacion.getClasificacion(derivarDTO.getClasificacion().getNombre());
-			DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,LocalDate.now(),ticket);
+			DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,fecha,ticket);
 			ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
 			ticket.add(nuevaDuracionClasificacion);	
 		}

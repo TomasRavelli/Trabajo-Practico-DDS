@@ -174,16 +174,12 @@ public class InterfazDerivarTicket2 extends JPanel {
 		txtNuevoEstado.setText("Abierto derivado");
 		this.add(txtNuevoEstado);
 		txtNuevoEstado.setColumns(10);
-		
-
-		
+			
 		JComboBox<GrupoDeResolucion> comboBoxGrupo = new JComboBox<GrupoDeResolucion>();
 		comboBoxGrupo.setModel(new DefaultComboBoxModel<GrupoDeResolucion>(grupos));
 		comboBoxGrupo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxGrupo.setBounds(692, 490, 252, 22);
-		this.add(comboBoxGrupo);
-		
-		
+		this.add(comboBoxGrupo);		
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -200,7 +196,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 		comboBoxClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxClasificacion.setBounds(692, 441, 252, 22);
 		add(comboBoxClasificacion);
-		 ActionListener cbActionListener = new ActionListener() {//add actionlistner to listen for change
+		 ActionListener cbActionListener = new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	            	remove(comboBoxGrupo);
