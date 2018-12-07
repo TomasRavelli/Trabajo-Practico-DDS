@@ -194,7 +194,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	    			errorLegajoVacio.setVisible(false);
 	    		}
 	        	if (!txtNumeroLegajo.getText().isEmpty()) {
-	        		nombreEmpleado = ventana.getGestorEmpleado().validarLegajo(txtNumeroLegajo.getText());
+	        		nombreEmpleado = ventana.getGestorEmpleado().validarLegajo(Integer.valueOf(txtNumeroLegajo.getText()));
 	        		if (nombreEmpleado == null) {
 	        			errorLegajoExistente.setVisible(true);
 	        			nombre.setVisible(false);

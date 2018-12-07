@@ -6,7 +6,13 @@ import javax.swing.border.EmptyBorder;
 
 import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
+import modelo.entidades.ClasificacionTicket;
+import modelo.entidades.Intervencion;
+import modelo.entidades.Ticket;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,24 +22,20 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
+import java.awt.SystemColor;
 
 public class InterfazActualizarEstadoIntervencion extends JPanel {
 
 	private Principal ventana;
 	private JTextField txtEstadoActual;
+	private ClasificacionTicket[] clasificaciones;
 
 
 	public InterfazActualizarEstadoIntervencion(Principal frame, IntervencionResultadoDTO intervencion) {
-		
-		//ACTOR : GRUPO DE RESOLUCION
-		
-		//CLASIFICACION ACTUAL DEL TICKET POR DEFECTO
-		
-		//CUANDO EL GRUPO DE RESOLUCION RECIBE UNA ASIGNACION DEBE INGRESAR EN EL SISTEMA CUANDO COMIENZA
-		//A TRABAJAR EN LA MISMA
-		
 
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -42,7 +44,7 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
 		
-		
+		clasificaciones = cargarClasificaciones(intervencion);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
@@ -60,13 +62,19 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		this.add(scrollPane2);
 		
 		
+		Ticket ticket = ventana.getGestorTicket().getTicket(intervencion.getNumeroTicket());
 		JTextArea textAreaDescripcion = new JTextArea();
-		textAreaDescripcion.setBackground(new Color(220, 220, 220));
 		textAreaDescripcion.setEditable(false);
+		textAreaDescripcion.setBackground(SystemColor.controlHighlight);
 		scrollPane.setViewportView(textAreaDescripcion);
+		//TODO ver que ande
+		scrollPane.setToolTipText(ticket.getDescripcion());
+		textAreaDescripcion.setText(ticket.getDescripcion());
+		
+		
 		
 		JTextArea textAreaObservaciones = new JTextArea();
-		textAreaObservaciones.setBackground(new Color(220, 220, 220));
+		textAreaObservaciones.setBackground(SystemColor.text);
 		textAreaObservaciones.setEditable(true);
 		scrollPane2.setViewportView(textAreaObservaciones);
 		
@@ -122,19 +130,21 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		txtEstadoActual.setColumns(10);
 		txtEstadoActual.setEditable(false);
 		this.add(txtEstadoActual);
+		txtEstadoActual.setText(intervencion.getEstadoIntervencion());
 		
 		
 		
 		JComboBox<String> comboBoxNuevoEstado = new JComboBox<String>();
 		comboBoxNuevoEstado.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
-		comboBoxNuevoEstado.setModel(new DefaultComboBoxModel(new String[] {"Seleccione una opcion...", "Asignada", "En espera", "Terminada", "Trabajando"}));
+		comboBoxNuevoEstado.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una opcion...", "Asignada", "En espera", "Terminada", "Trabajando"}));
 		comboBoxNuevoEstado.setBounds(666, 347, 266, 25);
 		this.add(comboBoxNuevoEstado);
 		
-		JComboBox<String> comboBoxClasificacion = new JComboBox<String>();
-		comboBoxClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
-		comboBoxClasificacion.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una opcion...", "Configuracion de Sistema Operativo", "Mal funcionamiento de Hardware", "Modificacion en los perfiles de usuarios", "Problemas con el correo electronico", "Problemas de acceso a la red local o remota", "Problemas en el funcionamiento del Sistema Operativo", "Problemas en la autenticacion", "Problemas en los sistemas de la empresa", "Solicitud de cambio de contrase\u00F1as", "Solicitud de instalacion de aplicaciones", "Solicitud de nuevos puestos de trabajo", "Solicitud de usuarios de red", "Solicitud de usuarios de Sistemas informaticos", "Solicitud soporte en el uso de alguna aplicacion o sistema", "Otros"}));
-		comboBoxClasificacion.setBounds(666, 423, 266, 25);
+		JComboBox<ClasificacionTicket> comboBoxClasificacion = new JComboBox<ClasificacionTicket>();
+		comboBoxClasificacion.setBackground(SystemColor.text);
+		comboBoxClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
+		comboBoxClasificacion.setModel(new DefaultComboBoxModel<ClasificacionTicket>(clasificaciones));
+		comboBoxClasificacion.setBounds(666, 424, 266, 24);
 		this.add(comboBoxClasificacion);
 		
 		
@@ -159,15 +169,55 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 				else if (textAreaObservaciones.getText().isEmpty()) {
 					errorObservacionesVacio.setVisible(true);
 				}
+				else {
+					errorObservacionesVacio.setVisible(false);
+					errorEstadoVacio.setVisible(false);
+					
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog (null, "¿Esta terminando la intervencion por una asignacion incorrecta?","Warning",dialogButton);
+					if(dialogResult == JOptionPane.YES_OPTION){
+						ventana.getGestorTicket().actualizarEstadoIntervencion(intervencion, comboBoxNuevoEstado.getSelectedItem().toString(), textAreaObservaciones.getText(), true, (ClasificacionTicket)comboBoxClasificacion.getSelectedItem());
+					}
+					else {
+						ventana.getGestorTicket().actualizarEstadoIntervencion(intervencion, comboBoxNuevoEstado.getSelectedItem().toString(), textAreaObservaciones.getText(), false, (ClasificacionTicket)comboBoxClasificacion.getSelectedItem());					
+					}
+					
+					ventana.setContentPane(new InterfazConsultarIntervenciones(ventana));
+					ventana.pack();
+				}
 			}
 		});
 		
 		
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana));
-				//ventana.pack();
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea cancelar la actualizacion del estado de la intervencion? Los cambios no seran guardados.","Warning",dialogButton);
+				if(dialogResult == JOptionPane.YES_OPTION){
+					ventana.setContentPane(new HomeGrupoResolucion(ventana));
+					ventana.pack();
+				}
 			}
-		});
+		});	
+	}
+	
+	
+	private ClasificacionTicket[] cargarClasificaciones(IntervencionResultadoDTO intervencion) {
+		List<ClasificacionTicket> clasificacionesGrupo = ventana.getGestorClasificacion().getClasificaciones(intervencion.getGrupo());
+		clasificaciones = new ClasificacionTicket[clasificacionesGrupo.size()];
+		List<ClasificacionTicket> auxiliar = new ArrayList<>();		
+		
+		for (ClasificacionTicket ct : clasificacionesGrupo) {
+			if (!ct.getNombre().equalsIgnoreCase(intervencion.getClasificacion())) {
+				auxiliar.add(ct);
+			}
+		}
+		
+		clasificaciones[0] = new ClasificacionTicket(intervencion.getClasificacion());
+		for(int i=0; i < auxiliar.size(); i++) {
+			clasificaciones[i+1] = auxiliar.get(i);
+		}
+		
+		return clasificaciones;
 	}
 }

@@ -18,6 +18,11 @@ public class GestorUsuario {
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
+	
+	
+	public Integer getNumeroLegajo() {
+		return this.getUsuarioActual().getNumeroLegajo();
+	}
 
 	
 	public void setUsuarioActual(Usuario usuarioActual) {

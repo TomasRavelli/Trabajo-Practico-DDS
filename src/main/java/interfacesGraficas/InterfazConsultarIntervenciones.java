@@ -2,21 +2,16 @@ package interfacesGraficas;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import org.hibernate.type.descriptor.java.LocalDateJavaDescriptor;
-
 import infoDTO.IntervencionBusquedaDTO;
-import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
-import modelo.entidades.GrupoDeResolucion;
-import modelo.entidades.Intervencion;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.HeadlessException;
+
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,7 +19,6 @@ import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class InterfazConsultarIntervenciones extends JPanel {
@@ -37,12 +31,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 
 
 	public InterfazConsultarIntervenciones(Principal frame) {
-		
-		//ACTOR : GRUPO DE RESOLUCION
-		//PUEDE NO INGRESAR NINGUN CRITERIO
-		//UN GRUPO DE RESOLUCION SOLO PUEDE MODIFICAR EL ESTADO DE UNA INTERVENCION ASIGNADA A EL
-		//Las fechas son del ultimo cambio de estado
-		
+
 		this.ventana=frame;
 		ventana.setContentPane(this);
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -107,7 +96,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		JComboBox<String> comboBoxEstado = new JComboBox<String>();
 		comboBoxEstado.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		comboBoxEstado.setForeground(Color.BLACK);
-		comboBoxEstado.setModel(new DefaultComboBoxModel(new String[] {"Asignada", "En espera", "Terminada", "Trabajando", "Todos"}));
+		comboBoxEstado.setModel(new DefaultComboBoxModel<String>(new String[] {"Asignada", "En espera", "Terminada", "Trabajando", "Todos"}));
 		comboBoxEstado.setBounds(630, 363, 267, 27);
 		this.add(comboBoxEstado);
 		
@@ -143,27 +132,35 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		btnBuscar.setBounds(1020, 650, 133, 37);
 		this.add(btnBuscar);
 		
+		JLabel lblFormatoFechas = new JLabel("Formato de fechas: dd/mm/aaaa");
+		lblFormatoFechas.setForeground(Color.GRAY);
+		lblFormatoFechas.setBackground(Color.WHITE);
+		lblFormatoFechas.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
+		lblFormatoFechas.setBounds(652, 492, 226, 20);
+		add(lblFormatoFechas);
+		
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO ver que el pelotudo ingresa bien la fecha con try catch
-				
 				IntervencionBusquedaDTO intervencionDTO = new IntervencionBusquedaDTO();
-				GrupoDeResolucion grupo = ventana.getGestorEmpleado().getEmpleado(ventana.getGestorUsuario().getUsuarioActual().getNumeroLegajo()).getGrupo();
 				
 				if(!txtFechaDesde.getText().isEmpty() && !txtFechaHasta.getText().isEmpty()) {
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-					LocalDate fechaDesde = LocalDate.parse(txtFechaDesde.getText(), formatter);
-					LocalDate fechaHasta = LocalDate.parse(txtFechaHasta.getText(), formatter);
-					
-					if (fechaHasta.isAfter(LocalDate.now()) || fechaDesde.isAfter(LocalDate.now())) {
-						JOptionPane.showMessageDialog(null, "Fecha(s) no valida(s).");
-					}
-					
-					else {
-						intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-						ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
-						ventana.pack();
+					try {
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+						LocalDate fechaDesde = LocalDate.parse(txtFechaDesde.getText(), formatter);
+						LocalDate fechaHasta = LocalDate.parse(txtFechaHasta.getText(), formatter);
+						
+						if (fechaHasta.isAfter(LocalDate.now()) || fechaDesde.isAfter(LocalDate.now())) {
+							JOptionPane.showMessageDialog(null, "Fecha(s) no valida(s).");
+						}
+						
+						else {
+							intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
+							ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
+							ventana.pack();
+						}
+					} catch (HeadlessException e) {
+						e.printStackTrace();
 					}
 				}
 				
@@ -172,7 +169,6 @@ public class InterfazConsultarIntervenciones extends JPanel {
 					ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
 					ventana.pack();
 				}
-				
 			}
 		});
 		

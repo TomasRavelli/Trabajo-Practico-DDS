@@ -31,12 +31,17 @@ public class GestorEmpleado {
 	}
 	
 	
-	public String validarLegajo (String legajo) {
+	public String validarLegajo (Integer legajo) {
 		for (Empleado e : this.getEmpleados()) {
-			if (e.getNumeroLegajo().toString().equals(legajo)) {
+			if (e.getNumeroLegajo()==(legajo)) {
 				return e.getNombre();
 			}
 		}
 		return null;	
+	}
+	
+	
+	public Integer getGrupoId (Integer legajo) {
+		return this.getEmpleado(legajo).getGrupoId();
 	}
 }

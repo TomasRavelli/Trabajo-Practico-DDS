@@ -24,14 +24,14 @@ public class GestorGrupo {
 		this.grupos = grupos;
 	}
 
-	public GestorBD getGestorBD() {
+/*	public GestorBD getGestorBD() {
 		return gestorBD;
 	}
 
 	public void setGestorBD(GestorBD gestorBD) {
 		this.gestorBD = gestorBD;
 	}
-
+*/
 	public GrupoDeResolucion getGrupo(String nombre) {
 		return gestorBD.getGrupoResolucion(nombre);
 	}

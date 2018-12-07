@@ -27,7 +27,8 @@ public class DatosDTO {
 		this.grupo = grupo;
 		this.numeroTicket = numeroTicket;
 		this.numeroLegajo = numeroLegajo;
-		//TODO parsear fechas
+		this.fechaApertura = fechaApertura;
+		this.fechaUltimoCambioEstado = fechaUltimoCambioEstado;
 	}
 	
 	

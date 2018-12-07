@@ -309,7 +309,6 @@ public class InterfazConsultarTicket extends JPanel {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				//TODO agregar anios hasta el 2008 en los combo box
 				modeloTablaTicket.setRowCount(0);;
 				DatosDTO datosDTO = new DatosDTO();
 				

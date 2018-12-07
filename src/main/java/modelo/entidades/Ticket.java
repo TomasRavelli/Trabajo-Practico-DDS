@@ -201,4 +201,15 @@ public class Ticket implements Serializable {
 		this.descripcion = descripcion;
 	}
 	
+	public Integer getIntervencionesAbiertas() {
+		Integer i = 0;
+		for (Intervencion intervencion : this.getIntervenciones()) {
+			if (intervencion.getFechaFinAsignacion()==null) {
+				i++;
+			}
+		}
+		
+		return i;
+	}
+	
 }

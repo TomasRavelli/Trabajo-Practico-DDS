@@ -3,7 +3,6 @@ package modelo.aplicacion;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-
 import interfacesGraficas.HomeGrupoResolucion;
 import interfacesGraficas.HomeMesaAyuda;
 import modelo.gestores.*;
@@ -25,9 +24,9 @@ public class Principal extends JFrame{
 			public void run() {
 				gestorBD = new GestorBD();
 				//TODO ver lo del log in
-				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(88888));
+				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(66666));
 				gestorEmpleado = new GestorEmpleado(gestorBD);
-				gestorIntervencion = new GestorIntervencion(gestorBD, gestorUsuario);
+				gestorIntervencion = new GestorIntervencion(gestorBD, gestorUsuario, gestorEmpleado);
 				gestorClasificacion = new GestorClasificacion(gestorBD);
 				gestorGrupo = new GestorGrupo(gestorBD);
 				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario, gestorClasificacion);
@@ -48,16 +47,10 @@ public class Principal extends JFrame{
 		
 		
 		//DEPENDIENDO SI SE REGISTRE COMO MESA DE AYUDA O GRUPO DE RESOLUCION
-		if(true) {
-			this.setContentPane(new HomeMesaAyuda(this));
-			this.pack();
-		}
-		else {
-			this.setContentPane(new HomeGrupoResolucion(this));
-			this.pack();
-		}
-		//this.setContentPane(new HomeGrupoResolucion(this));
-		//this.pack();
+
+
+		this.setContentPane(new HomeGrupoResolucion(this));
+		this.pack();
 	}
 
 

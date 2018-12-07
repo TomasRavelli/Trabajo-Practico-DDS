@@ -31,7 +31,7 @@ public class DuracionClasificacion implements Serializable {
 	private LocalDate fechaInicio;
 	
 	@Column (name = "FECHA_FIN")
-	private Date fechaFin;
+	private LocalDate fechaFin;
 		
 	@OneToOne (fetch = FetchType.LAZY, mappedBy = "duracionClasificacionActual",cascade = {CascadeType.ALL})
 	@JoinColumn (name = "ID_DURACION_CLASIFICACION")
@@ -64,11 +64,11 @@ public class DuracionClasificacion implements Serializable {
 		this.fechaInicio = fechaInicio;
 	}
 
-	public Date getFechaFin() {
+	public LocalDate getFechaFin() {
 		return fechaFin;
 	}
 
-	public void setFechaFin(Date fechaFin) {
+	public void setFechaFin(LocalDate fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 

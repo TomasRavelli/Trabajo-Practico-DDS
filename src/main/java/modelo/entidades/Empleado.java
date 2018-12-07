@@ -103,4 +103,8 @@ public class Empleado implements Serializable {
 	public GrupoDeResolucion getGrupo() {
 		return this.grupo;
 	}
+	
+	public Integer getGrupoId() {
+		return this.getGrupo().getId_Grupo();
+	}
 }

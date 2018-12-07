@@ -42,6 +42,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 	private JTextField textFieldNumeroLegajo;
 	private JTextField textFieldFechaDesde;
 	private JTextField textFieldFechaHasta;
+	private Integer i;
 
 	public InterfazConsultarIntervencionesPaginacion(Principal frame, IntervencionBusquedaDTO criteriosBusqueda) {
 
@@ -51,7 +52,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
-
+		
 		
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -207,7 +208,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		txtNumeroPagina.setBounds(731, 203, 34, 22);
 		txtNumeroPagina.setColumns(10);
 		this.add(txtNumeroPagina);
-		txtNumeroPagina.setText("1");
+		
 		
 		txtCantidad = new JTextField();
 		txtCantidad.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
@@ -295,15 +296,14 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		btnDerecha.setBounds(926, 202, 42, 25);
 		this.add(btnDerecha);
 		
-		//TODO ver que sea menor al size y la flecha tambien que no se pase
-		Integer i = Integer.valueOf(txtNumeroPagina.getText());
-		GrupoDeResolucion grupo = ventana.getGestorEmpleado().getEmpleado(ventana.getGestorUsuario().getUsuarioActual().getNumeroLegajo()).getGrupo();
-		List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(criteriosBusqueda, grupo.getId_Grupo());
+		//TODO ver que el campo de paginacion sea menor al size
+		Integer numeroLegajo = ventana.getGestorUsuario().getNumeroLegajo();
+		List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(criteriosBusqueda, numeroLegajo);
 		
 		txtCantidad.setText(((Integer)intervenciones.size()).toString());
 		
-		
 		if (intervenciones.size()>0) {
+			txtNumeroPagina.setText("1");
 			txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
 			txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
 			txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
@@ -316,44 +316,83 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		}
 		
 		else {
+			txtNumeroPagina.setText("0");
 			JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
-			ventana.setContentPane(new InterfazConsultarIntervenciones(ventana));
-			ventana.pack();
 		}
 		
-		
+		if (Integer.valueOf(txtNumeroPagina.getText())<=intervenciones.size()) {
+			i = Integer.valueOf(txtNumeroPagina.getText());
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Numero ingresado no valido.");
+		}
+			
 		
 		btnDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				i++;
+				if (i<=intervenciones.size()) {
+					txtNumeroPagina.setText(i.toString());
+					txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
+					txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
+					txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
+					txtEstadoTicket.setText(intervenciones.get(i-1).getEstadoTicket());
+					txtFechaApertura.setText(intervenciones.get(i-1).getFechaApertura().toString());
+					txtFechaAsignacion.setText(intervenciones.get(i-1).getFechaAsignacionIntervencion().toString());
+					txtEstadoIntervencion.setText(intervenciones.get(i-1).getEstadoIntervencion());
+					txtGrupoResolucion.setText(intervenciones.get(i-1).getGrupo());
+					textAreaObservaciones.setText(intervenciones.get(i-1).getObservacionIntervencion());
+				}
 			}
 		});
+		
 		
 		btnIzquierda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				i--;
+				if (i>0) {
+					txtNumeroPagina.setText(i.toString());
+					Integer i = Integer.valueOf(txtNumeroPagina.getText());
+					txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
+					txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
+					txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
+					txtEstadoTicket.setText(intervenciones.get(i-1).getEstadoTicket());
+					txtFechaApertura.setText(intervenciones.get(i-1).getFechaApertura().toString());
+					txtFechaAsignacion.setText(intervenciones.get(i-1).getFechaAsignacionIntervencion().toString());
+					txtEstadoIntervencion.setText(intervenciones.get(i-1).getEstadoIntervencion());
+					txtGrupoResolucion.setText(intervenciones.get(i-1).getGrupo());
+					textAreaObservaciones.setText(intervenciones.get(i-1).getObservacionIntervencion());
+				}	
 			}
 		});
 		
-		
-		
+			
 		btnModificarEstado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventana.setContentPane(new InterfazActualizarEstadoIntervencion(ventana, intervenciones.get(i-1)));
-				ventana.pack();
+				if (intervenciones.size()>0) {
+					ventana.setContentPane(new InterfazActualizarEstadoIntervencion(ventana, intervenciones.get(i-1)));
+					ventana.pack();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "No hay intervenciones para modificar su estado.");
+				}
 			}
 		});
 		
 		
 		btnIngresarComentario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO verificar que el estado sea TRABAJANDO
-				if (intervenciones.get(i-1).getEstadoIntervencion().equalsIgnoreCase("Trabajando")) {
-					ventana.setContentPane(new InterfazModificarComentarios(ventana, intervenciones.get(i-1)));
-					ventana.pack();
+				if (intervenciones.size()>0) {
+					if (intervenciones.get(i-1).getEstadoIntervencion().equalsIgnoreCase("Trabajando")) {
+						ventana.setContentPane(new InterfazModificarComentarios(ventana, intervenciones.get(i-1)));
+						ventana.pack();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "No se pueden modificar los comentarios de esta intervencion.");
+					}
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "No se pueden modificar los comentarios de esta intervencion.");
+					JOptionPane.showMessageDialog(null, "No hay intervenciones para ingresarle un comentario.");
 				}
 			}
 		});

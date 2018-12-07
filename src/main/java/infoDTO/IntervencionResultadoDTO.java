@@ -13,12 +13,13 @@ public class IntervencionResultadoDTO {
 	private String estadoIntervencion;
 	private String grupo;
 	private String observacionIntervencion;
+	private Integer idIntervencion;
 	
 	public IntervencionResultadoDTO() {
 		
 	}
 	
-	public IntervencionResultadoDTO(Integer numt, Integer legajo, String clas, String estadoT, LocalDate fechaAp, LocalDate fechaAsig, String estadoInt, String g, String obsInt) {
+	public IntervencionResultadoDTO(Integer numt, Integer legajo, String clas, String estadoT, LocalDate fechaAp, LocalDate fechaAsig, String estadoInt, String g, String obsInt, Integer idIntervencion) {
 		this.numeroTicket = numt;
 		this.numeroLegajo = legajo;
 		this.clasificacion = clas;
@@ -28,9 +29,18 @@ public class IntervencionResultadoDTO {
 		this.estadoIntervencion = estadoInt;
 		this.grupo = g;
 		this.observacionIntervencion = obsInt;
+		this.idIntervencion = idIntervencion;
 	}
 	
 	
+	public Integer getIdIntervencion() {
+		return idIntervencion;
+	}
+
+	public void setIdIntervencion(Integer idIntervencion) {
+		this.idIntervencion = idIntervencion;
+	}
+
 	public Integer getNumeroTicket() {
 		return numeroTicket;
 	}
