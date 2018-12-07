@@ -56,18 +56,17 @@ public class GestorIntervencion {
 		
 	}
 	
-	public Intervencion actualizarIntervenciones(Integer numeroTicket, String observaciones, GrupoDeResolucion grupo, String observacionesNueva) {
+	public Intervencion actualizarIntervenciones(Integer numeroTicket, String observaciones, GrupoDeResolucion grupo) {
 		LocalDate fecha = LocalDate.now();
 		LocalTime hora = LocalTime.now();
 		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
 		
-		intervencion.getEstadoIntervencionActual().setObservaciones(observaciones);
+		//intervencion.getEstadoIntervencionActual().setObservaciones(observaciones);
 		intervencion.getEstadoIntervencionActual().setUsuario(gestorUsuario.getUsuarioActual());
 		intervencion.getEstadoIntervencionActual().setFechaFin(fecha);
 		intervencion.getEstadoIntervencionActual().setHoraFin(hora);
 		
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("En espera", fecha, hora, intervencion);
-		nuevoEstadoIntervencion.setObservaciones(observacionesNueva);
 		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
 		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 		intervencion.add(nuevoEstadoIntervencion);
@@ -78,6 +77,7 @@ public class GestorIntervencion {
 		Intervencion intervencionGrupoNueva = gestorBD.getUltimaIntervencion(numeroTicket,grupo);
 		EstadoIntervencion estadoIntervencionGrupo = new EstadoIntervencion(fecha, hora);
 		estadoIntervencionGrupo.setEstado("Asignada");
+		estadoIntervencionGrupo.setObservaciones(observaciones);
 	
 		
 		if(intervencionGrupoNueva==null || intervencionGrupoNueva.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Terminada")) {

@@ -33,7 +33,6 @@ public class InterfazDerivarTicket1 extends JPanel {
 
 	public InterfazDerivarTicket1(Principal frame, DerivarDTO derivarDTO) {
 		
-		
 		this.ventana=frame;
 		ventana.setContentPane(this);
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -126,7 +125,7 @@ public class InterfazDerivarTicket1 extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
-					ventana.getGestorTicket().derivarTicket(derivarDTO, false, (GrupoDeResolucion)comboBox.getSelectedItem(), derivarDTO.getObservaciones());
+					ventana.getGestorTicket().derivarTicket(derivarDTO, false, (GrupoDeResolucion)comboBox.getSelectedItem());
 					ventana.setContentPane(new HomeMesaAyuda(ventana));
 					ventana.pack();
 				}

@@ -66,6 +66,30 @@ public class GrupoDeResolucion implements Serializable {
 		this.id_Grupo = id_Grupo;
 	}
 	
+	public List<Empleado> getEmpleados() {
+		return empleados;
+	}
+
+	public void setEmpleados(List<Empleado> empleados) {
+		this.empleados = empleados;
+	}
+
+	public List<Intervencion> getIntervenciones() {
+		return intervenciones;
+	}
+
+	public void setIntervenciones(List<Intervencion> intervenciones) {
+		this.intervenciones = intervenciones;
+	}
+
+	public List<ClasificacionTicket> getClasificaciones() {
+		return clasificaciones;
+	}
+
+	public void setClasificaciones(List<ClasificacionTicket> clasificaciones) {
+		this.clasificaciones = clasificaciones;
+	}
+
 	@Override
 	public String toString() {
 		return this.getNombre();

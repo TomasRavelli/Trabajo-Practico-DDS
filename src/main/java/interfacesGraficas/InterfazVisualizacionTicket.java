@@ -4,9 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
@@ -18,12 +23,20 @@ import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.DuracionClasificacion;
 import modelo.entidades.DuracionEstado;
 import modelo.entidades.Empleado;
+import modelo.entidades.EstadoIntervencion;
+import modelo.entidades.GrupoDeResolucion;
 import modelo.entidades.Intervencion;
 import modelo.entidades.Ticket;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 
 public class InterfazVisualizacionTicket extends JPanel {
@@ -41,6 +54,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 	private JTable table;
 	private DefaultTableModel modeloTabla;
 	private Ticket ticketParaMostrar;
+	private int filaVieja = -1;
 
 
 	public InterfazVisualizacionTicket(Principal frame, Integer numeroTicket) {
@@ -220,7 +234,6 @@ public class InterfazVisualizacionTicket extends JPanel {
 		this.add(txtOficina);
 		
 		
-		
 		table = new JTable();
 		modeloTabla = new DefaultTableModel(
 				new Object[][] {
@@ -247,31 +260,81 @@ public class InterfazVisualizacionTicket extends JPanel {
 		});
 		
 		ticketParaMostrar = ventana.getGestorTicket().getTicket(numeroTicket);
-		Empleado e = ventana.getGestorEmpleado().getEmpleado(ticketParaMostrar.getUsuario().getNumeroLegajo());
-		txtLegajo.setText(ticketParaMostrar.getUsuario().getNumeroLegajo().toString());
-		txtApellidoNombre.setText(ticketParaMostrar.getUsuario().getNombre());
-		txtTelefonoInterno.setText(e.getTelefonoInterno());
-		txtTelefonoDirecto.setText(e.getTelefonoDirecto());
-		txtDescripcionCargo.setText(e.getDescripcionCargo());
+		txtLegajo.setText(ticketParaMostrar.getEmpleado().getNumeroLegajo().toString());
+		txtApellidoNombre.setText(ticketParaMostrar.getEmpleado().getNombre());
+		txtTelefonoInterno.setText(ticketParaMostrar.getEmpleado().getTelefonoInterno());
+		txtTelefonoDirecto.setText(ticketParaMostrar.getEmpleado().getTelefonoDirecto());
+		txtDescripcionCargo.setText(ticketParaMostrar.getEmpleado().getDescripcionCargo());
 		cargarTabla();
-	}
+		/*filaVieja=-1;
+		modeloTabla.addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent evento) {
+            	int filaNueva = table.getSelectedRow();
+            	if(filaVieja == -1) {
+                filaVieja = table.getSelectedRow();
+            	}
+                else {
+                	filaNueva = table.getSelectedRow();;
+                	if(filaNueva != filaVieja) {
+                		textAreaObservaciones.setText(obtenerObservacionesFecha(table.getSelectedRow()).get(1));
+                		filaVieja = filaNueva;
+                	}
+                }
+            }
+        });
+   		*/
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ListSelectionModel rowSM = table.getSelectionModel();
+		rowSM.addListSelectionListener(new ListSelectionListener() {
+
+		    public void valueChanged(ListSelectionEvent e) {
+		        //Ignore extra messages.
+		        if (e.getValueIsAdjusting()) return;
+
+		        ListSelectionModel lsm =
+		            (ListSelectionModel)e.getSource();
+
+		        if (lsm.isSelectionEmpty()) {
+		            //no rows are selected
+		        } else {
+		            int selectedRow = lsm.getMinSelectionIndex();
+		            //selectedRow is selected
+		            textAreaObservaciones.setText(obtenerObservacionesFecha(table.getSelectedRow()).get(1));
+		        }
+		    }
+		});
+
+
+		/*table.addFocusListener(new FocusListener() {
+			
+	        public void focusLost(FocusEvent arg0) { 
+	          }  
+			@Override
+			public void focusGained(FocusEvent e) {
+				textAreaObservaciones.setText(obtenerObservacionesFecha(table.getSelectedRow()).get(1));
+			}
+			
+		});*/
+}
 	
 	private void cargarTabla() {
 		ArrayList<DuracionEstado> duraciones = new ArrayList<>();
 		for(DuracionEstado d:  ticketParaMostrar.getDuracionEstado()) {
 			duraciones.add(d);
 		}
-		duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));
+		if(duraciones.size() != 1) {
+		duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));}
 		for(DuracionEstado de: duraciones) {
-			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre(),"Hacer Metodo",buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
+			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre(),obtenerObservacionesFecha(duraciones.indexOf(de)).get(0),buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
 		}
 		
 	}
 
-	private ClasificacionTicket buscarGrupoResTicketDeLaFecha(LocalDate fechaInicio) {
-		//TODO
-		return null;
-	}
+	/*private GrupoDeResolucion buscarGrupoResTicketDeLaFecha(DuracionEstado de) {
+		return de.getUsuario().getEmpleado().getGrupo();
+	}*/
 
 	private Integer compararFechasCambioEstado(DuracionEstado c1, DuracionEstado c2) {
 		
@@ -335,4 +398,90 @@ public class InterfazVisualizacionTicket extends JPanel {
 		
 		return retorno;
 	}
-}
+	
+	private ArrayList<String> obtenerObservacionesFecha(int selectedRow) {
+		// TODO Auto-generated method stub
+		ArrayList<String> aux = new ArrayList<>(); 
+		ArrayList<DuracionEstado> de = new ArrayList<>(); 
+		for(DuracionEstado d: ticketParaMostrar.getDuracionEstado()) {
+			de.add((DuracionEstado)d);
+		}
+		de.sort((c1,c2) -> compararFechasCambioEstado(c1, c2));
+		DuracionEstado duracionMostrada = (DuracionEstado)de.get(selectedRow);
+		//LocalDate fechaDuracionEstadoActual = duracionMostrada.getFechaInicio();
+		//LocalTime horaDuracionEstadoActual = duracionMostrada.getHoraInicio();
+		ArrayList<Intervencion> intervencionesTicket = new ArrayList<>();
+		for(Intervencion i: duracionMostrada.getTicket().getIntervenciones()) {
+			intervencionesTicket.add(i);
+		}
+		
+		Intervencion intervencion = new Intervencion();
+
+		int i = 0;
+		boolean flag = true;
+		String observaciones = new String();
+		
+		
+		if(!duracionMostrada.getEstado().getNombre().equalsIgnoreCase("Abierto Derivado")) {
+			for(Intervencion interv: duracionMostrada.getTicket().getIntervenciones()) {
+				if(interv.getGrupoResolucion().getNombre().equalsIgnoreCase("Mesa de ayuda")) {
+					intervencion = interv;
+				}
+			}
+		}
+		else {
+			for(Intervencion interv: intervencionesTicket) {
+				if(interv.getGrupoResolucion().getNombre().equalsIgnoreCase("Mesa de ayuda")) {
+					intervencionesTicket.remove(interv);
+				}
+			}
+			while(i < intervencionesTicket.size() && flag) {
+				if(intervencionesTicket.get(i).getFechaAsignacion().isEqual(duracionMostrada.getFechaInicio()) && intervencionesTicket.get(i).getHoraAsignacion().getHour()== duracionMostrada.getHoraInicio().getHour() && intervencionesTicket.get(i).getHoraAsignacion().getMinute() == duracionMostrada.getHoraInicio().getMinute() && intervencionesTicket.get(i).getHoraAsignacion().getSecond() == duracionMostrada.getHoraInicio().getSecond()){
+					flag = false;
+					intervencion = intervencionesTicket.get(i);
+					System.out.println("OBSERVACIONES QUE DEBEN APARECER: " + intervencion.getEstadoIntervencionActual().getObservaciones());
+				}
+				i++;
+			}
+		}
+		
+		i=0;
+		flag = true;
+		while(i < intervencion.getHistorialEstadoIntervenciones().size() && flag) {
+			if(intervencion.getHistorialEstadoIntervenciones().get(i).getFechaInicio().equals(duracionMostrada.getFechaInicio())) { //&& intervencion.getHistorialEstadoIntervenciones().get(i).getHoraFin().getHour() == duracionMostrada.getHoraInicio().getHour() && intervencion.getHistorialEstadoIntervenciones().get(i).getHoraFin().getHour() == duracionMostrada.getHoraInicio().getHour() && intervencion.getHistorialEstadoIntervenciones().get(i).getHoraFin().getSecond() == duracionMostrada.getHoraInicio().getSecond()){
+				flag = false;
+				observaciones = intervencion.getHistorialEstadoIntervenciones().get(i).getObservaciones();
+			}
+			i++;
+		}
+	
+		System.out.println("Hora Asignacion intervencion");
+		System.out.println(intervencion.getHistorialEstadoIntervenciones().get(intervencion.getHistorialEstadoIntervenciones().size()-1).getIntervencion().getHoraAsignacion());
+		System.out.println("Hora Asignacion estado intervencion");
+		System.out.println(intervencion.getHistorialEstadoIntervenciones().get(intervencion.getHistorialEstadoIntervenciones().size()-1).getHoraInicio());
+		System.out.println("ID estado intervencion");
+		System.out.println(intervencion.getHistorialEstadoIntervenciones().get(intervencion.getHistorialEstadoIntervenciones().size()-1).getId_EstadoIntervencion());
+		System.out.println("Id intervencion");
+		System.out.println(intervencion.getHistorialEstadoIntervenciones().get(intervencion.getHistorialEstadoIntervenciones().size()-1).getIntervencion().getId_Intervencion());
+		
+		flag = true;
+		i=0;
+		
+		/*ArrayList<EstadoIntervencion> estadosResultantes = new ArrayList<>(); 
+		while(i<intervencion.getHistorialEstadoIntervenciones().size() && flag) {
+			
+			if(intervencion.getHistorialEstadoIntervenciones().get(i).getFechaInicio().isEqual(fechaDuracionEstadoActual)){	
+				if(intervencion.getHistorialEstadoIntervenciones().get(i).getHoraInicio().getHour() == horaDuracionEstadoActual.getHour() &&  intervencion.getHistorialEstadoIntervenciones().get(i).getHoraInicio().getMinute() == horaDuracionEstadoActual.getMinute() && intervencion.getHistorialEstadoIntervenciones().get(i).getHoraInicio().getSecond() == horaDuracionEstadoActual.getSecond()) {}
+				flag = false;
+				estadosResultantes.add(intervencion.getHistorialEstadoIntervenciones().get(i));
+				}
+			
+			i++;
+		}*/
+			//observaciones = estadosResultantes.get(estadosResultantes.size()-1).getObservaciones();
+			System.out.println(observaciones);
+			aux.add(intervencion.getGrupoResolucion().getNombre());
+			aux.add(observaciones);
+			return aux;
+	}
+}	

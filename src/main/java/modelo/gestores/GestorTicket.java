@@ -95,12 +95,12 @@ public class GestorTicket {
 	}
 	
 	
-	public void derivarTicket (DerivarDTO derivarDTO, boolean cambioClasificacion, GrupoDeResolucion grupo, String observacionesNueva) {
+	public void derivarTicket (DerivarDTO derivarDTO, boolean cambioClasificacion, GrupoDeResolucion grupo) {
 		Ticket ticket = this.getTicket(derivarDTO.getNumeroTicket());
 		LocalDate fecha= LocalDate.now();
 		LocalTime hora= LocalTime.now();
 		Usuario usuario = gestorUsuario.getUsuarioActual();
-		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo, observacionesNueva);
+		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo);
 		
 		if(nuevaIntervencion!=null) {
 			nuevaIntervencion.setTicket(ticket);
