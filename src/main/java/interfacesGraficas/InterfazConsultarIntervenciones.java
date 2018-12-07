@@ -3,6 +3,7 @@ package interfacesGraficas;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import infoDTO.IntervencionBusquedaDTO;
+import infoDTO.IntervencionResultadoDTO;
 import modelo.aplicacion.Principal;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +20,7 @@ import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class InterfazConsultarIntervenciones extends JPanel {
@@ -156,8 +158,15 @@ public class InterfazConsultarIntervenciones extends JPanel {
 						
 						else {
 							intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-							ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
-							ventana.pack();
+							Integer numeroLegajo = ventana.getGestorUsuario().getNumeroLegajo();
+							List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO, numeroLegajo);
+							if (intervenciones.size()>0) {
+								ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO, intervenciones));
+								ventana.pack();
+							}
+							else {
+								JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
+							}
 						}
 					} catch (HeadlessException e) {
 						e.printStackTrace();
@@ -166,8 +175,15 @@ public class InterfazConsultarIntervenciones extends JPanel {
 				
 				else {
 					intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-					ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO));
-					ventana.pack();
+					Integer numeroLegajo = ventana.getGestorUsuario().getNumeroLegajo();
+					List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO, numeroLegajo);
+					if (intervenciones.size()>0) {
+						ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO, intervenciones));
+						ventana.pack();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
+					}
 				}
 			}
 		});

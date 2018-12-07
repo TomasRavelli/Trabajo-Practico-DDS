@@ -135,9 +135,16 @@ public class GestorIntervencion {
 		Integer idGrupo = gestorEmpleado.getGrupoId(legajo);
 		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO, idGrupo);
 		if (encontradasAux.size()>0) {
+			System.out.println("Entra al fin");
 			for(Intervencion i: encontradasAux) {
+				System.out.println("Entra al for");
 				Ticket t1 = i.getTicket();
-				IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), intervencionDTO.getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
+				
+				//EL ERROR ES ESTE PUTOOOOOOOOOOOOOOO
+				//System.out.println(t1.getDuracionEstadoActual().getEstado().getNombre());
+				
+				IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), i.getEstadoIntervencionActual().getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
+				
 				encontradas.add(auxDTO);
 			}
 		}
@@ -178,8 +185,10 @@ public class GestorIntervencion {
 				}
 			}
 			
+			intervencion.setTicket(ticket);
 			intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 			intervencion.add(nuevoEstadoIntervencion);
+			nuevoEstadoIntervencion.setIntervencion(intervencion);
 			gestorBD.actualizarIntervencion(intervencion);
 			resultado = ticket;
 		}

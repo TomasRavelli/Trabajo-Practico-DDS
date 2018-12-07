@@ -50,9 +50,7 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		separator.setForeground(Color.GRAY);
 		separator.setBounds(274, 90, 800, 2);
 		this.add(separator);
-		
-		
-		
+				
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(666, 246, 266, 80);
 		this.add(scrollPane);
@@ -60,7 +58,6 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		JScrollPane scrollPane2 = new JScrollPane();
 		scrollPane2.setBounds(666, 502, 266, 80);
 		this.add(scrollPane2);
-		
 		
 		Ticket ticket = ventana.getGestorTicket().getTicket(intervencion.getNumeroTicket());
 		JTextArea textAreaDescripcion = new JTextArea();
@@ -71,13 +68,10 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		scrollPane.setToolTipText(ticket.getDescripcion());
 		textAreaDescripcion.setText(ticket.getDescripcion());
 		
-		
-		
 		JTextArea textAreaObservaciones = new JTextArea();
 		textAreaObservaciones.setBackground(SystemColor.text);
 		textAreaObservaciones.setEditable(true);
 		scrollPane2.setViewportView(textAreaObservaciones);
-		
 		
 		JLabel lblActualizarEstadoIntervencion = new JLabel("Actualizar estado intervencion");
 		lblActualizarEstadoIntervencion.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
@@ -132,8 +126,6 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		this.add(txtEstadoActual);
 		txtEstadoActual.setText(intervencion.getEstadoIntervencion());
 		
-		
-		
 		JComboBox<String> comboBoxNuevoEstado = new JComboBox<String>();
 		comboBoxNuevoEstado.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		comboBoxNuevoEstado.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una opcion...", "Asignada", "En espera", "Terminada", "Trabajando"}));
@@ -145,9 +137,7 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		comboBoxClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxClasificacion.setModel(new DefaultComboBoxModel<ClasificacionTicket>(clasificaciones));
 		comboBoxClasificacion.setBounds(666, 424, 266, 24);
-		this.add(comboBoxClasificacion);
-		
-		
+		this.add(comboBoxClasificacion);	
 		
 		JButton btnActualizar = new JButton("Actualizar");
 		btnActualizar.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -158,8 +148,6 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		btnSalir.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		btnSalir.setBounds(1207, 655, 133, 37);
 		this.add(btnSalir);
-		
-		
 		
 		btnActualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -173,15 +161,7 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 					errorObservacionesVacio.setVisible(false);
 					errorEstadoVacio.setVisible(false);
 					
-					int dialogButton = JOptionPane.YES_NO_OPTION;
-					int dialogResult = JOptionPane.showConfirmDialog (null, "¿Esta terminando la intervencion por una asignacion incorrecta?","Warning",dialogButton);
-					if(dialogResult == JOptionPane.YES_OPTION){
-						ventana.getGestorTicket().actualizarEstadoIntervencion(intervencion, comboBoxNuevoEstado.getSelectedItem().toString(), textAreaObservaciones.getText(), true, (ClasificacionTicket)comboBoxClasificacion.getSelectedItem());
-					}
-					else {
-						ventana.getGestorTicket().actualizarEstadoIntervencion(intervencion, comboBoxNuevoEstado.getSelectedItem().toString(), textAreaObservaciones.getText(), false, (ClasificacionTicket)comboBoxClasificacion.getSelectedItem());					
-					}
-					
+					ventana.getGestorTicket().actualizarEstadoIntervencion(intervencion, comboBoxNuevoEstado.getSelectedItem().toString(), textAreaObservaciones.getText(), (ClasificacionTicket)comboBoxClasificacion.getSelectedItem());							
 					ventana.setContentPane(new InterfazConsultarIntervenciones(ventana));
 					ventana.pack();
 				}

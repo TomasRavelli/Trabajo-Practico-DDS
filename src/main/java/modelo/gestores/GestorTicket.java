@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import infoDTO.DatosDTO;
 import infoDTO.DerivarDTO;
 import infoDTO.IntervencionResultadoDTO;
@@ -139,12 +142,12 @@ public class GestorTicket {
 	
 	
 	
-	public void actualizarEstadoIntervencion (IntervencionResultadoDTO intervencion, String nuevoEstado, String observaciones, Boolean asignacionIncorrecta, ClasificacionTicket clasificacionNueva) {
+	public void actualizarEstadoIntervencion (IntervencionResultadoDTO intervencion, String nuevoEstado, String observaciones, ClasificacionTicket clasificacionNueva) {
 		//TODO ticket no recibe los cambios porque se pasa por referencia
-		Ticket ticket = this.getTicket(intervencion.getNumeroTicket());
+		Ticket ticket = gestorBD.getTicket(intervencion.getNumeroTicket());
 		ticket = gestorIntervencion.actualizarIntervencion(intervencion, nuevoEstado, observaciones, ticket);
 		
-		if (ticket!=null) {
+		if (ticket!=null && !(intervencion.getEstadoIntervencion().equalsIgnoreCase("Asignada") && nuevoEstado.equalsIgnoreCase("Trabajando"))) {
 			DuracionEstado nuevaDuracionEstado = new DuracionEstado();
 			nuevaDuracionEstado.setFechaInicio(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
 			nuevaDuracionEstado.setHoraInicio(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getHoraFin());
@@ -155,16 +158,34 @@ public class GestorTicket {
 			}
 			
 			if (nuevoEstado.equalsIgnoreCase("Terminada")) {
+				Boolean asignacionIncorrecta;
+				
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog (null, "¿Esta terminando la intervencion por una asignacion incorrecta?","Warning",dialogButton);
+				if(dialogResult == JOptionPane.YES_OPTION){
+					asignacionIncorrecta=true;
+				}
+				else {
+					asignacionIncorrecta=false;
+				}
+				
 				if (asignacionIncorrecta || ticket.getIntervencionesAbiertas()>1) {
-					nuevaDuracionEstado.getEstado().setNombre("Abierto en Mesa de Ayuda");
+					
+					
+					nuevaDuracionEstado.setEstado(gestorBD.getEstado(1));
 				}			
 				else {
-					nuevaDuracionEstado.getEstado().setNombre("Solucionado a la espera OK");
+					nuevaDuracionEstado.setEstado(gestorBD.getEstado(4));
 				}
-			}
 				
+				ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).getEstadoIntervencionActual().setFechaFin(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
+				ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).getEstadoIntervencionActual().setHoraFin(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getHoraFin());
+			}
+
+			nuevaDuracionEstado.setTicket(ticket);	
 			ticket.setDuracionEstadoActual(nuevaDuracionEstado);
 			ticket.add(nuevaDuracionEstado);
+			ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).setTicket(ticket);
 			
 			if (!clasificacionNueva.getNombre().equalsIgnoreCase(ticket.getDuracionClasificacionActual().getClasificacion().getNombre())) {
 				ticket.getDuracionClasificacionActual().setFechaFin(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
@@ -172,7 +193,6 @@ public class GestorTicket {
 				ticket.getClasificaciones().add(duracionClasificacionNueva);
 				ticket.setDuracionClasificacionActual(duracionClasificacionNueva);
 			}
-			
 			gestorBD.actualizarTicket(ticket);
 		}
 	}	
