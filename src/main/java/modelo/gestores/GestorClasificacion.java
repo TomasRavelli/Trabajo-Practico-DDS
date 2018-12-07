@@ -1,10 +1,12 @@
 package modelo.gestores;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.DuracionClasificacion;
+import modelo.entidades.GrupoDeResolucion;
 import modelo.entidades.Ticket;
 
 public class GestorClasificacion {
@@ -39,5 +41,23 @@ public class GestorClasificacion {
 		DuracionClasificacion nuevaDuracion= new DuracionClasificacion(fechaAp, t);
 		nuevaDuracion.setClasificacion(clasificacion);
 		return nuevaDuracion;
+	}
+	
+	
+	public List<ClasificacionTicket> getClasificaciones (String grupo){
+		List<ClasificacionTicket> clasificacionesGrupo = gestorBD.getClasificaciones();
+		System.out.println(clasificacionesGrupo.size());
+		
+		List<ClasificacionTicket> resultado = new ArrayList<>();
+		for (ClasificacionTicket ct : clasificacionesGrupo) {
+			for (GrupoDeResolucion g : ct.getGrupos()) {
+				if(g.getNombre().equalsIgnoreCase(grupo)) {
+					resultado.add(ct);
+				}
+			}
+		}
+		
+		System.out.println(resultado.size());
+		return resultado;
 	}
 }

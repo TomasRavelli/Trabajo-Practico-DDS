@@ -35,7 +35,6 @@ public class ClasificacionTicket implements Serializable {
 	
 	public ClasificacionTicket() {}
 	
-	
 	public ClasificacionTicket(String n) {
 		this.nombre = n;
 	}
@@ -57,6 +56,16 @@ public class ClasificacionTicket implements Serializable {
 		this.id_ClasificacionTicket = id_ClasificacionTicket;
 	}
 	
+	public List<GrupoDeResolucion> getGrupos() {
+		return grupos;
+	}
+
+
+	public void setGrupos(List<GrupoDeResolucion> grupos) {
+		this.grupos = grupos;
+	}
+
+
 	@Override
 	public String toString() {
 		return nombre;

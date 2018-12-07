@@ -2,7 +2,7 @@ package modelo.entidades;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
+import java.time.LocalTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,20 +38,23 @@ public class DuracionEstado implements Serializable {
 	@JoinColumn (name = "NUMERO_TICKET")
 	private Ticket ticket;
 	
-	
 	@Column (name = "FECHA_INICIO")
 	private LocalDate fechaInicio;
+	@Column (name = "HORA_INICIO")
+	private LocalTime horaInicio;
 	@Column (name = "FECHA_FIN")
 	private LocalDate fechaFin;
-	
+	@Column (name = "HORA_FIN")
+	private LocalTime horaFin;
 	
 	
 	public DuracionEstado() {}
 	
-	public DuracionEstado(LocalDate fInicio, Usuario u, Ticket t) {
+	public DuracionEstado(LocalDate fInicio,LocalTime horaIn, Usuario u, Ticket t) {
 		this.fechaInicio = fInicio;
 		this.usuario = u;
 		this.ticket=t;
+		this.horaInicio = horaIn;
 	}
 
 
@@ -72,6 +75,39 @@ public class DuracionEstado implements Serializable {
 		this.fechaFin = fechaFin;
 	}
 	
+	
+	public Integer getIdDuracionEstado() {
+		return idDuracionEstado;
+	}
+
+	public void setIdDuracionEstado(Integer idDuracionEstado) {
+		this.idDuracionEstado = idDuracionEstado;
+	}
+
+	public Ticket getTicket() {
+		return ticket;
+	}
+
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
+	}
+
+	public LocalTime getHoraInicio() {
+		return horaInicio;
+	}
+
+	public void setHoraInicio(LocalTime horaInicio) {
+		this.horaInicio = horaInicio;
+	}
+
+	public LocalTime getHoraFin() {
+		return horaFin;
+	}
+
+	public void setHoraFin(LocalTime horaFin) {
+		this.horaFin = horaFin;
+	}
+
 	public Estado getEstado() {
 		return estado;
 	}

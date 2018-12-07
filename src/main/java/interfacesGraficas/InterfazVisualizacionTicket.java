@@ -14,8 +14,16 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.aplicacion.Principal;
+import modelo.entidades.ClasificacionTicket;
+import modelo.entidades.DuracionClasificacion;
+import modelo.entidades.DuracionEstado;
+import modelo.entidades.Empleado;
+import modelo.entidades.Ticket;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+
 
 public class InterfazVisualizacionTicket extends JPanel {
 
@@ -30,6 +38,8 @@ public class InterfazVisualizacionTicket extends JPanel {
 	private JTextField txtPiso;
 	private JTextField txtOficina;
 	private JTable table;
+	private DefaultTableModel modeloTabla;
+	private Ticket ticketParaMostrar;
 
 
 	public InterfazVisualizacionTicket(Principal frame, Integer numeroTicket) {
@@ -40,8 +50,6 @@ public class InterfazVisualizacionTicket extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
-		
-		
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(275, 90, 800, 2);
@@ -62,8 +70,6 @@ public class InterfazVisualizacionTicket extends JPanel {
 		textAreaObservaciones.setBackground(new Color(220, 220, 220));
 		textAreaObservaciones.setEditable(false);
 		scrollPane.setViewportView(textAreaObservaciones);
-		
-		
 		
 		JLabel lblVisualizacionTicket = new JLabel("Visualizacion ticket");
 		lblVisualizacionTicket.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
@@ -138,9 +144,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		JLabel lblObservaciones = new JLabel("Observaciones: ");
 		lblObservaciones.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		lblObservaciones.setBounds(701, 434, 115, 24);
-		this.add(lblObservaciones);
-		
-		
+		this.add(lblObservaciones);		
 		
 		txtDescripcionCargo = new JTextField();
 		txtDescripcionCargo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
@@ -217,30 +221,16 @@ public class InterfazVisualizacionTicket extends JPanel {
 		
 		
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {"Fecha", "Hora", "Operador", "Estado", "Grupo de resol.", "Clasif. ticket"}
-		));
+		modeloTabla = new DefaultTableModel(
+				new Object[][] {
+					
+				},
+				new String[] {"Fecha", "Hora", "Operador", "Estado", "Grupo de resol.", "Clasif. ticket"}
+			);
+		table.setModel(modeloTabla);
 		table.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 11));
 		scrollPane_1.setViewportView(table);
 		
-		
-
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		btnAceptar.setBounds(1207, 655, 133, 37);
@@ -249,9 +239,105 @@ public class InterfazVisualizacionTicket extends JPanel {
 		
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				modeloTabla.setRowCount(0);
 				ventana.setContentPane(new InterfazConsultarTicket(ventana));
 				ventana.pack();
 			}
 		});
+		
+		
+		ticketParaMostrar = ventana.getGestorTicket().getTicket(numeroTicket);
+		Empleado e = ventana.getGestorEmpleado().getEmpleado(ticketParaMostrar.getUsuario().getNumeroLegajo());
+		txtLegajo.setText(ticketParaMostrar.getUsuario().getNumeroLegajo().toString());
+		txtApellidoNombre.setText(ticketParaMostrar.getUsuario().getNombre());
+		txtTelefonoInterno.setText(e.getTelefonoInterno());
+		txtTelefonoDirecto.setText(e.getTelefonoDirecto());
+		txtDescripcionCargo.setText(e.getDescripcionCargo());
+		cargarTabla();
+	}
+	
+	
+	private void cargarTabla() {
+		ArrayList<DuracionEstado> duraciones = new ArrayList<>();
+		for(DuracionEstado d:  ticketParaMostrar.getDuracionEstado()) {
+			duraciones.add(d);
+		}
+		
+		duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));
+		for(DuracionEstado de: duraciones) {
+			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre(),"Hacer Metodo",buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
+		}
+	}
+
+	
+	private ClasificacionTicket buscarGrupoResTicketDeLaFecha(LocalDate fechaInicio) {
+		//TODO
+		return null;
+	}
+
+	
+	private Integer compararFechasCambioEstado(DuracionEstado c1, DuracionEstado c2) {
+		Integer retorno = 0;
+		if(c1.getFechaInicio().isEqual((c2.getFechaInicio()))) {
+				if(c1.getHoraInicio().getHour() == c2.getHoraInicio().getHour()) {
+					if(c1.getHoraInicio().getHour() == c2.getHoraInicio().getHour()) {
+						retorno = (((Integer)c2.getHoraInicio().getSecond()).compareTo(c1.getHoraInicio().getSecond()));  
+					}
+					else {
+						retorno = (((Integer)c2.getHoraInicio().getMinute()).compareTo((Integer)c1.getHoraInicio().getMinute()));  
+					}
+				}
+				else {
+					retorno = (((Integer)c2.getHoraInicio().getHour()).compareTo((Integer)c2.getHoraInicio().getHour()));  
+				}
+				}
+		else {
+			retorno = (c2.getFechaInicio().compareTo(c1.getFechaInicio()));  
+		}
+		return retorno;
+	}
+	
+	
+	private ClasificacionTicket buscarClasificacionTicketDeLaFecha(LocalDate fechaDada){
+		ArrayList<DuracionClasificacion> dc = new ArrayList<>(); 
+		
+		for(DuracionClasificacion d: ticketParaMostrar.getClasificaciones()) {
+			dc.add((DuracionClasificacion)d);
+		}
+		
+		int i=0;
+		boolean flag = true;
+		ClasificacionTicket retorno = new ClasificacionTicket();
+		
+		if(dc.size() == 1) {
+			retorno = dc.get(0).getClasificacion();
+		}
+		
+		else {
+		while(i<dc.size() && flag) {
+			if(i+1 == dc.size()) {
+				if(dc.get(i).getFechaInicio().isAfter(fechaDada)){	
+					flag = false;
+					retorno = dc.get(i-1).getClasificacion();
+				}
+				else {
+					retorno = dc.get(i).getClasificacion();
+				}
+			}
+			else {
+			if(dc.get(i).getFechaInicio().isAfter(fechaDada)){	
+				flag = false;
+				if(i==0) {
+					retorno = dc.get(i).getClasificacion();
+				}
+				else {
+					retorno = dc.get(i-1).getClasificacion();
+				}
+			}
+			}
+			i++;
+		}
+		}	
+		return retorno;
 	}
 }

@@ -42,6 +42,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 	private JTextField textFieldNumeroLegajo;
 	private JTextField textFieldFechaDesde;
 	private JTextField textFieldFechaHasta;
+	private Integer i;
 
 	public InterfazConsultarIntervencionesPaginacion(Principal frame, IntervencionBusquedaDTO criteriosBusqueda) {
 
@@ -51,7 +52,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
-
+		
 		
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -296,7 +297,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.add(btnDerecha);
 		
 		//TODO ver que sea menor al size y la flecha tambien que no se pase
-		Integer i = Integer.valueOf(txtNumeroPagina.getText());
+		i = Integer.valueOf(txtNumeroPagina.getText());
 		GrupoDeResolucion grupo = ventana.getGestorEmpleado().getEmpleado(ventana.getGestorUsuario().getUsuarioActual().getNumeroLegajo()).getGrupo();
 		List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(criteriosBusqueda, grupo.getId_Grupo());
 		
@@ -317,21 +318,40 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		else {
 			JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
-			ventana.setContentPane(new InterfazConsultarIntervenciones(ventana));
-			ventana.pack();
 		}
-		
-		
+			
 		
 		btnDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				i++;
+				txtNumeroPagina.setText(i.toString());
+				txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
+				txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
+				txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
+				txtEstadoTicket.setText(intervenciones.get(i-1).getEstadoTicket());
+				txtFechaApertura.setText(intervenciones.get(i-1).getFechaApertura().toString());
+				txtFechaAsignacion.setText(intervenciones.get(i-1).getFechaAsignacionIntervencion().toString());
+				txtEstadoIntervencion.setText(intervenciones.get(i-1).getEstadoIntervencion());
+				txtGrupoResolucion.setText(intervenciones.get(i-1).getGrupo());
+				textAreaObservaciones.setText(intervenciones.get(i-1).getObservacionIntervencion());
 				
 			}
 		});
 		
 		btnIzquierda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				i--;
+				txtNumeroPagina.setText(i.toString());
+				Integer i = Integer.valueOf(txtNumeroPagina.getText());
+				txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
+				txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
+				txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
+				txtEstadoTicket.setText(intervenciones.get(i-1).getEstadoTicket());
+				txtFechaApertura.setText(intervenciones.get(i-1).getFechaApertura().toString());
+				txtFechaAsignacion.setText(intervenciones.get(i-1).getFechaAsignacionIntervencion().toString());
+				txtEstadoIntervencion.setText(intervenciones.get(i-1).getEstadoIntervencion());
+				txtGrupoResolucion.setText(intervenciones.get(i-1).getGrupo());
+				textAreaObservaciones.setText(intervenciones.get(i-1).getObservacionIntervencion());
 			}
 		});
 		
@@ -347,7 +367,6 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		btnIngresarComentario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO verificar que el estado sea TRABAJANDO
 				if (intervenciones.get(i-1).getEstadoIntervencion().equalsIgnoreCase("Trabajando")) {
 					ventana.setContentPane(new InterfazModificarComentarios(ventana, intervenciones.get(i-1)));
 					ventana.pack();

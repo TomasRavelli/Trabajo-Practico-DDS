@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import infoDTO.DatosDTO;
 import infoDTO.DerivarDTO;
+import infoDTO.IntervencionResultadoDTO;
 import infoDTO.TicketDTO;
 import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.DuracionClasificacion;
@@ -43,14 +44,14 @@ public class GestorTicket {
 	public Ticket crearTicket(TicketDTO ticketDTO) {
 		Ticket ticket = new Ticket(ticketDTO);
 		ticket.setEmpleado(gestorEmpleado.getEmpleado(ticketDTO.getLegajo()));
-		//HACER ESTO EN EL GESTOR CLASIFICACION Y VER DIAGRAMA
+
 		ClasificacionTicket clasificacion = gestorClasificacion.getClasificacion(ticketDTO.getClasificacion().toString());
 		DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,ticketDTO.getFechaApertura(),ticket);//Adentro ya se inserta la clasificacion
 		ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
 		ticket.add(nuevaDuracionClasificacion);
 		ticket.setUsuario(gestorUsuario.getUsuarioActual());
-		ticket.setDescripcion(ticketDTO.getDescripcion());
-		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), gestorUsuario.getUsuarioActual(),ticket);
+		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), ticketDTO.getHoraApertura(), gestorUsuario.getUsuarioActual(),ticket);
+		//TODO crear constante global
 		durEstado.setEstado(gestorBD.getEstado(1));
 		durEstado.setUsuario(gestorUsuario.getUsuarioActual());
 		ticket.setDuracionEstadoActual(durEstado);
@@ -71,8 +72,9 @@ public class GestorTicket {
 		DuracionEstado durEstado= new DuracionEstado();
 		durEstado= ticket.getDuracionEstadoActual();
 		durEstado.setFechaFin(fecha);
+		durEstado.setHoraFin(hora);
 		
-		DuracionEstado durEstadoNueva= new DuracionEstado(fecha,gestorUsuario.getUsuarioActual(),ticket);
+		DuracionEstado durEstadoNueva= new DuracionEstado(fecha,hora, gestorUsuario.getUsuarioActual(),ticket);
 		durEstadoNueva.setEstado(gestorBD.getEstado(3));
 		durEstadoNueva.setUsuario(gestorUsuario.getUsuarioActual());
 		durEstadoNueva.setFechaFin(fecha);
@@ -97,6 +99,7 @@ public class GestorTicket {
 	public void derivarTicket (DerivarDTO derivarDTO, boolean cambioClasificacion, GrupoDeResolucion grupo, String observacionesNueva) {
 		Ticket ticket = this.getTicket(derivarDTO.getNumeroTicket());
 		LocalDate fecha= LocalDate.now();
+		LocalTime hora= LocalTime.now();
 		Usuario usuario = gestorUsuario.getUsuarioActual();
 		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo, observacionesNueva);
 		
@@ -104,9 +107,10 @@ public class GestorTicket {
 			nuevaIntervencion.setTicket(ticket);
 			ticket.add(nuevaIntervencion);
 			ticket.getDuracionEstadoActual().setFechaFin(fecha);
+			ticket.getDuracionEstadoActual().setHoraFin(hora);
 		}		
 		
-		DuracionEstado nuevaDuracionEstado = new DuracionEstado(fecha, usuario, ticket);
+		DuracionEstado nuevaDuracionEstado = new DuracionEstado(fecha, hora, usuario, ticket);
 		nuevaDuracionEstado.setEstado(gestorBD.getEstado(2));
 		nuevaDuracionEstado.setUsuario(usuario);
 		ticket.add(nuevaDuracionEstado);
@@ -125,12 +129,49 @@ public class GestorTicket {
 	public List<TicketDTO> getTickets(DatosDTO datosDTO){
 		List<TicketDTO> encontrados = new ArrayList<>();
 		List<Ticket> encontradosAux = gestorBD.getTickets(datosDTO);
-		
 		for(Ticket t: encontradosAux) {
 			TicketDTO auxDTO = new TicketDTO(t.getNumero(), t.getEmpleado().getNumeroLegajo(), t.getDuracionClasificacionActual().getClasificacion(), t.getFechaApertura(),t.getHoraApertura(), t.getIntervenciones().get(t.getIntervenciones().size()-1).getGrupoResolucion(), t.getDuracionEstadoActual().getFechaInicio(), t.getDuracionEstadoActual().getEstado(), t.getUsuario());
 			encontrados.add(auxDTO);
 		}
-		
 		return encontrados;
 	}
+	
+	
+	
+	public void actualizarEstadoIntervencion (IntervencionResultadoDTO intervencion, String nuevoEstado, String observaciones, Boolean asignacionIncorrecta, ClasificacionTicket clasificacionNueva) {
+		Ticket ticket = this.getTicket(intervencion.getNumeroTicket());
+		ticket = gestorIntervencion.actualizarIntervencion(intervencion, nuevoEstado, observaciones, ticket);
+		
+		if (ticket!=null) {
+			DuracionEstado nuevaDuracionEstado = new DuracionEstado();
+			nuevaDuracionEstado.setFechaInicio(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
+			nuevaDuracionEstado.setHoraInicio(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getHoraFin());
+			nuevaDuracionEstado.setUsuario(gestorUsuario.getUsuarioActual());
+			
+			if (nuevoEstado.equalsIgnoreCase("En espera")) {
+				nuevaDuracionEstado.getEstado().setNombre("Abierto en Mesa de Ayuda");
+			}
+			
+			if (nuevoEstado.equalsIgnoreCase("Terminada")) {
+				if (asignacionIncorrecta || ticket.getIntervencionesAbiertas()>1) {
+					nuevaDuracionEstado.getEstado().setNombre("Abierto en Mesa de Ayuda");
+				}			
+				else {
+					nuevaDuracionEstado.getEstado().setNombre("Solucionado a la espera OK");
+				}
+			}
+				
+			ticket.setDuracionEstadoActual(nuevaDuracionEstado);
+			ticket.add(nuevaDuracionEstado);
+			
+			if (!clasificacionNueva.getNombre().equalsIgnoreCase(ticket.getDuracionClasificacionActual().getClasificacion().getNombre())) {
+				ticket.getDuracionClasificacionActual().setFechaFin(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
+				DuracionClasificacion duracionClasificacionNueva = new DuracionClasificacion(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin(), ticket);
+				ticket.getClasificaciones().add(duracionClasificacionNueva);
+				ticket.setDuracionClasificacionActual(duracionClasificacionNueva);
+			}
+			
+			gestorBD.actualizarTicket(ticket);
+		}
+	}	
 }
