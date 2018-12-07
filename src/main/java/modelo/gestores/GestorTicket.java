@@ -51,6 +51,7 @@ public class GestorTicket {
 		ticket.add(nuevaDuracionClasificacion);
 		ticket.setUsuario(gestorUsuario.getUsuarioActual());
 		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), ticketDTO.getHoraApertura(), gestorUsuario.getUsuarioActual(),ticket);
+
 		//TODO crear constante global
 		durEstado.setEstado(gestorBD.getEstado(1));
 		durEstado.setUsuario(gestorUsuario.getUsuarioActual());
@@ -96,12 +97,12 @@ public class GestorTicket {
 	}
 	
 	
-	public void derivarTicket (DerivarDTO derivarDTO, boolean cambioClasificacion, GrupoDeResolucion grupo, String observacionesNueva) {
+	public void derivarTicket (DerivarDTO derivarDTO, boolean cambioClasificacion, GrupoDeResolucion grupo) {
 		Ticket ticket = this.getTicket(derivarDTO.getNumeroTicket());
 		LocalDate fecha= LocalDate.now();
 		LocalTime hora= LocalTime.now();
 		Usuario usuario = gestorUsuario.getUsuarioActual();
-		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo, observacionesNueva);
+		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo);
 		
 		if(nuevaIntervencion!=null) {
 			nuevaIntervencion.setTicket(ticket);

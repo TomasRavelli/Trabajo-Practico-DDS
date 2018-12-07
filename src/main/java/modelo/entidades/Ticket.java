@@ -93,6 +93,7 @@ public class Ticket implements Serializable {
 		this.fechaFin = null;
 		this.horaApertura = t.getHoraApertura();
 		this.horaFin = null;
+		this.descripcion = t.getDescripcion();
 	}
 
 	public Integer getNumero() {

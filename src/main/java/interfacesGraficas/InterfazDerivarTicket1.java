@@ -33,7 +33,6 @@ public class InterfazDerivarTicket1 extends JPanel {
 
 	public InterfazDerivarTicket1(Principal frame, DerivarDTO derivarDTO) {
 		
-		
 		this.ventana=frame;
 		ventana.setContentPane(this);
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -42,8 +41,6 @@ public class InterfazDerivarTicket1 extends JPanel {
 		this.setLayout(null);
 		
 		grupos = cargarGrupos(derivarDTO.getClasificacion());
-		
-		
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
@@ -112,8 +109,6 @@ public class InterfazDerivarTicket1 extends JPanel {
 		add(txtClasificacionDeTicket);
 		txtClasificacionDeTicket.setText(derivarDTO.getClasificacion().toString());
 		
-		
-		
 		JButton btnDerivarTicket = new JButton("Derivar Ticket");
 		btnDerivarTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		btnDerivarTicket.setBounds(1020, 655, 133, 37);
@@ -130,7 +125,7 @@ public class InterfazDerivarTicket1 extends JPanel {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
-					ventana.getGestorTicket().derivarTicket(derivarDTO, false, (GrupoDeResolucion)comboBox.getSelectedItem(), derivarDTO.getObservaciones());
+					ventana.getGestorTicket().derivarTicket(derivarDTO, false, (GrupoDeResolucion)comboBox.getSelectedItem());
 					ventana.setContentPane(new HomeMesaAyuda(ventana));
 					ventana.pack();
 				}
@@ -145,7 +140,6 @@ public class InterfazDerivarTicket1 extends JPanel {
 			}
 		});
 	}
-	
 	
 	private GrupoDeResolucion[] cargarGrupos(ClasificacionTicket clasifTicket) {
 		int n = 0;

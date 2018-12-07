@@ -242,5 +242,4 @@ public class GestorBD {
 		manager.getTransaction().commit();
 		return intervencionEncontrada;
 	}
-
 }

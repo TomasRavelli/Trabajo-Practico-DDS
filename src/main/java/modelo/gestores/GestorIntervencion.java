@@ -37,8 +37,10 @@ public class GestorIntervencion {
 	
 	
 	public void actualizarEstadoIntervencion (Integer numeroTicket, String observaciones) {
+
 		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
 		EstadoIntervencion estadoIntervencion = intervencion.getEstadoIntervencionActual();
+
 		LocalDate fecha = LocalDate.now();
 		LocalTime hora = LocalTime.now();
 		
@@ -56,7 +58,7 @@ public class GestorIntervencion {
 		
 	}
 	
-	public Intervencion actualizarIntervenciones(Integer numeroTicket, String observaciones, GrupoDeResolucion grupo, String observacionesNueva) {
+	public Intervencion actualizarIntervenciones(Integer numeroTicket, String observaciones, GrupoDeResolucion grupo) {
 		LocalDate fecha = LocalDate.now();
 		LocalTime hora = LocalTime.now();
 		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
@@ -67,7 +69,6 @@ public class GestorIntervencion {
 		intervencion.getEstadoIntervencionActual().setHoraFin(hora);
 		
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("En espera", fecha, hora, intervencion);
-		nuevoEstadoIntervencion.setObservaciones(observacionesNueva);
 		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
 		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 		intervencion.add(nuevoEstadoIntervencion);

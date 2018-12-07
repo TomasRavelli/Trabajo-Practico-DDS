@@ -121,7 +121,7 @@ public class InterfazConsultarTicket extends JPanel {
 		
 		modeloTablaTicket = new DefaultTableModel(
 				new Object[][] {
-					
+
 				},
 				new String[] {"Ticket", "Legajo", "Fecha apertura", "Hora apertura", "Operador", "Clasificacion actual", "Estado actual", "Ultimo cambio estado"}
 			);

@@ -78,4 +78,30 @@ public class Usuario implements Serializable {
 		this.password = password;
 	}
 
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+
+	public void setEmpleado(Empleado empleado) {
+		this.empleado = empleado;
+	}
+
+	public List<DuracionEstado> getDuracionEstado() {
+		return duracionEstado;
+	}
+
+	public void setDuracionEstado(List<DuracionEstado> duracionEstado) {
+		this.duracionEstado = duracionEstado;
+	}
+
+	public List<EstadoIntervencion> getEstadoIntervencion() {
+		return estadoIntervencion;
+	}
+
+	public void setEstadoIntervencion(List<EstadoIntervencion> estadoIntervencion) {
+		this.estadoIntervencion = estadoIntervencion;
+	}
+	
+	
+
 }

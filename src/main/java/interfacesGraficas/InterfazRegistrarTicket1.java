@@ -139,8 +139,6 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		nombre.setVisible(false);
 		nombre.setEditable(false);
 		
-		
-		
 		txtFechaApertura = new JTextField();
 		txtFechaApertura.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		txtFechaApertura.setBackground(new Color(220, 220, 220));

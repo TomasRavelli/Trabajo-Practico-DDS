@@ -231,11 +231,12 @@ public class InterfazDerivarTicket2 extends JPanel {
 					int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket?","Warning",dialogButton);
 					if(dialogResult == JOptionPane.YES_OPTION){
 						derivarDTO.setClasificacion((ClasificacionTicket)comboBoxClasificacion.getSelectedItem());
+						derivarDTO.setObservaciones(txtAreaObservaciones.getText());
 						if(((ClasificacionTicket)comboBoxClasificacion.getSelectedItem()).getId_ClasificacionTicket() == clasificacionOriginal.getId_ClasificacionTicket()) {
-							ventana.getGestorTicket().derivarTicket(derivarDTO,false,(GrupoDeResolucion)comboBoxGrupo.getSelectedItem(), txtAreaObservaciones.getText());	
+							ventana.getGestorTicket().derivarTicket(derivarDTO,false,(GrupoDeResolucion)comboBoxGrupo.getSelectedItem());	
 						}
 						else {
-							ventana.getGestorTicket().derivarTicket(derivarDTO,true,(GrupoDeResolucion)comboBoxGrupo.getSelectedItem(), txtAreaObservaciones.getText());
+							ventana.getGestorTicket().derivarTicket(derivarDTO,true,(GrupoDeResolucion)comboBoxGrupo.getSelectedItem());
 						}
 						ventana.setContentPane(new HomeMesaAyuda(ventana));
 						ventana.pack();
