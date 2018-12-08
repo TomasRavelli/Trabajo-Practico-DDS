@@ -28,7 +28,6 @@ public class Ticket implements Serializable {
 	
 	
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column (name = "NUMERO_TICKET")
 	private Integer numeroTicket;
 	

@@ -44,7 +44,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 	private JTextField textFieldFechaHasta;
 	private Integer i;
 
-	public InterfazConsultarIntervencionesPaginacion(Principal frame, IntervencionBusquedaDTO criteriosBusqueda) {
+	public InterfazConsultarIntervencionesPaginacion(Principal frame, IntervencionBusquedaDTO criteriosBusqueda, List<IntervencionResultadoDTO> intervenciones) {
 
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -52,8 +52,6 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
-		
-		
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(976, 407, 202, 113);
@@ -115,7 +113,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		lblCriteriosDeBusqueda.setBounds(80, 35, 516, 31);
 		this.add(lblCriteriosDeBusqueda);
 		
-		JLabel lblClasificacionDeTicket = new JLabel("Intervencion asignada        de ");
+		JLabel lblClasificacionDeTicket = new JLabel("Intervencion asignada       de ");
 		lblClasificacionDeTicket.setFont(new Font("Segoe UI Symbol", Font.BOLD, 18));
 		lblClasificacionDeTicket.setBounds(532, 200, 271, 22);
 		this.add(lblClasificacionDeTicket);
@@ -218,7 +216,6 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.add(txtCantidad);
 		
 		
-		
 		textFieldNumeroTicket = new JTextField();
 		textFieldNumeroTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		textFieldNumeroTicket.setBounds(297, 92, 130, 21);
@@ -268,9 +265,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 			textFieldFechaHasta.setText(criteriosBusqueda.getFechaHasta().toString());
 		}
 		
-		
-		
-		
+
 		JButton btnModificarEstado = new JButton("Modificar estado");
 		btnModificarEstado.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		btnModificarEstado.setBounds(854, 650, 157, 37);
@@ -297,13 +292,12 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.add(btnDerecha);
 		
 		//TODO ver que el campo de paginacion sea menor al size
-		Integer numeroLegajo = ventana.getGestorUsuario().getNumeroLegajo();
-		List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(criteriosBusqueda, numeroLegajo);
-		
 		txtCantidad.setText(((Integer)intervenciones.size()).toString());
 		
-		if (intervenciones.size()>0) {
-			txtNumeroPagina.setText("1");
+		if (intervenciones.size() > 0) {
+			System.out.println("Valor de i: " + i);
+			i = 1;
+			txtNumeroPagina.setText(i.toString());
 			txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
 			txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
 			txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
@@ -317,7 +311,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		else {
 			txtNumeroPagina.setText("0");
-			JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
+			//JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
 		}
 		
 		if (Integer.valueOf(txtNumeroPagina.getText())<=intervenciones.size()) {
@@ -330,8 +324,10 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		btnDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				i++;
-				if (i<=intervenciones.size()) {
+				
+				//TODO si sigue apretando el boton y no hay mas resultados que no se decremente
+				if ((i+1)<=intervenciones.size()) {
+					i++;
 					txtNumeroPagina.setText(i.toString());
 					txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
 					txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
@@ -349,10 +345,11 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		btnIzquierda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				i--;
-				if (i>0) {
+				//TODO si sigue apretando el boton y no hay mas resultados que no se decremente
+				if ((i-1) > 0) {
+					i--;
 					txtNumeroPagina.setText(i.toString());
-					Integer i = Integer.valueOf(txtNumeroPagina.getText());
+					//i = Integer.valueOf(txtNumeroPagina.getText());
 					txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
 					txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
 					txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
@@ -369,12 +366,12 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 			
 		btnModificarEstado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (intervenciones.size()>0) {
+				if (intervenciones.size()>0 && !intervenciones.get(i-1).getEstadoIntervencion().equalsIgnoreCase("Terminada")) {
 					ventana.setContentPane(new InterfazActualizarEstadoIntervencion(ventana, intervenciones.get(i-1)));
 					ventana.pack();
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "No hay intervenciones para modificar su estado.");
+					JOptionPane.showMessageDialog(null, "No se puede modificar el estado de esta intervencion.");
 				}
 			}
 		});

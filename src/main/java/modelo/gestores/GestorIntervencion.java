@@ -3,9 +3,7 @@ package modelo.gestores;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import infoDTO.IntervencionBusquedaDTO;
 import infoDTO.IntervencionResultadoDTO;
 import modelo.entidades.EstadoIntervencion;
@@ -19,6 +17,7 @@ public class GestorIntervencion {
 	GestorBD gestorBD;
 	GestorUsuario gestorUsuario;
 	GestorEmpleado gestorEmpleado;
+	private Integer MESADEAYUDA = 1;
 	
 	public GestorIntervencion(GestorBD gBD, GestorUsuario gUsu, GestorEmpleado gE){
 		gestorBD = gBD;
@@ -30,7 +29,7 @@ public class GestorIntervencion {
 	public Intervencion crearIntervencion(LocalDate fechaActual, LocalTime horaActual, Ticket ticket) {
 		Intervencion interv = new Intervencion(fechaActual, horaActual,ticket);
 		//TODO CREAR CONSTANTE GLOBAL PARA EL GET(1)
-		interv.setGrupoResolucion(gestorBD.getGrupoResolucion(1));
+		interv.setGrupoResolucion(gestorBD.getGrupoResolucion(MESADEAYUDA));
 		EstadoIntervencion estadoInterv = new EstadoIntervencion("Trabajando",fechaActual, horaActual,interv);
 		interv.add(estadoInterv);
 		interv.setEstadoIntervencionActual(estadoInterv);
@@ -135,9 +134,16 @@ public class GestorIntervencion {
 		Integer idGrupo = gestorEmpleado.getGrupoId(legajo);
 		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO, idGrupo);
 		if (encontradasAux.size()>0) {
+			System.out.println("Entra al fin");
 			for(Intervencion i: encontradasAux) {
+				System.out.println("Entra al for");
 				Ticket t1 = i.getTicket();
-				IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), intervencionDTO.getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
+				
+				//EL ERROR ES ESTE PUTOOOOOOOOOOOOOOO
+				//System.out.println(t1.getDuracionEstadoActual().getEstado().getNombre());
+				
+				IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), i.getEstadoIntervencionActual().getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
+				
 				encontradas.add(auxDTO);
 			}
 		}
@@ -178,8 +184,10 @@ public class GestorIntervencion {
 				}
 			}
 			
+			intervencion.setTicket(ticket);
 			intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 			intervencion.add(nuevoEstadoIntervencion);
+			nuevoEstadoIntervencion.setIntervencion(intervencion);
 			gestorBD.actualizarIntervencion(intervencion);
 			resultado = ticket;
 		}

@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import interfacesGraficas.HomeGrupoResolucion;
 import interfacesGraficas.HomeMesaAyuda;
+import modelo.entidades.Usuario;
 import modelo.gestores.*;
 
 
@@ -24,12 +25,13 @@ public class Principal extends JFrame{
 			public void run() {
 				gestorBD = new GestorBD();
 				//TODO ver lo del log in
-				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(66666));
+				gestorUsuario = new GestorUsuario();
 				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD, gestorUsuario, gestorEmpleado);
 				gestorClasificacion = new GestorClasificacion(gestorBD);
 				gestorGrupo = new GestorGrupo(gestorBD);
 				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario, gestorClasificacion);
+				
 				new Principal();
 			}
 		});
@@ -48,8 +50,8 @@ public class Principal extends JFrame{
 		
 		//DEPENDIENDO SI SE REGISTRE COMO MESA DE AYUDA O GRUPO DE RESOLUCION
 
-
-		this.setContentPane(new HomeGrupoResolucion(this));
+		//this.setContentPane(new HomeMesaAyuda(this));
+		this.setContentPane(new LogIn(this));
 		this.pack();
 	}
 
@@ -80,5 +82,46 @@ public class Principal extends JFrame{
 
 	public GestorGrupo getGestorGrupo() {
 		return gestorGrupo;
+	}
+
+
+	public static void setGestorUsuario(GestorUsuario gestorUsuario) {
+		Principal.gestorUsuario = gestorUsuario;
+	}
+
+
+	public static void setGestorTicket(GestorTicket gestorTicket) {
+		Principal.gestorTicket = gestorTicket;
+	}
+
+
+	public static void setGestorClasificacion(GestorClasificacion gestorClasificacion) {
+		Principal.gestorClasificacion = gestorClasificacion;
+	}
+
+
+	public static void setGestorBD(GestorBD gestorBD) {
+		Principal.gestorBD = gestorBD;
+	}
+
+
+	public static void setGestorEmpleado(GestorEmpleado gestorEmpleado) {
+		Principal.gestorEmpleado = gestorEmpleado;
+	}
+
+
+	public static void setGestorIntervencion(GestorIntervencion gestorIntervencion) {
+		Principal.gestorIntervencion = gestorIntervencion;
+	}
+
+
+	public static void setGestorGrupo(GestorGrupo gestorGrupo) {
+		Principal.gestorGrupo = gestorGrupo;
+	}
+
+
+	public void setUsuario(Usuario u) {
+		// TODO Auto-generated method stub
+		gestorUsuario.setUsuarioActual(u);
 	}
 }

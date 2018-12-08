@@ -65,7 +65,6 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		JTextArea textAreaDescripcion = new JTextArea();
 		scrollPane.setViewportView(textAreaDescripcion);
 		textAreaDescripcion.setLineWrap(true);
-
 		
 		
 		JLabel lblNumeroTicket = new JLabel("Numero de Ticket:");
@@ -277,8 +276,10 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	
 	
 	private String obtenerNumeroTicketNuevo() {
-		GestorTicket gestorT = ventana.getGestorTicket();
+		/*GestorTicket gestorT = ventana.getGestorTicket();
 		Ticket nuevoTicket = gestorT.crearTicket();
 		return nuevoTicket.getNumero().toString();
+	*/
+		return ventana.getGestorTicket().getNext();
 	}
 }

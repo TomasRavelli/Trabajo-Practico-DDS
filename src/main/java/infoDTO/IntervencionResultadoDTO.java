@@ -28,7 +28,10 @@ public class IntervencionResultadoDTO {
 		this.fechaAsignacionIntervencion = fechaAsig;
 		this.estadoIntervencion = estadoInt;
 		this.grupo = g;
-		this.observacionIntervencion = obsInt;
+		if (obsInt!=null) {
+			this.observacionIntervencion = obsInt;
+		}
+		
 		this.idIntervencion = idIntervencion;
 	}
 	

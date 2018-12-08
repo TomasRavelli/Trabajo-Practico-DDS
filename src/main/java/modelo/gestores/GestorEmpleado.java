@@ -33,10 +33,11 @@ public class GestorEmpleado {
 	
 	public String validarLegajo (Integer legajo) {
 		for (Empleado e : this.getEmpleados()) {
-			if (e.getNumeroLegajo()==(legajo)) {
+			if (e.getNumeroLegajo().intValue() == legajo.intValue()) {
 				return e.getNombre();
 			}
 		}
+		
 		return null;	
 	}
 	

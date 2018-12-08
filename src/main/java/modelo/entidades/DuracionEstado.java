@@ -115,7 +115,8 @@ public class DuracionEstado implements Serializable {
 	public void setEstado(Estado estado2) {
 		this.estado = estado2;
 	}
-
+	
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}

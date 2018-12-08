@@ -13,6 +13,7 @@ import modelo.entidades.Estado;
 import modelo.entidades.GrupoDeResolucion;
 import modelo.entidades.Intervencion;
 import modelo.entidades.Ticket;
+import modelo.entidades.UltimoNumeroTicket;
 import modelo.entidades.Usuario;
 
 public class GestorBD {
@@ -135,7 +136,12 @@ public class GestorBD {
 	public Usuario getUsuario(int i) {
 		Usuario u;
 		manager.getTransaction().begin();
-		u = (Usuario) manager.createQuery("from Usuario where NUMERO_LEGAJO = " + i).getSingleResult();
+		try {
+			u = (Usuario) manager.createQuery("from Usuario where NUMERO_LEGAJO = " + i).getSingleResult();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			u = null;
+		}
 		manager.getTransaction().commit();
 		return u;
 	}
@@ -243,4 +249,19 @@ public class GestorBD {
 		manager.getTransaction().commit();
 		return intervencionEncontrada;
 	}
+
+
+	public UltimoNumeroTicket getUltimoNumeroTicket() {
+		UltimoNumeroTicket n;
+		manager.getTransaction().begin();
+		n = (UltimoNumeroTicket) manager.createQuery("FROM UltimoNumeroTicket").getSingleResult();
+		n.setNumeroTicket(n.getNumeroTicket()+1);
+		n = manager.merge(n);
+		manager.persist(n);
+		manager.getTransaction().commit();
+		return n;
+	}
+
+
+	
 }
