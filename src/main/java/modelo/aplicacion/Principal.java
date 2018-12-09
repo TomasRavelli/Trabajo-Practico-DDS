@@ -3,8 +3,7 @@ package modelo.aplicacion;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-import interfacesGraficas.HomeGrupoResolucion;
-import interfacesGraficas.HomeMesaAyuda;
+import modelo.entidades.Usuario;
 import modelo.gestores.*;
 
 
@@ -23,8 +22,7 @@ public class Principal extends JFrame{
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				gestorBD = new GestorBD();
-				//TODO ver lo del log in
-				gestorUsuario = new GestorUsuario(gestorBD.getUsuario(55555));
+				gestorUsuario = new GestorUsuario();
 				gestorEmpleado = new GestorEmpleado(gestorBD);
 				gestorIntervencion = new GestorIntervencion(gestorBD, gestorUsuario, gestorEmpleado);
 				gestorClasificacion = new GestorClasificacion(gestorBD);
@@ -45,11 +43,7 @@ public class Principal extends JFrame{
 		//setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);
 		
-		
-		//DEPENDIENDO SI SE REGISTRE COMO MESA DE AYUDA O GRUPO DE RESOLUCION
-
-		//this.setContentPane(new HomeMesaAyuda(this));
-		this.setContentPane(new HomeGrupoResolucion(this));
+		this.setContentPane(new LogIn(this));
 		this.pack();
 	}
 
@@ -80,5 +74,45 @@ public class Principal extends JFrame{
 
 	public GestorGrupo getGestorGrupo() {
 		return gestorGrupo;
+	}
+
+
+	public static void setGestorUsuario(GestorUsuario gestorUsuario) {
+		Principal.gestorUsuario = gestorUsuario;
+	}
+
+
+	public static void setGestorTicket(GestorTicket gestorTicket) {
+		Principal.gestorTicket = gestorTicket;
+	}
+
+
+	public static void setGestorClasificacion(GestorClasificacion gestorClasificacion) {
+		Principal.gestorClasificacion = gestorClasificacion;
+	}
+
+
+	public static void setGestorBD(GestorBD gestorBD) {
+		Principal.gestorBD = gestorBD;
+	}
+
+
+	public static void setGestorEmpleado(GestorEmpleado gestorEmpleado) {
+		Principal.gestorEmpleado = gestorEmpleado;
+	}
+
+
+	public static void setGestorIntervencion(GestorIntervencion gestorIntervencion) {
+		Principal.gestorIntervencion = gestorIntervencion;
+	}
+
+
+	public static void setGestorGrupo(GestorGrupo gestorGrupo) {
+		Principal.gestorGrupo = gestorGrupo;
+	}
+
+
+	public void setUsuario(Usuario u) {
+		gestorUsuario.setUsuarioActual(u);
 	}
 }

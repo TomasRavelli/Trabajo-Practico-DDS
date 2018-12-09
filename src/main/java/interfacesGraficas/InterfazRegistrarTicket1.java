@@ -5,8 +5,6 @@ import javax.swing.border.EmptyBorder;
 import infoDTO.TicketDTO;
 import modelo.aplicacion.Principal;
 import modelo.entidades.ClasificacionTicket;
-import modelo.entidades.Ticket;
-import modelo.gestores.GestorTicket;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
@@ -37,8 +35,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	private JTextField txtNumeroLegajo;
 	private JLabel errorLegajoExistente;
 	private JLabel errorLegajoVacio;
-	private JTextField nombre;
-	
+	private JTextField nombre;	
 
 	
 	public InterfazRegistrarTicket1(Principal frame) {
@@ -65,7 +62,6 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		JTextArea textAreaDescripcion = new JTextArea();
 		scrollPane.setViewportView(textAreaDescripcion);
 		textAreaDescripcion.setLineWrap(true);
-
 		
 		
 		JLabel lblNumeroTicket = new JLabel("Numero de Ticket:");
@@ -147,7 +143,6 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		txtFechaApertura.setEditable(false);
 		txtFechaApertura.setFocusable(false);
 		this.add(txtFechaApertura);
-		//FECHA ACTUAL
 		LocalDate fechaApertura = LocalDate.now();
 		txtFechaApertura.setText(fechaApertura.toString());
 		
@@ -160,7 +155,6 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		txtHoraApertura.setEditable(false);
 		txtHoraApertura.setFocusable(false);
 		this.add(txtHoraApertura);
-		//HORA ACTUAL
 		LocalTime horaApertura = LocalTime.now();
 		txtHoraApertura.setText(horaApertura.toString());
 		
@@ -194,7 +188,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	    			errorLegajoVacio.setVisible(false);
 	    		}
 	        	if (!txtNumeroLegajo.getText().isEmpty()) {
-	        		nombreEmpleado = ventana.getGestorEmpleado().validarLegajo(txtNumeroLegajo.getText());
+	        		nombreEmpleado = ventana.getGestorEmpleado().validarLegajo(Integer.valueOf(txtNumeroLegajo.getText()));
 	        		if (nombreEmpleado == null) {
 	        			errorLegajoExistente.setVisible(true);
 	        			nombre.setVisible(false);
@@ -277,8 +271,6 @@ public class InterfazRegistrarTicket1 extends JPanel{
 	
 	
 	private String obtenerNumeroTicketNuevo() {
-		GestorTicket gestorT = ventana.getGestorTicket();
-		Ticket nuevoTicket = gestorT.crearTicket();
-		return nuevoTicket.getNumero().toString();
+		return ventana.getGestorTicket().getNext();
 	}
 }

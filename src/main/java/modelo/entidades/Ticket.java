@@ -9,8 +9,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,15 +22,11 @@ import infoDTO.TicketDTO;
 @Table (name = "TICKET")
 public class Ticket implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1L;	
 	
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column (name = "NUMERO_TICKET")
 	private Integer numeroTicket;
-	
-	//NUMERO_LEGAJO Y ID_CLASIFICACION SON FK
 	
 
 	@OneToMany (cascade = {CascadeType.ALL}, mappedBy = "ticket")
@@ -74,8 +68,7 @@ public class Ticket implements Serializable {
 	private String descripcion;
 	
 	
-	public Ticket() {
-		
+	public Ticket() {		
 	}
 	
 	public Ticket(Integer nro, LocalDate fechaAp, LocalTime horaAp) {
@@ -83,6 +76,7 @@ public class Ticket implements Serializable {
 		this.fechaApertura = fechaAp;
 		this.horaApertura = horaAp;
 	}
+	
 	
 	public Ticket(TicketDTO t) {
 		historialClasificacion = new ArrayList<>();
@@ -96,6 +90,7 @@ public class Ticket implements Serializable {
 		this.descripcion = t.getDescripcion();
 	}
 
+	
 	public Integer getNumero() {
 		return numeroTicket;
 	}
@@ -208,8 +203,6 @@ public class Ticket implements Serializable {
 				i++;
 			}
 		}
-		
 		return i;
 	}
-	
 }

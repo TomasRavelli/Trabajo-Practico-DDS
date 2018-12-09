@@ -19,6 +19,7 @@ public class GestorIntervencion {
 	GestorBD gestorBD;
 	GestorUsuario gestorUsuario;
 	GestorEmpleado gestorEmpleado;
+	private Integer MESADEAYUDA = 1;
 	
 	public GestorIntervencion(GestorBD gBD, GestorUsuario gUsu, GestorEmpleado gE){
 		gestorBD = gBD;
@@ -29,8 +30,7 @@ public class GestorIntervencion {
 	
 	public Intervencion crearIntervencion(LocalDate fechaActual, LocalTime horaActual, Ticket ticket) {
 		Intervencion interv = new Intervencion(fechaActual, horaActual,ticket);
-		//TODO CREAR CONSTANTE GLOBAL PARA EL GET(1)
-		interv.setGrupoResolucion(gestorBD.getGrupoResolucion(1));
+		interv.setGrupoResolucion(gestorBD.getGrupoResolucion(MESADEAYUDA));
 		EstadoIntervencion estadoInterv = new EstadoIntervencion("Trabajando",fechaActual, horaActual,interv);
 		interv.add(estadoInterv);
 		interv.setEstadoIntervencionActual(estadoInterv);
@@ -65,7 +65,6 @@ public class GestorIntervencion {
 		LocalTime hora = LocalTime.now();
 		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
 		
-		//intervencion.getEstadoIntervencionActual().setObservaciones(observaciones);
 		intervencion.getEstadoIntervencionActual().setUsuario(gestorUsuario.getUsuarioActual());
 		intervencion.getEstadoIntervencionActual().setFechaFin(fecha);
 		intervencion.getEstadoIntervencionActual().setHoraFin(hora);
@@ -135,20 +134,12 @@ public class GestorIntervencion {
 		Integer idGrupo = gestorEmpleado.getGrupoId(legajo);
 		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO, idGrupo);
 		if (encontradasAux.size()>0) {
-			System.out.println("Entra al fin");
 			for(Intervencion i: encontradasAux) {
-				System.out.println("Entra al for");
 				Ticket t1 = i.getTicket();
-				
-				//EL ERROR ES ESTE PUTOOOOOOOOOOOOOOO
-				//System.out.println(t1.getDuracionEstadoActual().getEstado().getNombre());
-				
 				IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), i.getEstadoIntervencionActual().getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
-				
 				encontradas.add(auxDTO);
 			}
 		}
-		
 		return encontradas;
 	}
 	

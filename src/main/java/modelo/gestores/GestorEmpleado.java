@@ -3,11 +3,9 @@ package modelo.gestores;
 import java.util.List;
 import modelo.entidades.Empleado;
 
-
 public class GestorEmpleado {
 	
-	private GestorBD gestorBD;
-	
+	private GestorBD gestorBD;	
 	
 	public GestorEmpleado(GestorBD gBD) {
 		gestorBD = gBD;
@@ -31,9 +29,9 @@ public class GestorEmpleado {
 	}
 	
 	
-	public String validarLegajo (String legajo) {
+	public String validarLegajo (Integer legajo) {
 		for (Empleado e : this.getEmpleados()) {
-			if (e.getNumeroLegajo().toString().equals(legajo)) {
+			if (e.getNumeroLegajo().intValue() == legajo.intValue()) {
 				return e.getNombre();
 			}
 		}

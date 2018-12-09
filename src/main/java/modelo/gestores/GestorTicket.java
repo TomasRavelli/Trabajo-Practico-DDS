@@ -143,7 +143,6 @@ public class GestorTicket {
 	
 	
 	public void actualizarEstadoIntervencion (IntervencionResultadoDTO intervencion, String nuevoEstado, String observaciones, ClasificacionTicket clasificacionNueva) {
-		//TODO ticket no recibe los cambios porque se pasa por referencia
 		Ticket ticket = gestorBD.getTicket(intervencion.getNumeroTicket());
 		ticket = gestorIntervencion.actualizarIntervencion(intervencion, nuevoEstado, observaciones, ticket);
 		
@@ -170,8 +169,6 @@ public class GestorTicket {
 				}
 				
 				if (asignacionIncorrecta || ticket.getIntervencionesAbiertas()>1) {
-					
-					
 					nuevaDuracionEstado.setEstado(gestorBD.getEstado(1));
 				}			
 				else {
@@ -195,5 +192,9 @@ public class GestorTicket {
 			}
 			gestorBD.actualizarTicket(ticket);
 		}
-	}	
+	}
+	
+	public String getNext() {
+		return gestorBD.getUltimoNumeroTicket().getNumeroTicket().toString();
+	}
 }
