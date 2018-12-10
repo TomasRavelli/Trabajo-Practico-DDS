@@ -1,13 +1,10 @@
 package interfacesGraficas;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.border.EmptyBorder;
-
 import modelo.aplicacion.Principal;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -44,7 +41,7 @@ public class HomeGrupoResolucion extends JPanel {
 		
 		JButton btnConsultarIntervenciones = new JButton("Consultar intervenciones");
 		btnConsultarIntervenciones.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 25));
-		btnConsultarIntervenciones.setBounds(462, 183, 424, 45);
+		btnConsultarIntervenciones.setBounds(462, 215, 424, 45);
 		this.add(btnConsultarIntervenciones);
 		
 		JButton btnRegistrarClasificacion = new JButton("Registrar clasificacion de ticket");
@@ -54,7 +51,7 @@ public class HomeGrupoResolucion extends JPanel {
 		
 		JButton btnBuscarClasificacion = new JButton("Buscar clasificacion");
 		btnBuscarClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 25));
-		btnBuscarClasificacion.setBounds(462, 436, 424, 45);
+		btnBuscarClasificacion.setBounds(462, 393, 424, 45);
 		this.add(btnBuscarClasificacion);
 		
 		JButton btnSalir = new JButton("Salir");

@@ -28,6 +28,7 @@ public class Principal extends JFrame{
 				gestorClasificacion = new GestorClasificacion(gestorBD);
 				gestorGrupo = new GestorGrupo(gestorBD);
 				gestorTicket = new GestorTicket(gestorBD,gestorEmpleado, gestorIntervencion, gestorUsuario, gestorClasificacion);
+				
 				new Principal();
 			}
 		});
@@ -42,7 +43,6 @@ public class Principal extends JFrame{
 		this.setBounds(0, 0, 1366, 768);
 		//setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);
-		
 		this.setContentPane(new LogIn(this));
 		this.pack();
 	}

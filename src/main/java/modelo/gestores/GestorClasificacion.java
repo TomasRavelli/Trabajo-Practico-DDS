@@ -56,8 +56,7 @@ public class GestorClasificacion {
 				}
 			}
 		}
-		
-		System.out.println(resultado.size());
+
 		return resultado;
 	}
 }

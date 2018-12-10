@@ -81,6 +81,7 @@ public class InterfazCerrarTicket extends JPanel {
 		
 		
 		textFieldTicket = new JTextField();
+		textFieldTicket.setEditable(false);
 		textFieldTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		textFieldTicket.setBounds(701, 184, 200, 24);
 		textFieldTicket.setColumns(10);
@@ -88,6 +89,7 @@ public class InterfazCerrarTicket extends JPanel {
 		textFieldTicket.setText(ticketSeleccionado.getNumero().toString());
 		
 		textFieldLegajo = new JTextField();
+		textFieldLegajo.setEditable(false);
 		textFieldLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		textFieldLegajo.setBounds(701, 266, 200, 24);
 		textFieldLegajo.setColumns(10);

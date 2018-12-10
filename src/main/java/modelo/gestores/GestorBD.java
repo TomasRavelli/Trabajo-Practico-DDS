@@ -35,7 +35,6 @@ public class GestorBD {
 		return empleados;
 	}
 	
-
 	public Ticket guardarTicket (Ticket ticket) {
 		manager.getTransaction().begin();
 		manager.persist(ticket);

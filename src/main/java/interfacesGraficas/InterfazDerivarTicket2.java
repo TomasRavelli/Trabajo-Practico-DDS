@@ -15,6 +15,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -174,16 +175,12 @@ public class InterfazDerivarTicket2 extends JPanel {
 		txtNuevoEstado.setText("Abierto derivado");
 		this.add(txtNuevoEstado);
 		txtNuevoEstado.setColumns(10);
-		
-
-		
+			
 		JComboBox<GrupoDeResolucion> comboBoxGrupo = new JComboBox<GrupoDeResolucion>();
 		comboBoxGrupo.setModel(new DefaultComboBoxModel<GrupoDeResolucion>(grupos));
 		comboBoxGrupo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxGrupo.setBounds(692, 490, 252, 22);
-		this.add(comboBoxGrupo);
-		
-		
+		this.add(comboBoxGrupo);		
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
@@ -200,7 +197,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 		comboBoxClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxClasificacion.setBounds(692, 441, 252, 22);
 		add(comboBoxClasificacion);
-		 ActionListener cbActionListener = new ActionListener() {//add actionlistner to listen for change
+		 ActionListener cbActionListener = new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	            	remove(comboBoxGrupo);
@@ -398,7 +395,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 				}
 		
 		grupos[0] = new GrupoDeResolucion("Seleccione una opcion...");
-		return grupos;
+		return ordenarVectorGrupo(grupos);
 	}
 	
 	
@@ -416,6 +413,36 @@ public class InterfazDerivarTicket2 extends JPanel {
 		clasificaciones[indiceAux] = aux;
 		clasificaciones[0] = actual;
 		
-		return clasificaciones;
+		return ordenarVectorClasificacion(clasificaciones);
+	}
+	
+	
+	private ClasificacionTicket[] ordenarVectorClasificacion(ClasificacionTicket[] clasificaciones2) {
+		ArrayList<ClasificacionTicket> aux = new ArrayList<>();
+		for(int i = 1; i < clasificaciones2.length ;i++) {
+			aux.add(clasificaciones2[i]);
+		}
+		
+		aux.sort((c1,c2) -> c1.getNombre().compareTo(c2.getNombre()));
+		
+		for(int i = 1; i < clasificaciones2.length ;i++) {
+			clasificaciones2[i] = aux.get(i-1);
+		}
+		return clasificaciones2;
+	}
+	
+	
+	private GrupoDeResolucion[] ordenarVectorGrupo(GrupoDeResolucion[] grupos2) {
+		ArrayList<GrupoDeResolucion> aux = new ArrayList<>();
+		for(int i = 1; i < grupos2.length ;i++) {
+			aux.add(grupos2[i]);
+		}
+		
+		aux.sort((c1,c2) -> c1.getNombre().compareTo(c2.getNombre()));
+		
+		for(int i = 1; i < grupos2.length ;i++) {
+			grupos2[i] = aux.get(i-1);
+		}
+		return grupos2;
 	}
 }

@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import java.awt.SystemColor;
 
 public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 
@@ -58,7 +59,7 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		this.add(scrollPane);
 		
 		JTextArea textAreaObservaciones = new JTextArea();
-		textAreaObservaciones.setBackground(new Color(220, 220, 220));
+		textAreaObservaciones.setBackground(SystemColor.menu);
 		textAreaObservaciones.setEditable(false);
 		scrollPane.setViewportView(textAreaObservaciones);
 		
@@ -146,56 +147,56 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		
 		txtNumeroTicket = new JTextField();
-		txtNumeroTicket.setBackground(new Color(220, 220, 220));
+		txtNumeroTicket.setEditable(false);
+		txtNumeroTicket.setBackground(SystemColor.menu);
 		txtNumeroTicket.setBounds(436, 264, 202, 22);
 		txtNumeroTicket.setColumns(10);
-		txtNumeroTicket.setEditable(false);
 		this.add(txtNumeroTicket);
 		
 		txtNumeroLegajo = new JTextField();
-		txtNumeroLegajo.setBackground(new Color(220, 220, 220));
+		txtNumeroLegajo.setBackground(SystemColor.menu);
 		txtNumeroLegajo.setBounds(436, 313, 202, 22);
 		txtNumeroLegajo.setColumns(10);
 		txtNumeroLegajo.setEditable(false);
 		this.add(txtNumeroLegajo);
 		
 		txtFechaApertura = new JTextField();
-		txtFechaApertura.setBackground(new Color(220, 220, 220));
+		txtFechaApertura.setBackground(SystemColor.menu);
 		txtFechaApertura.setBounds(436, 459, 202, 22);
 		txtFechaApertura.setColumns(10);
 		txtFechaApertura.setEditable(false);
 		this.add(txtFechaApertura);
 		
 		txtClasificacion = new JTextField();
-		txtClasificacion.setBackground(new Color(220, 220, 220));
+		txtClasificacion.setBackground(SystemColor.menu);
 		txtClasificacion.setBounds(436, 361, 202, 22);
 		txtClasificacion.setColumns(10);
 		txtClasificacion.setEditable(false);
 		this.add(txtClasificacion);
 		
 		txtEstadoTicket = new JTextField();
-		txtEstadoTicket.setBackground(new Color(220, 220, 220));
+		txtEstadoTicket.setBackground(SystemColor.menu);
 		txtEstadoTicket.setBounds(436, 410, 202, 22);
 		txtEstadoTicket.setColumns(10);
 		txtEstadoTicket.setEditable(false);
 		this.add(txtEstadoTicket);
 		
 		txtFechaAsignacion = new JTextField();
-		txtFechaAsignacion.setBackground(new Color(220, 220, 220));
+		txtFechaAsignacion.setBackground(SystemColor.menu);
 		txtFechaAsignacion.setBounds(977, 264, 202, 22);
 		txtFechaAsignacion.setColumns(10);
 		txtFechaAsignacion.setEditable(false);
 		this.add(txtFechaAsignacion);
 		
 		txtEstadoIntervencion = new JTextField();
-		txtEstadoIntervencion.setBackground(new Color(220, 220, 220));
+		txtEstadoIntervencion.setBackground(SystemColor.menu);
 		txtEstadoIntervencion.setBounds(976, 313, 202, 22);
 		txtEstadoIntervencion.setColumns(10);
 		txtEstadoIntervencion.setEditable(false);
 		this.add(txtEstadoIntervencion);
 		
 		txtGrupoResolucion = new JTextField();
-		txtGrupoResolucion.setBackground(new Color(220, 220, 220));
+		txtGrupoResolucion.setBackground(SystemColor.menu);
 		txtGrupoResolucion.setBounds(976, 361, 202, 22);
 		txtGrupoResolucion.setColumns(10);
 		txtGrupoResolucion.setEditable(false);
@@ -295,7 +296,6 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		txtCantidad.setText(((Integer)intervenciones.size()).toString());
 		
 		if (intervenciones.size() > 0) {
-			System.out.println("Valor de i: " + i);
 			i = 1;
 			txtNumeroPagina.setText(i.toString());
 			txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
@@ -311,7 +311,6 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		else {
 			txtNumeroPagina.setText("0");
-			//JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
 		}
 		
 		if (Integer.valueOf(txtNumeroPagina.getText())<=intervenciones.size()) {

@@ -35,7 +35,7 @@ INSERT INTO tpds.estado VALUES (3,'','Cerrado');
 INSERT INTO tpds.estado VALUES (4,'','Solucionado a la espera OK');
 
 
-INSERT INTO tpds.empleado VALUES (00000,'empleado1','Malena','12345','12345',1);
+INSERT INTO tpds.empleado VALUES (10000,'empleado1','Malena','12345','12345',1);
 INSERT INTO tpds.empleado VALUES (11111,'empleado2','Pilar','12345','12345',2);
 INSERT INTO tpds.empleado VALUES (22222,'empleado3','Martin','12345','12345',3);
 INSERT INTO tpds.empleado VALUES (33333,'empleado4','Tomas','12345','12345',4);
@@ -46,9 +46,13 @@ INSERT INTO tpds.empleado VALUES (77777,'empleado8','Hernan','12345','12345',8);
 INSERT INTO tpds.empleado VALUES (88888,'empleado9','Juan Martin','12345','12345',9);
 INSERT INTO tpds.empleado VALUES (99999,'empleado10','Santiago','12345','12345',10);
 
-INSERT INTO tpds.usuario  VALUES (00000,'Malena','10101');
+INSERT INTO tpds.usuario  VALUES (10000,'Malena','10101');
 INSERT INTO tpds.usuario  VALUES (99999,'Santiago','11111');
 INSERT INTO tpds.usuario VALUES (88888,'Juan Martin','22222');
 INSERT INTO tpds.usuario VALUES (77777,'Hernan','33333');
 INSERT INTO tpds.usuario VALUES (66666,'Camila','44444');
 INSERT INTO tpds.usuario VALUES (55555,'Emanuel','55555');
+
+
+
+insert into tpds.ultimo_numero_ticket values(1,0);

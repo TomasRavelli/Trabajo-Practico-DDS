@@ -17,10 +17,12 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
+import java.awt.SystemColor;
 
 public class InterfazDerivarTicket1 extends JPanel {
 
@@ -77,7 +79,7 @@ public class InterfazDerivarTicket1 extends JPanel {
 		
 		
 		JComboBox<GrupoDeResolucion> comboBox = new JComboBox<GrupoDeResolucion>();
-		comboBox.setBackground(Color.WHITE);
+		comboBox.setBackground(SystemColor.menu);
 		comboBox.setModel(new DefaultComboBoxModel<GrupoDeResolucion>(grupos));
 		comboBox.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		comboBox.setBounds(620, 308, 407, 25);
@@ -280,6 +282,21 @@ public class InterfazDerivarTicket1 extends JPanel {
 				}
 		
 		grupos[0] = new GrupoDeResolucion("Seleccione una opcion...");
-		return grupos;
+		return ordenarVector(grupos);
+	}
+	
+	
+	private GrupoDeResolucion[] ordenarVector(GrupoDeResolucion[] grupos2) {
+		ArrayList<GrupoDeResolucion> aux = new ArrayList<>();
+		for(int i = 1; i < grupos2.length ;i++) {
+			aux.add(grupos2[i]);
+		}
+		
+		aux.sort((c1,c2) -> c1.getNombre().compareTo(c2.getNombre()));
+		
+		for(int i = 1; i < grupos2.length ;i++) {
+			grupos2[i] = aux.get(i-1);
+		}
+		return grupos2;
 	}
 }

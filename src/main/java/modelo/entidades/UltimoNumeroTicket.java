@@ -24,12 +24,11 @@ public class UltimoNumeroTicket implements Serializable{
 
 	public UltimoNumeroTicket() { 
 	}
-	
-	
+
 	public Integer getNumeroTicket() {
 		return numeroTicket;
 	}
-	
+
 	public void setNumeroTicket(Integer numeroTicket) {
 		this.numeroTicket = numeroTicket;
 	}

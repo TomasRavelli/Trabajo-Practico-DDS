@@ -3,9 +3,7 @@ package modelo.gestores;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import infoDTO.IntervencionBusquedaDTO;
 import infoDTO.IntervencionResultadoDTO;
 import modelo.entidades.EstadoIntervencion;
@@ -50,6 +48,8 @@ public class GestorIntervencion {
 		estadoIntervencion.setHoraFin(hora);
 		
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("Terminada",fecha,hora,intervencion);
+		nuevoEstadoIntervencion.setObservaciones(observaciones);
+		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
 		nuevoEstadoIntervencion.setHoraFin(hora);
 		nuevoEstadoIntervencion.setFechaFin(fecha);
 		

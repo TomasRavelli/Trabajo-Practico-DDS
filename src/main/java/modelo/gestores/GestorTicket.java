@@ -55,13 +55,12 @@ public class GestorTicket {
 		ticket.setUsuario(gestorUsuario.getUsuarioActual());
 		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), ticketDTO.getHoraApertura(), gestorUsuario.getUsuarioActual(),ticket);
 
-		//TODO crear constante global
 		durEstado.setEstado(gestorBD.getEstado(1));
 		durEstado.setUsuario(gestorUsuario.getUsuarioActual());
 		ticket.setDuracionEstadoActual(durEstado);
 		ticket.add(durEstado);
 		ticket.add(gestorIntervencion.crearIntervencion(LocalDate.now(),LocalTime.now(),ticket));
-		return gestorBD.actualizarTicket(ticket);
+		return gestorBD.guardarTicket(ticket);
 	}
 	
 	
@@ -121,7 +120,7 @@ public class GestorTicket {
 		ticket.setDuracionEstadoActual(nuevaDuracionEstado);
 		if(cambioClasificacion) {
 			ClasificacionTicket clasificacion = gestorClasificacion.getClasificacion(derivarDTO.getClasificacion().getNombre());
-			DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,LocalDate.now(),ticket);
+			DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,fecha,ticket);
 			ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
 			ticket.add(nuevaDuracionClasificacion);	
 		}
@@ -160,7 +159,7 @@ public class GestorTicket {
 				Boolean asignacionIncorrecta;
 				
 				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog (null, "¿Esta terminando la intervencion por una asignacion incorrecta?","Warning",dialogButton);
+				int dialogResult = JOptionPane.showConfirmDialog (null, "ï¿½Esta terminando la intervencion por una asignacion incorrecta?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 					asignacionIncorrecta=true;
 				}
@@ -193,6 +192,7 @@ public class GestorTicket {
 			gestorBD.actualizarTicket(ticket);
 		}
 	}
+
 	
 	public String getNext() {
 		return gestorBD.getUltimoNumeroTicket().getNumeroTicket().toString();

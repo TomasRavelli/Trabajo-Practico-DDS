@@ -18,11 +18,13 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.SystemColor;
 
 public class InterfazRegistrarTicket1 extends JPanel{
 	
@@ -137,7 +139,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		
 		txtFechaApertura = new JTextField();
 		txtFechaApertura.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		txtFechaApertura.setBackground(new Color(220, 220, 220));
+		txtFechaApertura.setBackground(SystemColor.menu);
 		txtFechaApertura.setBounds(611, 174, 365, 24);
 		txtFechaApertura.setColumns(10);
 		txtFechaApertura.setEditable(false);
@@ -149,7 +151,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		
 		txtHoraApertura = new JTextField();
 		txtHoraApertura.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		txtHoraApertura.setBackground(new Color(220, 220, 220));
+		txtHoraApertura.setBackground(SystemColor.menu);
 		txtHoraApertura.setColumns(10);
 		txtHoraApertura.setBounds(611, 215, 365, 24);
 		txtHoraApertura.setEditable(false);
@@ -163,7 +165,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		txtNumeroTicket.setEditable(false);
 		txtNumeroTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		txtNumeroTicket.setColumns(10);
-		txtNumeroTicket.setBackground(new Color(220, 220, 220));
+		txtNumeroTicket.setBackground(SystemColor.menu);
 		txtNumeroTicket.setBounds(611, 133, 365, 24);
 		txtNumeroTicket.setFocusable(false);
 		this.add(txtNumeroTicket);
@@ -266,10 +268,26 @@ public class InterfazRegistrarTicket1 extends JPanel{
 			clasificaciones[i+1] = ventana.getGestorClasificacion().getClasificaciones().get(i);
 		}
 		clasificaciones[0] = new ClasificacionTicket("Seleccione una opcion...");
-		return clasificaciones;
+		
+		return ordenarVector(clasificaciones);
 	}
 	
 	
+	private ClasificacionTicket[] ordenarVector(ClasificacionTicket[] clasificaciones2) {
+		ArrayList<ClasificacionTicket> aux = new ArrayList<>();
+		for(int i = 1; i < clasificaciones2.length ;i++) {
+			aux.add(clasificaciones2[i]);
+		}
+		
+		aux.sort((c1,c2) -> c1.getNombre().compareTo(c2.getNombre()));
+		
+		for(int i = 1; i < clasificaciones2.length ;i++) {
+			clasificaciones2[i] = aux.get(i-1);
+		}
+		return clasificaciones2;
+	}
+
+
 	private String obtenerNumeroTicketNuevo() {
 		return ventana.getGestorTicket().getNext();
 	}
