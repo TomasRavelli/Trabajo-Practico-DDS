@@ -129,6 +129,8 @@ public class InterfazCerrarTicket extends JPanel {
 				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea cerrar el ticket?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 				  ventana.getGestorTicket().cerrarTicket(ticketSeleccionado.getNumero(), textAreaObservaciones.getText());
+				  ventana.setContentPane(new InterfazConsultarTicket(ventana));
+				  ventana.pack();
 				}
 			}
 		});

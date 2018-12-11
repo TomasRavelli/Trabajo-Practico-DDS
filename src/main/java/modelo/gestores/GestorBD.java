@@ -230,7 +230,7 @@ public class GestorBD {
 			resultado = null;
 		}
 		else {
-			resultado = intervencionesTicket.get(intervencionesTicket.size());
+			resultado = intervencionesTicket.get(intervencionesTicket.size()-1);
 		}
 		return resultado;
 	}

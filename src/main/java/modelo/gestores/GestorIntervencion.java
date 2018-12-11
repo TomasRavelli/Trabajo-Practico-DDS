@@ -45,24 +45,24 @@ public class GestorIntervencion {
 	
 	public void actualizarEstadoIntervencion (Integer numeroTicket, String observaciones, Usuario usuario) {
 
-		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
-		EstadoIntervencion estadoIntervencion = intervencion.getEstadoIntervencionActual();
+		Intervencion intervencionMDA = gestorBD.getIntervencionMDA(numeroTicket);
+		EstadoIntervencion estadoIntervencion = intervencionMDA.getEstadoIntervencionActual();
 		LocalDate fecha = LocalDate.now();
 		LocalTime hora = LocalTime.now();
 		
 		estadoIntervencion.setFechaFin(fecha);
 		estadoIntervencion.setHoraFin(hora);
 		
-		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion(TERMINADA,fecha,hora,intervencion);
+		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion(TERMINADA,fecha,hora,intervencionMDA);
 		nuevoEstadoIntervencion.setObservaciones(observaciones);
 		nuevoEstadoIntervencion.setUsuario(usuario);
 		nuevoEstadoIntervencion.setHoraFin(hora);
 		nuevoEstadoIntervencion.setFechaFin(fecha);
 		
-		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
-		intervencion.add(nuevoEstadoIntervencion);
-		intervencion.setFechaFinAsignacion(fecha);
-		intervencion.setHoraFinAsignacion(hora);	
+		intervencionMDA.setEstadoIntervencionActual(nuevoEstadoIntervencion);
+		intervencionMDA.add(nuevoEstadoIntervencion);
+		intervencionMDA.setFechaFinAsignacion(fecha);
+		intervencionMDA.setHoraFinAsignacion(hora);	
 	}
 	
 	
@@ -131,6 +131,9 @@ public class GestorIntervencion {
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion();
 		nuevoEstadoIntervencion.setEstado(TRABAJANDO);
 		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
+		nuevoEstadoIntervencion.setFechaInicio(fechaFin);
+		nuevoEstadoIntervencion.setHoraInicio(horaFin);
+		nuevoEstadoIntervencion.setIntervencion(intervencionMDA);
 		intervencionMDA.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 		intervencionMDA.add(nuevoEstadoIntervencion);
 	}
@@ -152,12 +155,11 @@ public class GestorIntervencion {
 	}
 	
 	
-	public Ticket actualizarIntervencion(IntervencionResultadoDTO i, String nuevoEstado, String observaciones, Ticket ticket) {
+	public Ticket actualizarIntervencion(LocalDate fechaFin, LocalTime horaFin, IntervencionResultadoDTO i, String nuevoEstado, String observaciones, Ticket ticket) {
 		Ticket resultado;
 		Usuario usuario = gestorUsuario.getUsuarioActual();
 		Intervencion intervencion = gestorBD.getIntervencion(i.getIdIntervencion());
-		LocalDate fechaFin = LocalDate.now();
-		LocalTime horaFin = LocalTime.now();
+		
 		
 		if ((intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TRABAJANDO) && nuevoEstado.equalsIgnoreCase(ENESPERA)) || (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TRABAJANDO) && nuevoEstado.equalsIgnoreCase(TERMINADA)) || (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(ASIGNADA) && nuevoEstado.equalsIgnoreCase(TRABAJANDO))) {
 			intervencion.getEstadoIntervencionActual().setFechaFin(fechaFin);
@@ -181,10 +183,14 @@ public class GestorIntervencion {
 				
 				if (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TRABAJANDO) && nuevoEstado.equalsIgnoreCase(TERMINADA)) {
 					nuevoEstadoIntervencion.setEstado(nuevoEstado);
+					nuevoEstadoIntervencion.setFechaFin(fechaFin);
+					nuevoEstadoIntervencion.setHoraFin(horaFin);
+					intervencion.setFechaFinAsignacion(fechaFin);
+					intervencion.setHoraFinAsignacion(horaFin);
 				}
 			}
 			
-			intervencion.setTicket(ticket);
+			//intervencion.setTicket(ticket);
 			intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 			intervencion.add(nuevoEstadoIntervencion);
 			nuevoEstadoIntervencion.setIntervencion(intervencion);

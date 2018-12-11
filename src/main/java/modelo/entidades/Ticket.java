@@ -205,4 +205,9 @@ public class Ticket implements Serializable {
 		}
 		return i;
 	}
+
+	public void setFechaFinDurClasifActual(LocalDate fecha) {
+		// TODO Auto-generated method stub
+		duracionClasificacionActual.setFechaFin(fecha);
+	}
 }

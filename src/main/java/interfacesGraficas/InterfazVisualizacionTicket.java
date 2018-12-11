@@ -288,14 +288,14 @@ public class InterfazVisualizacionTicket extends JPanel {
 		if(duraciones.size() != 1) {
 		duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));}
 		for(DuracionEstado de: duraciones) {
-			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre(),obtenerObservacionesFecha(duraciones.indexOf(de)).get(0),buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
+			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre()});//,obtenerObservacionesFecha(duraciones.indexOf(de)).get(0),buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
 		}		
 	}
 
 
 	private Integer compararFechasCambioEstado(DuracionEstado c1, DuracionEstado c2) {
 		
-		Integer retorno = 0;
+		Integer retorno;
 		if(c1.getFechaInicio().isEqual((c2.getFechaInicio()))) {
 				if(c1.getHoraInicio().getHour() == c2.getHoraInicio().getHour()) {
 					if(c1.getHoraInicio().getMinute() == c2.getHoraInicio().getMinute()) {
@@ -385,12 +385,14 @@ public class InterfazVisualizacionTicket extends JPanel {
 		}
 		
 		else {
+			ArrayList<Intervencion> auxIntervenciones = new ArrayList<>();
 			for(Intervencion interv: intervencionesTicket) {
-				if(interv.getGrupoResolucion().getNombre().equalsIgnoreCase("Mesa de ayuda")) {
-					intervencionesTicket.remove(interv);
+				if(!interv.getGrupoResolucion().getNombre().equalsIgnoreCase("Mesa de ayuda")) {
+					auxIntervenciones.add(interv);
 				}
 			}
-			
+			intervencionesTicket.removeAll(intervencionesTicket);
+			intervencionesTicket.addAll(auxIntervenciones);
 			while(i < intervencionesTicket.size() && flag) {
 				if(intervencionesTicket.get(i).getFechaAsignacion().isEqual(duracionMostrada.getFechaInicio()) && intervencionesTicket.get(i).getHoraAsignacion().getHour()== duracionMostrada.getHoraInicio().getHour() && intervencionesTicket.get(i).getHoraAsignacion().getMinute() == duracionMostrada.getHoraInicio().getMinute() && intervencionesTicket.get(i).getHoraAsignacion().getSecond() == duracionMostrada.getHoraInicio().getSecond()){
 					flag = false;
