@@ -18,6 +18,8 @@ import java.awt.Dimension;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -208,6 +210,29 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		txtNumeroPagina.setColumns(10);
 		this.add(txtNumeroPagina);
 		
+		txtNumeroPagina.addFocusListener(new FocusListener() {
+			   public void focusGained(FocusEvent e) {
+				      
+				   }
+				   public void focusLost(FocusEvent e) {
+					   Integer aux =  Integer.valueOf(txtNumeroPagina.getText());
+						if (aux <= intervenciones.size() && aux > 0) {
+							i = aux;
+							txtNumeroPagina.setText(aux.toString());
+							txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
+							txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
+							txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());
+							txtEstadoTicket.setText(intervenciones.get(i-1).getEstadoTicket());
+							txtFechaApertura.setText(intervenciones.get(i-1).getFechaApertura().toString());
+							txtFechaAsignacion.setText(intervenciones.get(i-1).getFechaAsignacionIntervencion().toString());
+							txtEstadoIntervencion.setText(intervenciones.get(i-1).getEstadoIntervencion());
+							txtGrupoResolucion.setText(intervenciones.get(i-1).getGrupo());
+							textAreaObservaciones.setText(intervenciones.get(i-1).getObservacionIntervencion());
+						}
+						
+				   }
+		});
+
 		
 		txtCantidad = new JTextField();
 		txtCantidad.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
@@ -292,7 +317,6 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		btnDerecha.setBounds(926, 202, 42, 25);
 		this.add(btnDerecha);
 		
-		//TODO ver que el campo de paginacion sea menor al size
 		txtCantidad.setText(((Integer)intervenciones.size()).toString());
 		
 		if (intervenciones.size() > 0) {
@@ -324,7 +348,6 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		btnDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//TODO si sigue apretando el boton y no hay mas resultados que no se decremente
 				if ((i+1)<=intervenciones.size()) {
 					i++;
 					txtNumeroPagina.setText(i.toString());
@@ -344,11 +367,9 @@ public class InterfazConsultarIntervencionesPaginacion extends JPanel {
 		
 		btnIzquierda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO si sigue apretando el boton y no hay mas resultados que no se decremente
 				if ((i-1) > 0) {
 					i--;
 					txtNumeroPagina.setText(i.toString());
-					//i = Integer.valueOf(txtNumeroPagina.getText());
 					txtNumeroTicket.setText(intervenciones.get(i-1).getNumeroTicket().toString());
 					txtNumeroLegajo.setText(intervenciones.get(i-1).getNumeroLegajo().toString());
 					txtClasificacion.setText(intervenciones.get(i-1).getClasificacion());

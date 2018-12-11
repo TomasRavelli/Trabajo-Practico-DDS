@@ -121,16 +121,30 @@ public class InterfazDerivarTicket1 extends JPanel {
 		btnAtras.setBounds(1207, 655, 133, 37);
 		this.add(btnAtras);
 		
+		JLabel errorGrupo = new JLabel("*Debe seleccionar un grupo");
+		errorGrupo.setForeground(Color.RED);
+		errorGrupo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
+		errorGrupo.setBounds(1054, 311, 180, 20);
+		errorGrupo.setVisible(false);
+		add(errorGrupo);
+	
+		
 		
 		btnDerivarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket?","Warning",dialogButton);
-				if(dialogResult == JOptionPane.YES_OPTION){
-					ventana.getGestorTicket().derivarTicket(derivarDTO, false, (GrupoDeResolucion)comboBox.getSelectedItem());
-					ventana.setContentPane(new HomeMesaAyuda(ventana));
-					ventana.pack();
+				if(comboBox.getSelectedIndex()==0) {
+					errorGrupo.setVisible(true);
 				}
+				else {
+					errorGrupo.setVisible(false);
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog (null, "Desea derivar el ticket?","Warning",dialogButton);
+					if(dialogResult == JOptionPane.YES_OPTION){
+						ventana.getGestorTicket().derivarTicket(derivarDTO, false, (GrupoDeResolucion)comboBox.getSelectedItem());
+						ventana.setContentPane(new HomeMesaAyuda(ventana));
+						ventana.pack();
+					}
+				}			
 			}
 		});
 		
