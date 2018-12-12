@@ -19,6 +19,8 @@ import modelo.aplicacion.Principal;
 
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class InterfazRegistrarClasificacionTicket1 extends JPanel {
 
@@ -30,7 +32,11 @@ public class InterfazRegistrarClasificacionTicket1 extends JPanel {
 	private JTextField txtNombre;
 	private JLabel lblDescripcion;
 	private JLabel lblGruposResolucion;
+	private JTable table;
 
+	
+
+	
 	public InterfazRegistrarClasificacionTicket1(Principal frame) {
 		
 		//ACTOR : GRUPO DE RESOLUCION
@@ -76,21 +82,20 @@ public class InterfazRegistrarClasificacionTicket1 extends JPanel {
 		lblNombre.setBounds(407, 129, 193, 31);
 		this.add(lblNombre);
 		
-		JLabel errorGrupo = new JLabel("* Debe seleccionar al menos una opcion.");
+		JLabel errorGrupo = new JLabel("* Debes seleccionar al menos una opcion");
 		errorGrupo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		errorGrupo.setForeground(Color.RED);
 		errorGrupo.setBounds(990, 335, 273, 20);
 		errorGrupo.setVisible(false);
 		this.add(errorGrupo);
 		
-		JLabel errorDescripcionVacio = new JLabel("* Este campo no puede estar vacio.");
+		JLabel errorDescripcionVacio = new JLabel("* Este  campo no  puede estar vacio.");
 		errorDescripcionVacio.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		errorDescripcionVacio.setForeground(Color.RED);
 		errorDescripcionVacio.setBounds(990, 175, 254, 20);
-		errorDescripcionVacio.setVisible(false);
 		this.add(errorDescripcionVacio);
 		
-		JLabel errorNombreVacio = new JLabel("* Este campo no puede estar vacio.");
+		JLabel errorNombreVacio = new JLabel("* Este  campo no  puede estar vacio.");
 		errorNombreVacio.setForeground(new Color(255, 0, 0));
 		errorNombreVacio.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		errorNombreVacio.setBounds(990, 136, 225, 20);
@@ -134,23 +139,63 @@ public class InterfazRegistrarClasificacionTicket1 extends JPanel {
 		btnCancelar.setBounds(1207, 650, 133, 37);
 		this.add(btnCancelar);
 		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(612, 333, 327, 307);
+		add(scrollPane_2);
+		
 		JList<String> list = new JList<String>();
+		scrollPane_2.setViewportView(list);
 		list.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
-		list.setModel(new AbstractListModel<String>() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			String[] values = new String[] {"Seleccione una opcion...", "Administrador DEBIAN", "Administrador de Base de Datos", "Administrador LAN", "Administrador Proxy y correo electronico", "Administrador SUSE Linux", "Comunicaciones", "Desarrollo Sistema Comercial", "Desarrollo Sistema de Reclamos", "Desarrollo Sistema RRHH", "Mesa de ayuda", "Servicio tecnico", "Unidades de soporte"};
+		list.setModel(new AbstractListModel() {
+			String[] values = new String[] {"Administrador DEBIAN", "Administrador de Base de Datos", "Administrador LAN", "Administrador Proxy y correo electronico", "Administrador SUSE Linux", "Comunicaciones", "Desarrollo Sistema Comercial", "Desarrollo Sistema de Reclamos", "Desarrollo Sistema RRHH", "Mesa de ayuda", "Servicio tecnico", "Unidades de soporte"};
 			public int getSize() {
 				return values.length;
 			}
-			public String getElementAt(int index) {
+			public Object getElementAt(int index) {
 				return values[index];
 			}
 		});
-		list.setBounds(612, 333, 327, 307);
-		this.add(list);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setToolTipText("");
+		scrollPane_1.setBounds(1026, 366, 300, 273);
+		add(scrollPane_1);
+		
+		table = new JTable();
+		table.setToolTipText("");
+		scrollPane_1.setViewportView(table);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+				{null},
+			},
+			new String[] {
+				"Clasificacion seleccionada"
+			}
+		));
+		
+		JButton botonAgregar = new JButton("->");
+		botonAgregar.setBounds(952, 425, 45, 23);
+		add(botonAgregar);
+		
+		JButton button = new JButton("<-");
+		button.setBounds(952, 479, 45, 23);
+		add(button);
 		
 		
 

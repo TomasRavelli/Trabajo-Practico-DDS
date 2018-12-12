@@ -212,6 +212,7 @@ public class InterfazRegistrarTicket1 extends JPanel{
 			}
 		});
 				
+		
 		JComboBox<ClasificacionTicket> comboBoxClasificacionTicket = new JComboBox<ClasificacionTicket>();
 		comboBoxClasificacionTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		comboBoxClasificacionTicket.setModel(new DefaultComboBoxModel<ClasificacionTicket>(clasificaciones));

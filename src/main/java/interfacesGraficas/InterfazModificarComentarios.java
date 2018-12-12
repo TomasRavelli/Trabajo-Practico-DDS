@@ -17,10 +17,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 public class InterfazModificarComentarios extends JPanel {
 
 	private Principal ventana;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
 
 	public InterfazModificarComentarios(Principal frame, IntervencionResultadoDTO intervencion) {
 		
@@ -42,13 +46,13 @@ public class InterfazModificarComentarios extends JPanel {
 		this.add(separator);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(460, 202, 600, 280);
+		scrollPane.setBounds(455, 338, 525, 245);
 		this.add(scrollPane);
 		
 		JTextArea textAreaObservaciones = new JTextArea();
 		textAreaObservaciones.setBackground(new Color(220, 220, 220));
 		textAreaObservaciones.setEditable(true);
-		scrollPane.setViewportView(textAreaObservaciones);
+		scrollPane.setColumnHeaderView(textAreaObservaciones);
 		
 		
 		
@@ -59,7 +63,7 @@ public class InterfazModificarComentarios extends JPanel {
 		
 		JLabel lblObservaciones = new JLabel("Observaciones:");
 		lblObservaciones.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
-		lblObservaciones.setBounds(286, 202, 143, 25);
+		lblObservaciones.setBounds(274, 334, 143, 25);
 		this.add(lblObservaciones);
 		
 		
@@ -73,6 +77,39 @@ public class InterfazModificarComentarios extends JPanel {
 		btnCancelar.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		btnCancelar.setBounds(1207, 655, 133, 37);
 		this.add(btnCancelar);
+		
+		JLabel lblNumeroDeTicket = new JLabel("Numero de Ticket:");
+		lblNumeroDeTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
+		lblNumeroDeTicket.setBounds(274, 133, 143, 25);
+		add(lblNumeroDeTicket);
+		
+		JLabel lblLegajo = new JLabel("Legajo:");
+		lblLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
+		lblLegajo.setBounds(274, 194, 143, 25);
+		add(lblLegajo);
+		
+		JLabel lblClasificacionTicket = new JLabel("Clasificacion ticket:");
+		lblClasificacionTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
+		lblClasificacionTicket.setBounds(274, 254, 143, 25);
+		add(lblClasificacionTicket);
+		
+		textField = new JTextField();
+		textField.setEditable(false);
+		textField.setBounds(455, 138, 525, 20);
+		add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		textField_1.setBounds(455, 194, 525, 20);
+		add(textField_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setEditable(false);
+		textField_2.setColumns(10);
+		textField_2.setBounds(455, 259, 525, 20);
+		add(textField_2);
 		
 		
 		btnCancelar.addActionListener(new ActionListener() {

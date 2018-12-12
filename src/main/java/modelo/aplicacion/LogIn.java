@@ -22,6 +22,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import infoDTO.TicketDTO;
 import interfacesGraficas.HomeGrupoResolucion;
 import interfacesGraficas.HomeMesaAyuda;
@@ -142,8 +144,8 @@ public class LogIn extends JPanel{
 				if(ventana.getGestorBD().getUsuario(Integer.valueOf(numeroLegajo.getText())) != null){
 					
 					Usuario u = ventana.getGestorBD().getUsuario(Integer.valueOf(numeroLegajo.getText()));
-					
-					
+				
+			
 				if (u.getPassword().intValue() == Integer.valueOf(txtContrasenia.getText())) {
 					ventana.setUsuario(u);
 						if(u.getEmpleado().getGrupo().getNombre().equalsIgnoreCase("Mesa de Ayuda")) {
