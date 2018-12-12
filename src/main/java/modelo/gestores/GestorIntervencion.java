@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import infoDTO.IntervencionBusquedaDTO;
 import infoDTO.IntervencionResultadoDTO;
+import infoDTO.TicketDTO;
 import modelo.entidades.EstadoIntervencion;
 import modelo.entidades.GrupoDeResolucion;
 import modelo.entidades.Intervencion;
@@ -18,6 +19,11 @@ public class GestorIntervencion {
 	GestorUsuario gestorUsuario;
 	GestorEmpleado gestorEmpleado;
 	private Integer MESADEAYUDA = 1;
+	private String TERMINADA = "Terminada";
+	private String ENESPERA = "En espera";
+	private String TRABAJANDO = "Trabajando";
+	private String ASIGNADA = "Asignada";
+	
 	
 	public GestorIntervencion(GestorBD gBD, GestorUsuario gUsu, GestorEmpleado gE){
 		gestorBD = gBD;
@@ -26,51 +32,51 @@ public class GestorIntervencion {
 	}
 
 	
-	public Intervencion crearIntervencion(LocalDate fechaActual, LocalTime horaActual, Ticket ticket) {
+	public Intervencion crearIntervencion(LocalDate fechaActual, LocalTime horaActual, Ticket ticket, Usuario u) {
 		Intervencion interv = new Intervencion(fechaActual, horaActual,ticket);
-		//TODO CREAR CONSTANTE GLOBAL PARA EL GET(1)
 		interv.setGrupoResolucion(gestorBD.getGrupoResolucion(MESADEAYUDA));
-		EstadoIntervencion estadoInterv = new EstadoIntervencion("Trabajando",fechaActual, horaActual,interv);
+		EstadoIntervencion estadoInterv = new EstadoIntervencion(TRABAJANDO,fechaActual, horaActual,interv);
+		estadoInterv.setUsuario(u);
 		interv.add(estadoInterv);
 		interv.setEstadoIntervencionActual(estadoInterv);
 		return interv;
 	}
 	
 	
-	public void actualizarEstadoIntervencion (Integer numeroTicket, String observaciones) {
+	public void actualizarEstadoIntervencion (Integer numeroTicket, String observaciones, Usuario usuario) {
 
-		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
-		EstadoIntervencion estadoIntervencion = intervencion.getEstadoIntervencionActual();
-
+		Intervencion intervencionMDA = gestorBD.getIntervencionMDA(numeroTicket);
+		EstadoIntervencion estadoIntervencion = intervencionMDA.getEstadoIntervencionActual();
 		LocalDate fecha = LocalDate.now();
 		LocalTime hora = LocalTime.now();
 		
 		estadoIntervencion.setFechaFin(fecha);
 		estadoIntervencion.setHoraFin(hora);
 		
-		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("Terminada",fecha,hora,intervencion);
+		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion(TERMINADA,fecha,hora,intervencionMDA);
+		nuevoEstadoIntervencion.setObservaciones(observaciones);
+		nuevoEstadoIntervencion.setUsuario(usuario);
 		nuevoEstadoIntervencion.setHoraFin(hora);
 		nuevoEstadoIntervencion.setFechaFin(fecha);
 		
-		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
-		intervencion.add(nuevoEstadoIntervencion);
-		intervencion.setFechaFinAsignacion(fecha);
-		intervencion.setHoraFinAsignacion(hora);
-		
+		intervencionMDA.setEstadoIntervencionActual(nuevoEstadoIntervencion);
+		intervencionMDA.add(nuevoEstadoIntervencion);
+		intervencionMDA.setFechaFinAsignacion(fecha);
+		intervencionMDA.setHoraFinAsignacion(hora);	
 	}
 	
-	public Intervencion actualizarIntervenciones(Integer numeroTicket, String observaciones, GrupoDeResolucion grupo) {
+	
+	public Intervencion actualizarIntervenciones(Integer numeroTicket, String observaciones, GrupoDeResolucion grupo, Usuario usuario) {
 		LocalDate fecha = LocalDate.now();
 		LocalTime hora = LocalTime.now();
 		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
 		
-		//intervencion.getEstadoIntervencionActual().setObservaciones(observaciones);
-		intervencion.getEstadoIntervencionActual().setUsuario(gestorUsuario.getUsuarioActual());
+		//intervencion.getEstadoIntervencionActual().setUsuario(usuario);
 		intervencion.getEstadoIntervencionActual().setFechaFin(fecha);
 		intervencion.getEstadoIntervencionActual().setHoraFin(hora);
 		
-		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion("En espera", fecha, hora, intervencion);
-		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
+		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion(ENESPERA, fecha, hora, intervencion);
+		nuevoEstadoIntervencion.setUsuario(usuario);
 		intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 		intervencion.add(nuevoEstadoIntervencion);
 		gestorBD.guardarIntervencion(intervencion);
@@ -79,17 +85,17 @@ public class GestorIntervencion {
 		
 		Intervencion intervencionGrupoNueva = gestorBD.getUltimaIntervencion(numeroTicket,grupo);
 		EstadoIntervencion estadoIntervencionGrupo = new EstadoIntervencion(fecha, hora);
-		estadoIntervencionGrupo.setEstado("Asignada");
+		estadoIntervencionGrupo.setEstado(ASIGNADA);
 		estadoIntervencionGrupo.setObservaciones(observaciones);
 	
 		
-		if(intervencionGrupoNueva==null || intervencionGrupoNueva.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Terminada")) {
+		if(intervencionGrupoNueva==null || intervencionGrupoNueva.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TERMINADA)) {
 			Intervencion intervencionGrupo = new Intervencion();
 			intervencionGrupo.setFechaAsignacion(fecha);
 			intervencionGrupo.setHoraAsignacion(hora);
 			intervencionGrupo.setGrupoResolucion(grupo);
 			estadoIntervencionGrupo.setIntervencion(intervencionGrupo);
-			estadoIntervencionGrupo.setUsuario(gestorUsuario.getUsuarioActual());
+			estadoIntervencionGrupo.setUsuario(usuario);
 			intervencionGrupo.setEstadoIntervencionActual(estadoIntervencionGrupo);
 			intervencionGrupo.add(estadoIntervencionGrupo);
 			intervencionRetorno = intervencionGrupo;
@@ -104,10 +110,11 @@ public class GestorIntervencion {
 			intervencionGrupoNueva.setEstadoIntervencionActual(estadoIntervencionGrupo);
 			intervencionGrupoNueva.add(estadoIntervencionGrupo);
 			estadoIntervencionGrupo.setIntervencion(intervencionGrupoNueva);
-			estadoIntervencionGrupo.setUsuario(gestorUsuario.getUsuarioActual());
+			estadoIntervencionGrupo.setUsuario(usuario);
 			gestorBD.actualizarIntervencion(intervencionGrupoNueva);
 			intervencionRetorno = null;
 		}
+		
 		return intervencionRetorno;
 	}
 	
@@ -122,7 +129,11 @@ public class GestorIntervencion {
 		intervencionMDA.getEstadoIntervencionActual().setHoraFin(horaFin);
 		
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion();
-		nuevoEstadoIntervencion.setEstado("Trabajando");
+		nuevoEstadoIntervencion.setEstado(TRABAJANDO);
+		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
+		nuevoEstadoIntervencion.setFechaInicio(fechaFin);
+		nuevoEstadoIntervencion.setHoraInicio(horaFin);
+		nuevoEstadoIntervencion.setIntervencion(intervencionMDA);
 		intervencionMDA.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 		intervencionMDA.add(nuevoEstadoIntervencion);
 	}
@@ -134,32 +145,23 @@ public class GestorIntervencion {
 		Integer idGrupo = gestorEmpleado.getGrupoId(legajo);
 		List<Intervencion> encontradasAux = gestorBD.getIntervenciones(intervencionDTO, idGrupo);
 		if (encontradasAux.size()>0) {
-			System.out.println("Entra al fin");
 			for(Intervencion i: encontradasAux) {
-				System.out.println("Entra al for");
 				Ticket t1 = i.getTicket();
-				
-				//EL ERROR ES ESTE PUTOOOOOOOOOOOOOOO
-				//System.out.println(t1.getDuracionEstadoActual().getEstado().getNombre());
-				
 				IntervencionResultadoDTO auxDTO = new IntervencionResultadoDTO(t1.getNumero(), t1.getEmpleado().getNumeroLegajo(), t1.getDuracionClasificacionActual().getClasificacion().getNombre(), t1.getDuracionEstadoActual().getEstado().getNombre(), t1.getFechaApertura(), i.getFechaAsignacion(), i.getEstadoIntervencionActual().getEstado(), i.getGrupoResolucion().getNombre(), i.getEstadoIntervencionActual().getObservaciones(), i.getId_Intervencion());
-				
 				encontradas.add(auxDTO);
 			}
 		}
-		
 		return encontradas;
 	}
 	
 	
-	public Ticket actualizarIntervencion(IntervencionResultadoDTO i, String nuevoEstado, String observaciones, Ticket ticket) {
+	public Ticket actualizarIntervencion(LocalDate fechaFin, LocalTime horaFin, IntervencionResultadoDTO i, String nuevoEstado, String observaciones, Ticket ticket) {
 		Ticket resultado;
 		Usuario usuario = gestorUsuario.getUsuarioActual();
 		Intervencion intervencion = gestorBD.getIntervencion(i.getIdIntervencion());
-		LocalDate fechaFin = LocalDate.now();
-		LocalTime horaFin = LocalTime.now();
 		
-		if ((intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Trabajando") && nuevoEstado.equalsIgnoreCase("En espera")) || (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Trabajando") && nuevoEstado.equalsIgnoreCase("Terminada")) || (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Asignada") && nuevoEstado.equalsIgnoreCase("Trabajando"))) {
+		
+		if ((intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TRABAJANDO) && nuevoEstado.equalsIgnoreCase(ENESPERA)) || (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TRABAJANDO) && nuevoEstado.equalsIgnoreCase(TERMINADA)) || (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(ASIGNADA) && nuevoEstado.equalsIgnoreCase(TRABAJANDO))) {
 			intervencion.getEstadoIntervencionActual().setFechaFin(fechaFin);
 			intervencion.getEstadoIntervencionActual().setHoraFin(horaFin);
 			
@@ -167,7 +169,7 @@ public class GestorIntervencion {
 			nuevoEstadoIntervencion.setUsuario(usuario);
 			nuevoEstadoIntervencion.setObservaciones(observaciones);
 			
-			if (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Asignada") && nuevoEstado.equalsIgnoreCase("Trabajando")) {
+			if (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(ASIGNADA) && nuevoEstado.equalsIgnoreCase(TRABAJANDO)) {
 				nuevoEstadoIntervencion.setEstado(nuevoEstado);
 			}
 			
@@ -175,16 +177,20 @@ public class GestorIntervencion {
 				ticket.getDuracionEstadoActual().setFechaFin(fechaFin);
 				ticket.getDuracionEstadoActual().setHoraFin(horaFin);
 				
-				if (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Trabajando") && nuevoEstado.equalsIgnoreCase("En espera")) {
+				if (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TRABAJANDO) && nuevoEstado.equalsIgnoreCase(ENESPERA)) {
 					nuevoEstadoIntervencion.setEstado(nuevoEstado);
 				}
 				
-				if (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase("Trabajando") && nuevoEstado.equalsIgnoreCase("Terminada")) {
+				if (intervencion.getEstadoIntervencionActual().getEstado().equalsIgnoreCase(TRABAJANDO) && nuevoEstado.equalsIgnoreCase(TERMINADA)) {
 					nuevoEstadoIntervencion.setEstado(nuevoEstado);
+					nuevoEstadoIntervencion.setFechaFin(fechaFin);
+					nuevoEstadoIntervencion.setHoraFin(horaFin);
+					intervencion.setFechaFinAsignacion(fechaFin);
+					intervencion.setHoraFinAsignacion(horaFin);
 				}
 			}
 			
-			intervencion.setTicket(ticket);
+			//intervencion.setTicket(ticket);
 			intervencion.setEstadoIntervencionActual(nuevoEstadoIntervencion);
 			intervencion.add(nuevoEstadoIntervencion);
 			nuevoEstadoIntervencion.setIntervencion(intervencion);

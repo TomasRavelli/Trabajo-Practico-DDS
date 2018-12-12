@@ -27,6 +27,7 @@ public class GestorBD {
 	}
 	
 	
+	
 	public List<Empleado> getEmpleados (){
 		manager.getTransaction().begin();
 		List<Empleado> empleados = manager.createQuery("from Empleado").getResultList();
@@ -67,38 +68,34 @@ public class GestorBD {
 	
 	
 	public List<ClasificacionTicket> getClasificaciones() {
-		List<ClasificacionTicket> clasificaciones;
 		manager.getTransaction().begin();
-		clasificaciones = (List<ClasificacionTicket>) manager.createQuery("FROM ClasificacionTicket").getResultList();
+		List<ClasificacionTicket> clasificaciones = (List<ClasificacionTicket>) manager.createQuery("FROM ClasificacionTicket").getResultList();
 		manager.getTransaction().commit();
 		return clasificaciones;
 	}
 	
 	
 	public List<GrupoDeResolucion> getGrupos() {
-		List<GrupoDeResolucion> grupos;
 		manager.getTransaction().begin();
-		grupos = (List<GrupoDeResolucion>) manager.createQuery("FROM GrupoDeResolucion").getResultList();
+		List<GrupoDeResolucion> grupos = (List<GrupoDeResolucion>) manager.createQuery("FROM GrupoDeResolucion").getResultList();
 		manager.getTransaction().commit();
 		return grupos;
 	}
 	
 	
 	public Estado getEstado(Integer id_estado) {
-		Estado estadoEncontrado;
 		String consulta = "FROM Estado where id_estado = " + id_estado;
 		manager.getTransaction().begin();
-		estadoEncontrado = (Estado) manager.createQuery(consulta).getSingleResult();
+		Estado estadoEncontrado = (Estado) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
 		return estadoEncontrado;
 	}
 	
 	
 	public GrupoDeResolucion getGrupoResolucion (Integer id) {
-		GrupoDeResolucion grupoEncontrado;
 		String consulta = "FROM GrupoDeResolucion where id_grupo = " + id;
 		manager.getTransaction().begin();
-		grupoEncontrado = (GrupoDeResolucion) manager.createQuery(consulta).getSingleResult();
+		GrupoDeResolucion grupoEncontrado = (GrupoDeResolucion) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
 		return grupoEncontrado;
 	}
@@ -124,10 +121,9 @@ public class GestorBD {
 	
 	
 	public Ticket getTicket(Integer numeroTicket) {
-		Ticket ticket;
 		String consulta = "FROM Ticket WHERE numero_ticket = " + numeroTicket;
 		manager.getTransaction().begin();
-		ticket = (Ticket) manager.createQuery(consulta).getSingleResult();
+		Ticket ticket = (Ticket) manager.createQuery(consulta).getSingleResult();
 		manager.getTransaction().commit();
 		return ticket;
 	}
@@ -138,8 +134,8 @@ public class GestorBD {
 		manager.getTransaction().begin();
 		try {
 			u = (Usuario) manager.createQuery("from Usuario where NUMERO_LEGAJO = " + i).getSingleResult();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (Exception e) {
 			u = null;
 		}
 		manager.getTransaction().commit();
@@ -148,9 +144,8 @@ public class GestorBD {
 
 
 	public GrupoDeResolucion getGrupoResolucion(String nombre) {
-		GrupoDeResolucion grupo;
 		manager.getTransaction().begin();
-		grupo = (GrupoDeResolucion) manager.createQuery("FROM GrupoDeResolucion WHERE nombre = " + nombre ).getSingleResult();
+		GrupoDeResolucion grupo = (GrupoDeResolucion) manager.createQuery("FROM GrupoDeResolucion WHERE nombre = " + nombre ).getSingleResult();
 		manager.getTransaction().commit();
 		return grupo;
 	}
@@ -193,7 +188,6 @@ public class GestorBD {
 		manager.getTransaction().begin();
 		encontrados = (List<Ticket>) manager.createQuery(consulta1).getResultList();
 		manager.getTransaction().commit();
-
 		return encontrados;
 	}
 	
@@ -236,7 +230,7 @@ public class GestorBD {
 			resultado = null;
 		}
 		else {
-			resultado = intervencionesTicket.get(intervencionesTicket.size());
+			resultado = intervencionesTicket.get(intervencionesTicket.size()-1);
 		}
 		return resultado;
 	}
@@ -249,19 +243,15 @@ public class GestorBD {
 		manager.getTransaction().commit();
 		return intervencionEncontrada;
 	}
-
-
+	
+	
 	public UltimoNumeroTicket getUltimoNumeroTicket() {
-		UltimoNumeroTicket n;
 		manager.getTransaction().begin();
-		n = (UltimoNumeroTicket) manager.createQuery("FROM UltimoNumeroTicket").getSingleResult();
+		UltimoNumeroTicket n = (UltimoNumeroTicket) manager.createQuery("FROM UltimoNumeroTicket").getSingleResult();
 		n.setNumeroTicket(n.getNumeroTicket()+1);
 		n = manager.merge(n);
 		manager.persist(n);
 		manager.getTransaction().commit();
 		return n;
 	}
-
-
-	
 }

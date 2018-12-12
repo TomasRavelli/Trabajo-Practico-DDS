@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import infoDTO.TicketDTO;
 import modelo.aplicacion.Principal;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -18,7 +21,7 @@ public class InterfazConfigurarReporte extends JPanel {
 
 	private Principal ventana;
 
-	public InterfazConfigurarReporte(Principal frame) {
+	public InterfazConfigurarReporte(Principal frame, List<TicketDTO> ticketsEncontrados) {
 		
 		//SELECCIONA UN SOLO CRITERIO
 		

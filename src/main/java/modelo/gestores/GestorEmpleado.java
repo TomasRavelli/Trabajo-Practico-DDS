@@ -3,11 +3,9 @@ package modelo.gestores;
 import java.util.List;
 import modelo.entidades.Empleado;
 
-
 public class GestorEmpleado {
 	
-	private GestorBD gestorBD;
-	
+	private GestorBD gestorBD;	
 	
 	public GestorEmpleado(GestorBD gBD) {
 		gestorBD = gBD;

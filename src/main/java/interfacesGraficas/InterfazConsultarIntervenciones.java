@@ -158,15 +158,6 @@ public class InterfazConsultarIntervenciones extends JPanel {
 						
 						else {
 							intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-							Integer numeroLegajo = ventana.getGestorUsuario().getNumeroLegajo();
-							List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO, numeroLegajo);
-							if (intervenciones.size()>0) {
-								ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO, intervenciones));
-								ventana.pack();
-							}
-							else {
-								JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
-							}
 						}
 					} catch (HeadlessException e) {
 						e.printStackTrace();
@@ -175,15 +166,16 @@ public class InterfazConsultarIntervenciones extends JPanel {
 				
 				else {
 					intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), txtNumeroTicket.getText(), txtNumeroLegajo.getText());
-					Integer numeroLegajo = ventana.getGestorUsuario().getNumeroLegajo();
-					List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO, numeroLegajo);
-					if (intervenciones.size()>0) {
-						ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO, intervenciones));
-						ventana.pack();
-					}
-					else {
-						JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
-					}
+				}
+				
+				Integer numeroLegajo = ventana.getGestorUsuario().getNumeroLegajo();
+				List<IntervencionResultadoDTO> intervenciones = ventana.getGestorIntervencion().getIntervenciones(intervencionDTO, numeroLegajo);
+				if (intervenciones.size()>0) {
+					ventana.setContentPane(new InterfazConsultarIntervencionesPaginacion(ventana, intervencionDTO, intervenciones));
+					ventana.pack();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
 				}
 			}
 		});

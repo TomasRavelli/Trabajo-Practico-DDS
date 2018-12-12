@@ -15,6 +15,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -394,7 +395,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 				}
 		
 		grupos[0] = new GrupoDeResolucion("Seleccione una opcion...");
-		return grupos;
+		return ordenarVectorGrupo(grupos);
 	}
 	
 	
@@ -412,6 +413,36 @@ public class InterfazDerivarTicket2 extends JPanel {
 		clasificaciones[indiceAux] = aux;
 		clasificaciones[0] = actual;
 		
-		return clasificaciones;
+		return ordenarVectorClasificacion(clasificaciones);
+	}
+	
+	
+	private ClasificacionTicket[] ordenarVectorClasificacion(ClasificacionTicket[] clasificaciones2) {
+		ArrayList<ClasificacionTicket> aux = new ArrayList<>();
+		for(int i = 1; i < clasificaciones2.length ;i++) {
+			aux.add(clasificaciones2[i]);
+		}
+		
+		aux.sort((c1,c2) -> c1.getNombre().compareTo(c2.getNombre()));
+		
+		for(int i = 1; i < clasificaciones2.length ;i++) {
+			clasificaciones2[i] = aux.get(i-1);
+		}
+		return clasificaciones2;
+	}
+	
+	
+	private GrupoDeResolucion[] ordenarVectorGrupo(GrupoDeResolucion[] grupos2) {
+		ArrayList<GrupoDeResolucion> aux = new ArrayList<>();
+		for(int i = 1; i < grupos2.length ;i++) {
+			aux.add(grupos2[i]);
+		}
+		
+		aux.sort((c1,c2) -> c1.getNombre().compareTo(c2.getNombre()));
+		
+		for(int i = 1; i < grupos2.length ;i++) {
+			grupos2[i] = aux.get(i-1);
+		}
+		return grupos2;
 	}
 }

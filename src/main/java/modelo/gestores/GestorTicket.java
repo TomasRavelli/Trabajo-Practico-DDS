@@ -26,6 +26,15 @@ public class GestorTicket {
 	private GestorUsuario gestorUsuario;
 	private GestorIntervencion gestorIntervencion;
 	private GestorClasificacion gestorClasificacion;
+	private Integer ABIERTOENMESADEAYUDA = 1;
+	private Integer ABIERTODERIVADO = 2;
+	private Integer CERRADO = 3;
+	private Integer SOLUCIONADOOK = 4;
+	private String TERMINADA = "Terminada";
+	private String ENESPERA = "En espera";
+	private String TRABAJANDO = "Trabajando";
+	private String ASIGNADA = "Asignada";
+	private String ABIERTOENMESAAYUDA = "Abierto en Mesa de Ayuda";
 	
 	
 	public GestorTicket(GestorBD gBD, GestorEmpleado gestorE, GestorIntervencion gestorI, GestorUsuario u, GestorClasificacion gC) {
@@ -46,46 +55,49 @@ public class GestorTicket {
 	
 	public Ticket crearTicket(TicketDTO ticketDTO) {
 		Ticket ticket = new Ticket(ticketDTO);
+		Usuario usuario = gestorUsuario.getUsuarioActual();
 		ticket.setEmpleado(gestorEmpleado.getEmpleado(ticketDTO.getLegajo()));
 
 		ClasificacionTicket clasificacion = gestorClasificacion.getClasificacion(ticketDTO.getClasificacion().toString());
-		DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,ticketDTO.getFechaApertura(),ticket);//Adentro ya se inserta la clasificacion
+		DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,ticketDTO.getFechaApertura(),ticket);
 		ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
 		ticket.add(nuevaDuracionClasificacion);
-		ticket.setUsuario(gestorUsuario.getUsuarioActual());
-		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), ticketDTO.getHoraApertura(), gestorUsuario.getUsuarioActual(),ticket);
+		ticket.setUsuario(usuario);
+		DuracionEstado durEstado = new DuracionEstado(ticketDTO.getFechaApertura(), ticketDTO.getHoraApertura(), usuario,ticket);
 
-		//TODO crear constante global
-		durEstado.setEstado(gestorBD.getEstado(1));
-		durEstado.setUsuario(gestorUsuario.getUsuarioActual());
+		durEstado.setEstado(gestorBD.getEstado(ABIERTOENMESADEAYUDA));
+		durEstado.setUsuario(usuario);
 		ticket.setDuracionEstadoActual(durEstado);
 		ticket.add(durEstado);
-		ticket.add(gestorIntervencion.crearIntervencion(LocalDate.now(),LocalTime.now(),ticket));
+		ticket.add(gestorIntervencion.crearIntervencion(LocalDate.now(), LocalTime.now(), ticket, usuario));
+		
 		return gestorBD.guardarTicket(ticket);
 	}
 	
 	
 	public void cerrarTicket (Integer numeroTicket, String observaciones) {
 		Ticket ticket = new Ticket();
+		Usuario usuario = gestorUsuario.getUsuarioActual();
 		LocalDate fecha= LocalDate.now();
 		LocalTime hora= LocalTime.now();
 		
-		gestorIntervencion.actualizarEstadoIntervencion(numeroTicket, observaciones);
+		gestorIntervencion.actualizarEstadoIntervencion(numeroTicket, observaciones, usuario);
 		ticket = gestorBD.getTicket(numeroTicket);
 		
-		DuracionEstado durEstado= new DuracionEstado();
-		durEstado= ticket.getDuracionEstadoActual();
+		DuracionEstado durEstado = ticket.getDuracionEstadoActual();
 		durEstado.setFechaFin(fecha);
 		durEstado.setHoraFin(hora);
 		
-		DuracionEstado durEstadoNueva= new DuracionEstado(fecha,hora, gestorUsuario.getUsuarioActual(),ticket);
-		durEstadoNueva.setEstado(gestorBD.getEstado(3));
-		durEstadoNueva.setUsuario(gestorUsuario.getUsuarioActual());
+		DuracionEstado durEstadoNueva= new DuracionEstado(fecha,hora, usuario,ticket);
+		durEstadoNueva.setEstado(gestorBD.getEstado(CERRADO));
+		durEstadoNueva.setUsuario(usuario);
 		durEstadoNueva.setFechaFin(fecha);
+		durEstadoNueva.setHoraFin(hora);
 		ticket.setDuracionEstadoActual(durEstadoNueva);
 		ticket.add(durEstadoNueva);
 		ticket.setFechaFin(fecha);
 		ticket.setHoraFin(hora);
+		ticket.getDuracionClasificacionActual().setFechaFin(fecha);
 		gestorBD.actualizarTicket(ticket);
 	}
 	
@@ -105,26 +117,29 @@ public class GestorTicket {
 		LocalDate fecha= LocalDate.now();
 		LocalTime hora= LocalTime.now();
 		Usuario usuario = gestorUsuario.getUsuarioActual();
-		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo);
+		Intervencion nuevaIntervencion = gestorIntervencion.actualizarIntervenciones(derivarDTO.getNumeroTicket(), derivarDTO.getObservaciones(), grupo, usuario);
 		
 		if(nuevaIntervencion!=null) {
 			nuevaIntervencion.setTicket(ticket);
 			ticket.add(nuevaIntervencion);
-			ticket.getDuracionEstadoActual().setFechaFin(fecha);
-			ticket.getDuracionEstadoActual().setHoraFin(hora);
 		}		
 		
+		ticket.getDuracionEstadoActual().setFechaFin(fecha);
+		ticket.getDuracionEstadoActual().setHoraFin(hora);
 		DuracionEstado nuevaDuracionEstado = new DuracionEstado(fecha, hora, usuario, ticket);
-		nuevaDuracionEstado.setEstado(gestorBD.getEstado(2));
+		nuevaDuracionEstado.setEstado(gestorBD.getEstado(ABIERTODERIVADO));
 		nuevaDuracionEstado.setUsuario(usuario);
 		ticket.add(nuevaDuracionEstado);
 		ticket.setDuracionEstadoActual(nuevaDuracionEstado);
+		
 		if(cambioClasificacion) {
 			ClasificacionTicket clasificacion = gestorClasificacion.getClasificacion(derivarDTO.getClasificacion().getNombre());
 			DuracionClasificacion nuevaDuracionClasificacion = gestorClasificacion.crearDuracionClasificacion(clasificacion,fecha,ticket);
+			ticket.setFechaFinDurClasifActual(fecha);
 			ticket.setDuracionClasificacionActual(nuevaDuracionClasificacion);
 			ticket.add(nuevaDuracionClasificacion);	
 		}
+		
 		gestorBD.actualizarTicket(ticket);
 	}
 	
@@ -143,63 +158,76 @@ public class GestorTicket {
 	
 	
 	public void actualizarEstadoIntervencion (IntervencionResultadoDTO intervencion, String nuevoEstado, String observaciones, ClasificacionTicket clasificacionNueva) {
-		//TODO ticket no recibe los cambios porque se pasa por referencia
 		Ticket ticket = gestorBD.getTicket(intervencion.getNumeroTicket());
-		ticket = gestorIntervencion.actualizarIntervencion(intervencion, nuevoEstado, observaciones, ticket);
+		LocalDate fecha = LocalDate.now();
+		LocalTime hora = LocalTime.now();
+		ticket = gestorIntervencion.actualizarIntervencion(fecha, hora, intervencion, nuevoEstado, observaciones, ticket);
 		
-		if (ticket!=null && !(intervencion.getEstadoIntervencion().equalsIgnoreCase("Asignada") && nuevoEstado.equalsIgnoreCase("Trabajando"))) {
+		
+		if (ticket!=null) {
+			if(!(intervencion.getEstadoIntervencion().equalsIgnoreCase(ASIGNADA) && nuevoEstado.equalsIgnoreCase(TRABAJANDO))) {
+		
 			DuracionEstado nuevaDuracionEstado = new DuracionEstado();
-			nuevaDuracionEstado.setFechaInicio(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
-			nuevaDuracionEstado.setHoraInicio(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getHoraFin());
+			nuevaDuracionEstado.setFechaInicio(fecha);
+			nuevaDuracionEstado.setHoraInicio(hora);
 			nuevaDuracionEstado.setUsuario(gestorUsuario.getUsuarioActual());
 			
-			if (nuevoEstado.equalsIgnoreCase("En espera")) {
-				nuevaDuracionEstado.getEstado().setNombre("Abierto en Mesa de Ayuda");
+			if (nuevoEstado.equalsIgnoreCase(ENESPERA)) {
+				nuevaDuracionEstado.setEstado(gestorBD.getEstado(ABIERTOENMESADEAYUDA));
 			}
 			
-			if (nuevoEstado.equalsIgnoreCase("Terminada")) {
+			if (nuevoEstado.equalsIgnoreCase(TERMINADA)) {
 				Boolean asignacionIncorrecta;
+				Boolean necesitaOtroGrupo = false;
 				
 				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog (null, "�Esta terminando la intervencion por una asignacion incorrecta?","Warning",dialogButton);
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Esta terminando la intervencion por una asignacion incorrecta?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 					asignacionIncorrecta=true;
 				}
 				else {
-					asignacionIncorrecta=false;
+					int dialogButton2 = JOptionPane.YES_NO_OPTION;
+					int dialogResult2 = JOptionPane.showConfirmDialog (null, "Necesita de otro Grupo de Resolucion?","Warning",dialogButton2);
+					if(dialogResult2 == JOptionPane.YES_OPTION){
+						necesitaOtroGrupo = true;
+					}
+					else {
+						necesitaOtroGrupo = false;
+					}
+					asignacionIncorrecta = false;
 				}
 				
-				if (asignacionIncorrecta || ticket.getIntervencionesAbiertas()>1) {
-					
-					
-					nuevaDuracionEstado.setEstado(gestorBD.getEstado(1));
+				
+				if (asignacionIncorrecta || ticket.getIntervencionesAbiertas()>1 || necesitaOtroGrupo) {
+					nuevaDuracionEstado.setEstado(gestorBD.getEstado(ABIERTOENMESADEAYUDA));
 				}			
 				else {
-					nuevaDuracionEstado.setEstado(gestorBD.getEstado(4));
+					nuevaDuracionEstado.setEstado(gestorBD.getEstado(SOLUCIONADOOK));
 				}
 				
-				ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).getEstadoIntervencionActual().setFechaFin(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
-				ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).getEstadoIntervencionActual().setHoraFin(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getHoraFin());
+				ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).getEstadoIntervencionActual().setFechaFin(fecha);
+				ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).getEstadoIntervencionActual().setHoraFin(hora);
 			}
-
+		
 			nuevaDuracionEstado.setTicket(ticket);	
 			ticket.setDuracionEstadoActual(nuevaDuracionEstado);
 			ticket.add(nuevaDuracionEstado);
 			ticket.getIntervenciones().get(ticket.getIntervenciones().size()-1).setTicket(ticket);
 			
+			}
 			if (!clasificacionNueva.getNombre().equalsIgnoreCase(ticket.getDuracionClasificacionActual().getClasificacion().getNombre())) {
-				ticket.getDuracionClasificacionActual().setFechaFin(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin());
-				DuracionClasificacion duracionClasificacionNueva = new DuracionClasificacion(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin(), ticket);
+				ticket.getDuracionClasificacionActual().setFechaFin(fecha);//(ticket.getDuracionEstado().get(ticket.getDuracionEstado().size()-1).getFechaFin()));
+				DuracionClasificacion duracionClasificacionNueva = gestorClasificacion.crearDuracionClasificacion(clasificacionNueva, fecha, ticket);
 				ticket.getClasificaciones().add(duracionClasificacionNueva);
 				ticket.setDuracionClasificacionActual(duracionClasificacionNueva);
 			}
+			
 			gestorBD.actualizarTicket(ticket);
 		}
 	}
 
-
+	
 	public String getNext() {
-		// TODO Auto-generated method stub
 		return gestorBD.getUltimoNumeroTicket().getNumeroTicket().toString();
-	}	
+	}
 }

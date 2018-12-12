@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import modelo.entidades.Intervencion;
 import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
 
 
 public class InterfazVisualizacionTicket extends JPanel {
@@ -43,7 +44,6 @@ public class InterfazVisualizacionTicket extends JPanel {
 	private JTable table;
 	private DefaultTableModel modeloTabla;
 	private Ticket ticketParaMostrar;
-	private int filaVieja = -1;
 
 
 	public InterfazVisualizacionTicket(Principal frame, Integer numeroTicket) {
@@ -71,7 +71,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		
 		JTextArea textAreaObservaciones = new JTextArea();
 		textAreaObservaciones.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
-		textAreaObservaciones.setBackground(new Color(220, 220, 220));
+		textAreaObservaciones.setBackground(SystemColor.menu);
 		textAreaObservaciones.setEditable(false);
 		scrollPane.setViewportView(textAreaObservaciones);
 		
@@ -152,7 +152,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		
 		txtDescripcionCargo = new JTextField();
 		txtDescripcionCargo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
-		txtDescripcionCargo.setBackground(new Color(220, 220, 220));
+		txtDescripcionCargo.setBackground(SystemColor.menu);
 		txtDescripcionCargo.setBounds(380, 332, 245, 73);
 		txtDescripcionCargo.setColumns(10);
 		txtDescripcionCargo.setEditable(false);
@@ -161,7 +161,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtLegajo = new JTextField();
 		txtLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtLegajo.setColumns(10);
-		txtLegajo.setBackground(new Color(220, 220, 220));
+		txtLegajo.setBackground(SystemColor.menu);
 		txtLegajo.setBounds(380, 184, 245, 24);
 		txtLegajo.setEditable(false);
 		this.add(txtLegajo);
@@ -169,7 +169,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtApellidoNombre = new JTextField();
 		txtApellidoNombre.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtApellidoNombre.setColumns(10);
-		txtApellidoNombre.setBackground(new Color(220, 220, 220));
+		txtApellidoNombre.setBackground(SystemColor.menu);
 		txtApellidoNombre.setBounds(380, 221, 245, 24);
 		txtApellidoNombre.setEditable(false);
 		this.add(txtApellidoNombre);
@@ -177,7 +177,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtTelefonoInterno = new JTextField();
 		txtTelefonoInterno.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtTelefonoInterno.setColumns(10);
-		txtTelefonoInterno.setBackground(new Color(220, 220, 220));
+		txtTelefonoInterno.setBackground(SystemColor.menu);
 		txtTelefonoInterno.setBounds(380, 258, 245, 24);
 		txtTelefonoInterno.setEditable(false);
 		this.add(txtTelefonoInterno);
@@ -185,7 +185,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtTelefonoDirecto = new JTextField();
 		txtTelefonoDirecto.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtTelefonoDirecto.setColumns(10);
-		txtTelefonoDirecto.setBackground(new Color(220, 220, 220));
+		txtTelefonoDirecto.setBackground(SystemColor.menu);
 		txtTelefonoDirecto.setBounds(380, 295, 245, 24);
 		txtTelefonoDirecto.setEditable(false);
 		this.add(txtTelefonoDirecto);
@@ -193,7 +193,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtCalle = new JTextField();
 		txtCalle.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtCalle.setColumns(10);
-		txtCalle.setBackground(new Color(220, 220, 220));
+		txtCalle.setBackground(SystemColor.menu);
 		txtCalle.setBounds(327, 471, 180, 24);
 		txtCalle.setEditable(false);
 		this.add(txtCalle);
@@ -201,7 +201,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtNumero = new JTextField();
 		txtNumero.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtNumero.setColumns(10);
-		txtNumero.setBackground(new Color(220, 220, 220));
+		txtNumero.setBackground(SystemColor.menu);
 		txtNumero.setBounds(327, 510, 180, 24);
 		txtNumero.setEditable(false);
 		this.add(txtNumero);
@@ -209,7 +209,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtPiso = new JTextField();
 		txtPiso.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtPiso.setColumns(10);
-		txtPiso.setBackground(new Color(220, 220, 220));
+		txtPiso.setBackground(SystemColor.menu);
 		txtPiso.setBounds(327, 547, 180, 24);
 		txtPiso.setEditable(false);
 		this.add(txtPiso);
@@ -217,7 +217,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		txtOficina = new JTextField();
 		txtOficina.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 15));
 		txtOficina.setColumns(10);
-		txtOficina.setBackground(new Color(220, 220, 220));
+		txtOficina.setBackground(SystemColor.menu);
 		txtOficina.setBounds(327, 584, 180, 24);
 		txtOficina.setEditable(false);
 		this.add(txtOficina);
@@ -272,7 +272,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		        } 
 		        else {
 		            int selectedRow = lsm.getMinSelectionIndex();
-		            textAreaObservaciones.setText(obtenerObservacionesFecha(table.getSelectedRow()).get(1));
+		            textAreaObservaciones.setText(obtenerObservacionesFecha(table.getSelectedRow()));
 		        }
 		    }
 		});
@@ -286,19 +286,25 @@ public class InterfazVisualizacionTicket extends JPanel {
 		}
 
 		if(duraciones.size() != 1) {
-		duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));}
+		//duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));
+		}
+		ArrayList<DuracionEstado>aux = new ArrayList<>();
+		aux.addAll(duraciones);
+		duraciones.removeAll(duraciones);
+		for(int j= aux.size()-1; j>=0; j--) {
+		duraciones.add(aux.get(j));}
 		for(DuracionEstado de: duraciones) {
-			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre(),obtenerObservacionesFecha(duraciones.indexOf(de)).get(0),buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
+			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre(),de.getUsuario().getEmpleado().getGrupo().getNombre(),buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
 		}		
 	}
 
 
 	private Integer compararFechasCambioEstado(DuracionEstado c1, DuracionEstado c2) {
 		
-		Integer retorno = 0;
+		Integer retorno;
 		if(c1.getFechaInicio().isEqual((c2.getFechaInicio()))) {
 				if(c1.getHoraInicio().getHour() == c2.getHoraInicio().getHour()) {
-					if(c1.getHoraInicio().getHour() == c2.getHoraInicio().getHour()) {
+					if(c1.getHoraInicio().getMinute() == c2.getHoraInicio().getMinute()) {
 						retorno = (((Integer)c2.getHoraInicio().getSecond()).compareTo(c1.getHoraInicio().getSecond()));  
 					}
 					else {
@@ -357,15 +363,16 @@ public class InterfazVisualizacionTicket extends JPanel {
 	}
 	
 	
-	private ArrayList<String> obtenerObservacionesFecha(int selectedRow) {
+	private String obtenerObservacionesFecha(int selectedRow) {
 		ArrayList<String> aux = new ArrayList<>(); 
 		ArrayList<DuracionEstado> de = new ArrayList<>(); 
 		for(DuracionEstado d: ticketParaMostrar.getDuracionEstado()) {
 			de.add((DuracionEstado)d);
 		}
-		
 		de.sort((c1,c2) -> compararFechasCambioEstado(c1, c2));
+		
 		DuracionEstado duracionMostrada = (DuracionEstado)de.get(selectedRow);
+		
 		ArrayList<Intervencion> intervencionesTicket = new ArrayList<>();
 		for(Intervencion i: duracionMostrada.getTicket().getIntervenciones()) {
 			intervencionesTicket.add(i);
@@ -377,7 +384,7 @@ public class InterfazVisualizacionTicket extends JPanel {
 		String observaciones = new String();
 		
 		if(!duracionMostrada.getEstado().getNombre().equalsIgnoreCase("Abierto Derivado")) {
-			for(Intervencion interv: duracionMostrada.getTicket().getIntervenciones()) {
+			for(Intervencion interv: intervencionesTicket) {
 				if(interv.getGrupoResolucion().getNombre().equalsIgnoreCase("Mesa de ayuda")) {
 					intervencion = interv;
 				}
@@ -385,16 +392,32 @@ public class InterfazVisualizacionTicket extends JPanel {
 		}
 		
 		else {
+			ArrayList<Intervencion> auxIntervenciones = new ArrayList<>();
 			for(Intervencion interv: intervencionesTicket) {
-				if(interv.getGrupoResolucion().getNombre().equalsIgnoreCase("Mesa de ayuda")) {
-					intervencionesTicket.remove(interv);
+				if(!interv.getGrupoResolucion().getNombre().equalsIgnoreCase("Mesa de ayuda")) {
+					auxIntervenciones.add(interv);
 				}
 			}
-			
+			intervencionesTicket.removeAll(intervencionesTicket);
+			intervencionesTicket.addAll(auxIntervenciones);
 			while(i < intervencionesTicket.size() && flag) {
-				if(intervencionesTicket.get(i).getFechaAsignacion().isEqual(duracionMostrada.getFechaInicio()) && intervencionesTicket.get(i).getHoraAsignacion().getHour()== duracionMostrada.getHoraInicio().getHour() && intervencionesTicket.get(i).getHoraAsignacion().getMinute() == duracionMostrada.getHoraInicio().getMinute() && intervencionesTicket.get(i).getHoraAsignacion().getSecond() == duracionMostrada.getHoraInicio().getSecond()){
-					flag = false;
-					intervencion = intervencionesTicket.get(i);
+				if(intervencionesTicket.get(i).getFechaAsignacion().isEqual(duracionMostrada.getFechaInicio())) {
+					if(intervencionesTicket.get(i).getHoraAsignacion().equals(duracionMostrada.getHoraInicio())) {
+						flag = false;
+						intervencion = intervencionesTicket.get(i);
+				}
+					else {
+						if(intervencionesTicket.get(i).getHoraAsignacion().isAfter(duracionMostrada.getHoraInicio()))
+						flag = false;
+						intervencion = intervencionesTicket.get(i);
+					}
+			
+				}
+				else {
+					if(intervencionesTicket.get(i).getFechaAsignacion().isAfter(duracionMostrada.getFechaInicio())) {
+						flag = false;
+						intervencion = intervencionesTicket.get(i);
+					}
 				}
 				i++;
 			}
@@ -402,19 +425,28 @@ public class InterfazVisualizacionTicket extends JPanel {
 		
 		i=0;
 		flag = true;
+		
 		while(i < intervencion.getHistorialEstadoIntervenciones().size() && flag) {
-			if(intervencion.getHistorialEstadoIntervenciones().get(i).getFechaInicio().equals(duracionMostrada.getFechaInicio())) { //&& intervencion.getHistorialEstadoIntervenciones().get(i).getHoraFin().getHour() == duracionMostrada.getHoraInicio().getHour() && intervencion.getHistorialEstadoIntervenciones().get(i).getHoraFin().getHour() == duracionMostrada.getHoraInicio().getHour() && intervencion.getHistorialEstadoIntervenciones().get(i).getHoraFin().getSecond() == duracionMostrada.getHoraInicio().getSecond()){
+			if(intervencion.getHistorialEstadoIntervenciones().get(i).getFechaInicio().equals(duracionMostrada.getFechaInicio())){ 
+			if(intervencion.getHistorialEstadoIntervenciones().get(i).getHoraInicio().equals(duracionMostrada.getHoraInicio())){
 				flag = false;
 				observaciones = intervencion.getHistorialEstadoIntervenciones().get(i).getObservaciones();
+				
+			}else {
+				if(intervencion.getHistorialEstadoIntervenciones().get(i).getHoraInicio().isAfter(duracionMostrada.getHoraInicio())) {
+					if(i>1) {
+					flag = false;
+					observaciones = intervencion.getHistorialEstadoIntervenciones().get(i-1).getObservaciones();
+				}}}
 			}
 			i++;
 		}
-			
+		
 		flag = true;
 		i=0;
 		
-		aux.add(intervencion.getGrupoResolucion().getNombre());
-		aux.add(observaciones);
-		return aux;
+		
+	
+		return observaciones;
 	}
 }	

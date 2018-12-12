@@ -5,31 +5,21 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
-import infoDTO.TicketDTO;
 import interfacesGraficas.HomeGrupoResolucion;
 import interfacesGraficas.HomeMesaAyuda;
-import interfacesGraficas.InterfazRegistrarTicket2;
-import modelo.entidades.ClasificacionTicket;
 import modelo.entidades.Usuario;
+
 
 public class LogIn extends JPanel{
 	
@@ -38,9 +28,10 @@ public class LogIn extends JPanel{
 	private JLabel errorLegajoExistente;
 	private JTextField numeroLegajo;
 	private JTextField txtContrasenia;
+	//private JPasswordField txtContrasenia;
 	
+
 	public LogIn(Principal frame) {
-	
 		this.ventana=frame;
 		ventana.setContentPane(this);
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -48,58 +39,71 @@ public class LogIn extends JPanel{
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
 		
-		JLabel lblRegistrarTicket = new JLabel("Log In");
+		JLabel lblRegistrarTicket = new JLabel("La llamita: Log In");
 		lblRegistrarTicket.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
-		lblRegistrarTicket.setBounds(526, 20, 298, 59);
+		lblRegistrarTicket.setBounds(511, 18, 344, 59);
 		this.add(lblRegistrarTicket);
 			
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
-		separator.setBounds(295, 90, 760, 2);
+		separator.setBounds(303, 90, 760, 2);
 		this.add(separator);
 		
 		JLabel lblLegajo = new JLabel("Numero de Legajo:");
-		lblLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
-		lblLegajo.setBounds(379, 180, 156, 28);
+		lblLegajo.setFont(new Font("Segoe UI Symbol", Font.BOLD, 18));
+		lblLegajo.setBounds(448, 180, 219, 37);
 		this.add(lblLegajo);
 		
-		JLabel lblContrasenia = new JLabel("Contrasenia:");
-		lblContrasenia.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
-		lblContrasenia.setBounds(379, 303, 156, 23);
+		JLabel lblContrasenia = new JLabel("Password:");
+		lblContrasenia.setFont(new Font("Segoe UI Symbol", Font.BOLD, 18));
+		lblContrasenia.setBounds(448, 306, 219, 37);
 		this.add(lblContrasenia);
 		
 		errorLegajoVacio = new JLabel("* Este campo no puede estar vacio.");
 		errorLegajoVacio.setForeground(Color.RED);
 		errorLegajoVacio.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		errorLegajoVacio.setBounds(850, 303, 219, 24);
+		errorLegajoVacio.setBounds(934, 188, 219, 24);
 		this.add(errorLegajoVacio);
 		errorLegajoVacio.setVisible(false);
 		
 		JLabel errorContraseniaVacia = new JLabel("* Este campo no puede estar vacio.");
 		errorContraseniaVacia.setForeground(Color.RED);
 		errorContraseniaVacia.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		errorContraseniaVacia.setBounds(850, 180, 219, 24);
+		errorContraseniaVacia.setBounds(934, 314, 219, 24);
 		this.add(errorContraseniaVacia);
 		errorContraseniaVacia.setVisible(false);
 		
 		errorLegajoExistente = new JLabel("* Este numero de legajo no se encuentra en el sistema.");
 		errorLegajoExistente.setForeground(Color.RED);
 		errorLegajoExistente.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-		errorLegajoExistente.setBounds(988, 303, 339, 24);
+		errorLegajoExistente.setBounds(934, 188, 339, 24);
 		this.add(errorLegajoExistente);
 		errorLegajoExistente.setVisible(false);
 
 		
 		numeroLegajo = new JTextField();
-		numeroLegajo.setBounds(600, 180, 200, 22);
+		numeroLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
+		numeroLegajo.setBounds(679, 187, 219, 24);
 		add(numeroLegajo);
 		numeroLegajo.setColumns(10);
 		numeroLegajo.setVisible(true);
 		this.add(numeroLegajo);
+		numeroLegajo.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (numeroLegajo.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
+		
 		
 		txtContrasenia = new JTextField();
-		txtContrasenia.setBounds(600, 303, 200, 22);
+		txtContrasenia.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
+		txtContrasenia.setBounds(679, 313, 219, 24);
 		add(txtContrasenia);
 		txtContrasenia.setColumns(10);
 		txtContrasenia.setVisible(true);
@@ -120,7 +124,7 @@ public class LogIn extends JPanel{
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog (null, "¿Desea salir?","Warning",dialogButton);
+				int dialogResult = JOptionPane.showConfirmDialog (null, "�Desea salir?","Warning",dialogButton);
 				if(dialogResult == JOptionPane.YES_OPTION){
 					System.exit(0);
 				}
@@ -130,48 +134,44 @@ public class LogIn extends JPanel{
 		
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			 if (numeroLegajo.getText().isEmpty() || txtContrasenia.getText().isEmpty()) {
-					if (numeroLegajo.getText().isEmpty()) {
-						errorLegajoVacio.setVisible(true);
-					}
-					if (txtContrasenia.getText().isEmpty()) {
-						errorContraseniaVacia.setVisible(true);
-					}
+				
+			if(numeroLegajo.getText().isEmpty()) {
+				errorLegajoVacio.setVisible(true);
+				errorContraseniaVacia.setVisible(false);
+			}
+			else if(txtContrasenia.getText().isEmpty()) {
+				errorContraseniaVacia.setVisible(true);
+				errorLegajoVacio.setVisible(false);
 			}
 			else {
 				errorLegajoVacio.setVisible(false);
-				errorLegajoVacio.setVisible(false);
-				if(ventana.getGestorBD().getUsuario(Integer.valueOf(numeroLegajo.getText())) != null){
-					
-					Usuario u = ventana.getGestorBD().getUsuario(Integer.valueOf(numeroLegajo.getText()));
+				errorContraseniaVacia.setVisible(false);
 				
-			
-				if (u.getPassword().intValue() == Integer.valueOf(txtContrasenia.getText())) {
-					ventana.setUsuario(u);
-						if(u.getEmpleado().getGrupo().getNombre().equalsIgnoreCase("Mesa de Ayuda")) {
-						ventana.setContentPane(new HomeMesaAyuda(ventana));
-						ventana.pack();
+				try{
+					Usuario u = ventana.getGestorBD().getUsuario(Integer.valueOf(numeroLegajo.getText()));
+
+					if (u.getPassword().intValue() == Integer.valueOf(txtContrasenia.getText())) {
+						ventana.setUsuario(u);
+							if(u.getEmpleado().getGrupo().getNombre().equalsIgnoreCase("Mesa de Ayuda")) {
+								ventana.setContentPane(new HomeMesaAyuda(ventana));
+								ventana.pack();
+							}
+							else {
+								ventana.setContentPane(new HomeGrupoResolucion(ventana));
+								ventana.pack();
+							}
 					}
+						
 					else {
-						ventana.setContentPane(new HomeGrupoResolucion(ventana));
-						ventana.pack();
-					}
-			
-			}
-					
-					else {
-						//int dialogButton = JOptionPane.ERROR_MESSAGE;
-						JOptionPane.showMessageDialog(ventana, "Contrasenia incorrecta");
+						JOptionPane.showMessageDialog(ventana, "Password incorrecta");
 					}
 				}
-				else {
+				
+				catch (Exception e) {
 					JOptionPane.showMessageDialog(ventana, "Usuario no existente");
-				}
+				}				
 			}
 			}
 		});
 	}
 }
-	
-	
-

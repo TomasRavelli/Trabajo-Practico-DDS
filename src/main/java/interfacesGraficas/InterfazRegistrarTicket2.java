@@ -18,6 +18,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.SystemColor;
 
 public class InterfazRegistrarTicket2 extends JPanel {
 
@@ -83,7 +84,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 				
 		txtNumeroTicket = new JTextField();
 		txtNumeroTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
-		txtNumeroTicket.setBackground(new Color(220, 220, 220));
+		txtNumeroTicket.setBackground(SystemColor.menu);
 		txtNumeroTicket.setBounds(503, 154, 520, 25);
 		txtNumeroTicket.setColumns(10);
 		txtNumeroTicket.setEditable(false);
@@ -93,14 +94,14 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		txtNumeroLegajo = new JTextField();
 		txtNumeroLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
 		txtNumeroLegajo.setColumns(10);
-		txtNumeroLegajo.setBackground(new Color(220, 220, 220));
+		txtNumeroLegajo.setBackground(SystemColor.menu);
 		txtNumeroLegajo.setBounds(503, 194, 520, 25);
 		txtNumeroLegajo.setEditable(false);
 		this.add(txtNumeroLegajo);
 		txtNumeroLegajo.setText(ticketDTO.getLegajo().toString());
 		
 		txtClasificacion = new JTextField();
-		txtClasificacion.setBackground(new Color(227, 227, 227));
+		txtClasificacion.setBackground(SystemColor.menu);
 		txtClasificacion.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
 		txtClasificacion.setEditable(false);
 		txtClasificacion.setBounds(503, 234, 520, 25);
