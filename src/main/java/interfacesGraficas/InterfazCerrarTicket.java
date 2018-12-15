@@ -10,6 +10,8 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -43,6 +45,16 @@ public class InterfazCerrarTicket extends JPanel {
 		
 		TextArea textAreaObservaciones = new TextArea();
 		textAreaObservaciones.setBounds(701, 420, 345, 160);
+		textAreaObservaciones.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (textAreaObservaciones.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		this.add(textAreaObservaciones);
 		
 		

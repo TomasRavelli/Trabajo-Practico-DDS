@@ -3,6 +3,8 @@ package modelo.aplicacion;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+
+import interfacesGraficas.LogIn;
 import modelo.entidades.Usuario;
 import modelo.gestores.*;
 

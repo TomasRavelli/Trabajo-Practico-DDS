@@ -1,4 +1,4 @@
-package modelo.aplicacion;
+package interfacesGraficas;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,8 +16,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import interfacesGraficas.HomeGrupoResolucion;
-import interfacesGraficas.HomeMesaAyuda;
+
+import modelo.aplicacion.Principal;
 import modelo.entidades.Usuario;
 
 
@@ -107,6 +107,16 @@ public class LogIn extends JPanel{
 		add(txtContrasenia);
 		txtContrasenia.setColumns(10);
 		txtContrasenia.setVisible(true);
+		txtContrasenia.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtContrasenia.getText().length() == 15)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		this.add(txtContrasenia);
 	
 		JButton btnSalir = new JButton("Salir");

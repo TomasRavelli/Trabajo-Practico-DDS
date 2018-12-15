@@ -15,6 +15,8 @@ import modelo.aplicacion.Principal;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -46,8 +48,7 @@ public class InterfazConsultarTicket extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
-		
-		
+			
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(275, 90, 800, 2);
@@ -137,12 +138,32 @@ public class InterfazConsultarTicket extends JPanel {
 		txtNumeroTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		txtNumeroTicket.setColumns(10);
 		txtNumeroTicket.setBounds(190, 131, 185, 20);
+		txtNumeroTicket.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtNumeroTicket.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		this.add(txtNumeroTicket);
 		
 		txtNumeroLegajo = new JTextField();
 		txtNumeroLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
 		txtNumeroLegajo.setColumns(10);
 		txtNumeroLegajo.setBounds(190, 156, 185, 20);
+		txtNumeroLegajo.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtNumeroLegajo.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		this.add(txtNumeroLegajo);
 		
 		

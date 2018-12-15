@@ -16,6 +16,8 @@ import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -63,6 +65,16 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		
 		JTextArea textAreaDescripcion = new JTextArea();
 		scrollPane.setViewportView(textAreaDescripcion);
+		textAreaDescripcion.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (textAreaDescripcion.getText().length()== 255)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});;
 		textAreaDescripcion.setLineWrap(true);
 		
 		
@@ -176,6 +188,16 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		txtNumeroLegajo.setColumns(10);
 		txtNumeroLegajo.setBackground(Color.WHITE);
 		txtNumeroLegajo.setBounds(611, 253, 365, 24);
+		txtNumeroLegajo.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtNumeroLegajo.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		this.add(txtNumeroLegajo);
 		
 		txtNumeroLegajo.addFocusListener(new FocusListener() {

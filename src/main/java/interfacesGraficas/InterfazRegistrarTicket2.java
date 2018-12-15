@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -48,6 +51,16 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		JTextArea textAreaObservaciones = new JTextArea();
 		textAreaObservaciones.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
 		scrollPane.setViewportView(textAreaObservaciones);
+		textAreaObservaciones.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (textAreaObservaciones.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		textAreaObservaciones.setLineWrap(true);
 		
 		JLabel errorObsVacio = new JLabel("* Este campo no puede estar vacio.");

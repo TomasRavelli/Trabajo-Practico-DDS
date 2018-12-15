@@ -15,6 +15,8 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -74,6 +76,16 @@ public class InterfazDerivarTicket2 extends JPanel {
 		txtDescripcion.setEditable(false);
 		txtDescripcion.setText(ticket.getDescripcion());
 		scrollPane2.setViewportView(txtDescripcion);
+		txtDescripcion.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtDescripcion.getText().length()== 255)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		
 		
 		

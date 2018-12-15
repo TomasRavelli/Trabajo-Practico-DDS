@@ -18,6 +18,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -58,7 +60,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		lblNumeroTicket.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
 		lblNumeroTicket.setBounds(426, 184, 195, 16);
 		this.add(lblNumeroTicket);
-		
+			
 		JLabel lblNumeroLegajo = new JLabel("Numero legajo:");
 		lblNumeroLegajo.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
 		lblNumeroLegajo.setBounds(426, 273, 195, 25);
@@ -106,11 +108,33 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		txtNumeroTicket.setBounds(630, 182, 270, 27);
 		txtNumeroTicket.setColumns(10);
 		this.add(txtNumeroTicket);
+		txtNumeroTicket.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtNumeroTicket.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
+		
 		
 		txtNumeroLegajo = new JTextField();
 		txtNumeroLegajo.setBounds(630, 275, 267, 27);
 		txtNumeroLegajo.setColumns(10);
 		this.add(txtNumeroLegajo);
+		txtNumeroLegajo.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtNumeroLegajo.getText().length()== 5)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
+		
 		
 		txtFechaDesde = new JTextField();
 		txtFechaDesde.setBounds(630, 452, 270, 27);
@@ -160,7 +184,8 @@ public class InterfazConsultarIntervenciones extends JPanel {
 							intervencionDTO = new IntervencionBusquedaDTO(comboBoxEstado.getSelectedItem().toString(), fechaDesde, fechaHasta, txtNumeroTicket.getText(), txtNumeroLegajo.getText());
 						}
 					} catch (HeadlessException e) {
-						e.printStackTrace();
+						JOptionPane mensageError  = new JOptionPane();
+						mensageError.showMessageDialog(ventana, "Fecha invalida.", "Error", mensageError.ERROR_MESSAGE);
 					}
 				}
 				
