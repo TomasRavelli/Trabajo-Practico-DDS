@@ -38,7 +38,6 @@ public class InterfazConsultarTicket extends JPanel {
 	TicketDTO ticketSeleccionado;
 
 	public InterfazConsultarTicket(Principal frame) {
-
 		
 		this.ventana=frame;
 		ventana.setContentPane(this);

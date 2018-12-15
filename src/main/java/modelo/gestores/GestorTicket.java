@@ -98,6 +98,7 @@ public class GestorTicket {
 		ticket.setFechaFin(fecha);
 		ticket.setHoraFin(hora);
 		ticket.getDuracionClasificacionActual().setFechaFin(fecha);
+		
 		gestorBD.actualizarTicket(ticket);
 	}
 	

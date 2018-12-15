@@ -144,7 +144,6 @@ public class Ticket implements Serializable {
 	}
 
 	public void setEmpleado(Empleado e) {
-		System.out.println(e.getNumeroLegajo());
 		this.empleado = e;
 	}
 
@@ -207,7 +206,6 @@ public class Ticket implements Serializable {
 	}
 
 	public void setFechaFinDurClasifActual(LocalDate fecha) {
-		// TODO Auto-generated method stub
 		duracionClasificacionActual.setFechaFin(fecha);
 	}
 }
