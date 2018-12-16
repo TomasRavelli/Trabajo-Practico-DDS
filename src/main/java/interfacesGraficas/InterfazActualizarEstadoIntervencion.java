@@ -22,6 +22,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -70,6 +72,16 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		JTextArea textAreaObservaciones = new JTextArea();
 		textAreaObservaciones.setBackground(SystemColor.text);
 		textAreaObservaciones.setEditable(true);
+		textAreaObservaciones.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (textAreaObservaciones.getText().length() >= 255)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		scrollPane2.setViewportView(textAreaObservaciones);
 		
 		JLabel lblActualizarEstadoIntervencion = new JLabel("Actualizar estado intervencion");
@@ -150,6 +162,7 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 		
 		btnActualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (textAreaObservaciones.getText().length() <= 255) {
 				if (comboBoxNuevoEstado.getSelectedIndex() == 0){
 					errorEstadoVacio.setVisible(true);
 				}
@@ -164,6 +177,11 @@ public class InterfazActualizarEstadoIntervencion extends JPanel {
 					ventana.setContentPane(new InterfazConsultarIntervenciones(ventana));
 					ventana.pack();
 				}
+			}
+				else {
+					JOptionPane p = new JOptionPane();
+					p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
+					}
 			}
 		});
 		

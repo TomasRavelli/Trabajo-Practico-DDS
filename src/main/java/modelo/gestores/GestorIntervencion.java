@@ -71,7 +71,6 @@ public class GestorIntervencion {
 		LocalTime hora = LocalTime.now();
 		Intervencion intervencion = gestorBD.getIntervencionMDA(numeroTicket);
 		
-		//intervencion.getEstadoIntervencionActual().setUsuario(usuario);
 		intervencion.getEstadoIntervencionActual().setFechaFin(fecha);
 		intervencion.getEstadoIntervencionActual().setHoraFin(hora);
 		
@@ -127,10 +126,11 @@ public class GestorIntervencion {
 		Intervencion intervencionMDA = gestorBD.getIntervencionMDA(numeroTicket);
 		intervencionMDA.getEstadoIntervencionActual().setFechaFin(fechaFin);
 		intervencionMDA.getEstadoIntervencionActual().setHoraFin(horaFin);
+		Usuario usuario = gestorUsuario.getUsuarioActual();
 		
 		EstadoIntervencion nuevoEstadoIntervencion = new EstadoIntervencion();
 		nuevoEstadoIntervencion.setEstado(TRABAJANDO);
-		nuevoEstadoIntervencion.setUsuario(gestorUsuario.getUsuarioActual());
+		nuevoEstadoIntervencion.setUsuario(usuario);
 		nuevoEstadoIntervencion.setFechaInicio(fechaFin);
 		nuevoEstadoIntervencion.setHoraInicio(horaFin);
 		nuevoEstadoIntervencion.setIntervencion(intervencionMDA);

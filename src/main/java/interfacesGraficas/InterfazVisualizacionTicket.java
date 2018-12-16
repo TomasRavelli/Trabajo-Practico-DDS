@@ -286,13 +286,9 @@ public class InterfazVisualizacionTicket extends JPanel {
 		}
 
 		if(duraciones.size() != 1) {
-		//duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));
+			duraciones.sort((c1,c2)->compararFechasCambioEstado(c1,c2));
 		}
-		ArrayList<DuracionEstado>aux = new ArrayList<>();
-		aux.addAll(duraciones);
-		duraciones.removeAll(duraciones);
-		for(int j= aux.size()-1; j>=0; j--) {
-		duraciones.add(aux.get(j));}
+		
 		for(DuracionEstado de: duraciones) {
 			modeloTabla.addRow(new String[]{de.getFechaInicio().toString(), de.getHoraInicio().toString(),de.getUsuario().getNombre(),de.getEstado().getNombre(),de.getUsuario().getEmpleado().getGrupo().getNombre(),buscarClasificacionTicketDeLaFecha(de.getFechaInicio()).getNombre()});
 		}		

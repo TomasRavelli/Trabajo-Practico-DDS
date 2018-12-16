@@ -67,10 +67,11 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		scrollPane.setViewportView(textAreaDescripcion);
 		textAreaDescripcion.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (textAreaDescripcion.getText().length()== 255)
+				if (textAreaDescripcion.getText().length() >= 255)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
+				
 			}
 			public void keyReleased(KeyEvent arg0) {
 			}
@@ -188,9 +189,10 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		txtNumeroLegajo.setColumns(10);
 		txtNumeroLegajo.setBackground(Color.WHITE);
 		txtNumeroLegajo.setBounds(611, 253, 365, 24);
+	
 		txtNumeroLegajo.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (txtNumeroLegajo.getText().length()== 5)
+				if (txtNumeroLegajo.getText().length() >= 5)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -266,20 +268,27 @@ public class InterfazRegistrarTicket1 extends JPanel{
 		
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			 if (textAreaDescripcion.getText().isEmpty() || (comboBoxClasificacionTicket.getSelectedIndex()==0)) {
-					if (textAreaDescripcion.getText().isEmpty()) {
-						errorDescripcionVacio.setVisible(true);
-					}
-					if (comboBoxClasificacionTicket.getSelectedIndex()==0) {
-						errorDebeElegir.setVisible(true);
-					}
-			}
-			else {
-				ticketDTO = new TicketDTO(Integer.valueOf(txtNumeroTicket.getText()),Integer.valueOf(txtNumeroLegajo.getText()), (ClasificacionTicket) comboBoxClasificacionTicket.getSelectedItem(), textAreaDescripcion.getText(), fechaApertura, horaApertura, null, null);
-				ventana.getGestorTicket().crearTicket(ticketDTO);
-				ventana.setContentPane(new InterfazRegistrarTicket2(ventana,ticketDTO));
-				ventana.pack();
-			}
+			
+			if(textAreaDescripcion.getText().length() <= 255 && txtNumeroLegajo.getText().length() <= 5 ) {	
+				if (textAreaDescripcion.getText().isEmpty() || (comboBoxClasificacionTicket.getSelectedIndex()==0)) {
+						if (textAreaDescripcion.getText().isEmpty()) {
+							errorDescripcionVacio.setVisible(true);
+						}
+						if (comboBoxClasificacionTicket.getSelectedIndex()==0) {
+							errorDebeElegir.setVisible(true);
+						}
+				}
+				else {
+					ticketDTO = new TicketDTO(Integer.valueOf(txtNumeroTicket.getText()),Integer.valueOf(txtNumeroLegajo.getText()), (ClasificacionTicket) comboBoxClasificacionTicket.getSelectedItem(), textAreaDescripcion.getText(), fechaApertura, horaApertura, null, null);
+					ventana.getGestorTicket().crearTicket(ticketDTO);
+					ventana.setContentPane(new InterfazRegistrarTicket2(ventana,ticketDTO));
+					ventana.pack();
+				}
+				}
+			else{
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
+				}
 			}
 		});
 	}

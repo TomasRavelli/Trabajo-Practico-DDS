@@ -110,7 +110,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		this.add(txtNumeroTicket);
 		txtNumeroTicket.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (txtNumeroTicket.getText().length()== 5)
+				if (txtNumeroTicket.getText().length() >= 5)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -126,7 +126,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		this.add(txtNumeroLegajo);
 		txtNumeroLegajo.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (txtNumeroLegajo.getText().length()== 5)
+				if (txtNumeroLegajo.getText().length() >= 5)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -168,6 +168,7 @@ public class InterfazConsultarIntervenciones extends JPanel {
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			if(txtNumeroTicket.getText().length() <= 5 && txtNumeroLegajo.getText().length() <= 5) {
 				IntervencionBusquedaDTO intervencionDTO = new IntervencionBusquedaDTO();
 				
 				if(!txtFechaDesde.getText().isEmpty() && !txtFechaHasta.getText().isEmpty()) {
@@ -201,6 +202,11 @@ public class InterfazConsultarIntervenciones extends JPanel {
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "No existen intervenciones que cumplan con los criterios ingresados.");
+					}
+				}
+			else {
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
 				}
 			}
 		});

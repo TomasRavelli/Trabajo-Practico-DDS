@@ -38,7 +38,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		this.setPreferredSize(new Dimension(1366, 768));
 		this.setBackground(new Color(230, 230, 250));
 		this.setLayout(null);
-		
+	
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.GRAY);
 		separator.setBounds(301, 90, 760, 2);
@@ -53,7 +53,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		scrollPane.setViewportView(textAreaObservaciones);
 		textAreaObservaciones.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (textAreaObservaciones.getText().length()== 5)
+				if (textAreaObservaciones.getText().length() >= 255)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -135,7 +135,7 @@ public class InterfazRegistrarTicket2 extends JPanel {
 		
 		btnDerivarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+			if(textAreaObservaciones.getText().length() <= 255) {	
 				if (textAreaObservaciones.getText().isEmpty()) {
 					errorObsVacio.setVisible(true);
 				}
@@ -149,11 +149,18 @@ public class InterfazRegistrarTicket2 extends JPanel {
 					}
 				}
 			}
+			else{
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
+			}}
 		});
 		
 
 		btnCerrarTicket.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent arg0) {
+			if(textAreaObservaciones.getText().length() <= 255) {
+				
 				if (textAreaObservaciones.getText().isEmpty()) {
 					errorObsVacio.setVisible(true);
 				}
@@ -162,6 +169,12 @@ public class InterfazRegistrarTicket2 extends JPanel {
 					ventana.getGestorTicket().cerrarTicket(Integer.valueOf(txtNumeroTicket.getText()),textAreaObservaciones.getText());
 					ventana.setContentPane(new HomeMesaAyuda(ventana));
 					ventana.pack();
+				}
+			}
+			
+			else {
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
 				}
 			}
 		});	

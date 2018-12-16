@@ -47,7 +47,7 @@ public class InterfazCerrarTicket extends JPanel {
 		textAreaObservaciones.setBounds(701, 420, 345, 160);
 		textAreaObservaciones.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (textAreaObservaciones.getText().length()== 5)
+				if (textAreaObservaciones.getText().length() >= 255)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -133,6 +133,7 @@ public class InterfazCerrarTicket extends JPanel {
 		
 		btnCerrarTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			if(textAreaObservaciones.getText().length()<=255) {
 				if(textAreaObservaciones.getText().isEmpty()) {
 					errorObsVacio.setVisible(true);
 				}
@@ -143,6 +144,11 @@ public class InterfazCerrarTicket extends JPanel {
 				  ventana.getGestorTicket().cerrarTicket(ticketSeleccionado.getNumero(), textAreaObservaciones.getText());
 				  ventana.setContentPane(new InterfazConsultarTicket(ventana));
 				  ventana.pack();
+				}
+			}
+			else {
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
 				}
 			}
 		});

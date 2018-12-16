@@ -40,7 +40,6 @@ public class InterfazConsultarTicket extends JPanel {
 	TicketDTO ticketSeleccionado;
 
 	public InterfazConsultarTicket(Principal frame) {
-
 		
 		this.ventana=frame;
 		ventana.setContentPane(this);
@@ -140,7 +139,7 @@ public class InterfazConsultarTicket extends JPanel {
 		txtNumeroTicket.setBounds(190, 131, 185, 20);
 		txtNumeroTicket.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (txtNumeroTicket.getText().length()== 5)
+				if (txtNumeroTicket.getText().length() >= 5)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -156,7 +155,7 @@ public class InterfazConsultarTicket extends JPanel {
 		txtNumeroLegajo.setBounds(190, 156, 185, 20);
 		txtNumeroLegajo.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (txtNumeroLegajo.getText().length()== 5)
+				if (txtNumeroLegajo.getText().length() >= 5)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -292,6 +291,10 @@ public class InterfazConsultarTicket extends JPanel {
 		
 		btnVetTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+			if(txtNumeroLegajo.getText().length() <= 5 && txtNumeroTicket.getText().length() <= 5) {
+
+			
 				if(table_1.getSelectedRow() != -1 && table_1.getSelectedRow() < ticketsEncontrados.size()) {
 					Integer numeroTicketSeleccionado = Integer.valueOf(((Vector) modeloTablaTicket.getDataVector().elementAt(table_1.getSelectedRow())).elementAt(0).toString());
 					ticketSeleccionado = buscarTicket(numeroTicketSeleccionado, ticketsEncontrados);
@@ -305,11 +308,19 @@ public class InterfazConsultarTicket extends JPanel {
 					}
 				}
 			}
+			else {
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
+				}
+			}
 		});
 		
 		
 		btnDerivar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
+				if(txtNumeroLegajo.getText().length() <= 5 && txtNumeroTicket.getText().length() <= 5) {
+
 				if(table_1.getSelectedRow() != -1 && table_1.getSelectedRow() < ticketsEncontrados.size()) {
 					Integer numeroTicketSeleccionado = Integer.valueOf(((Vector) modeloTablaTicket.getDataVector().elementAt(table_1.getSelectedRow())).elementAt(0).toString());
 					ticketSeleccionado = buscarTicket(numeroTicketSeleccionado, ticketsEncontrados);
@@ -328,13 +339,18 @@ public class InterfazConsultarTicket extends JPanel {
 						JOptionPane.showMessageDialog(null, "Debe seleccionar un ticket para poder derivarlo");
 					}	
 				}	
+				}
+				else {
+					JOptionPane p = new JOptionPane();
+					p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
+					}
 			}
 		});
 		
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+			if(txtNumeroLegajo.getText().length() <= 5 && txtNumeroTicket.getText().length() <= 5) {
 				modeloTablaTicket.setRowCount(0);;
 				DatosDTO datosDTO = new DatosDTO();
 				
@@ -385,9 +401,14 @@ public class InterfazConsultarTicket extends JPanel {
 				
 				else {
 					JOptionPane.showMessageDialog(null, "No existen tickets que cumplan con los criterios ingresados.");
+					}
+				}
+			else {
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
 				}
 			}
-		});
+			});
 		
 		
 		btnCancelar.addActionListener(new ActionListener() {

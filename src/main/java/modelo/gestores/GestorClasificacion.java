@@ -46,7 +46,6 @@ public class GestorClasificacion {
 	
 	public List<ClasificacionTicket> getClasificaciones (String grupo){
 		List<ClasificacionTicket> clasificacionesGrupo = gestorBD.getClasificaciones();
-		System.out.println(clasificacionesGrupo.size());
 		
 		List<ClasificacionTicket> resultado = new ArrayList<>();
 		for (ClasificacionTicket ct : clasificacionesGrupo) {

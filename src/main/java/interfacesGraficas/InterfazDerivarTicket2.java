@@ -64,6 +64,16 @@ public class InterfazDerivarTicket2 extends JPanel {
 		this.add(scrollPane);
 		
 		JTextArea txtAreaObservaciones = new JTextArea();
+		txtAreaObservaciones.addKeyListener(new KeyListener(){	 
+			public void keyTyped(KeyEvent e){
+				if (txtAreaObservaciones.getText().length() >= 255)
+			     e.consume();
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+		});
 		scrollPane.setViewportView(txtAreaObservaciones);
 		
 		
@@ -75,19 +85,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 		txtDescripcion.setBackground(SystemColor.controlHighlight);
 		txtDescripcion.setEditable(false);
 		txtDescripcion.setText(ticket.getDescripcion());
-		scrollPane2.setViewportView(txtDescripcion);
-		txtDescripcion.addKeyListener(new KeyListener(){	 
-			public void keyTyped(KeyEvent e){
-				if (txtDescripcion.getText().length()== 255)
-			     e.consume();
-			}
-			public void keyPressed(KeyEvent arg0) {
-			}
-			public void keyReleased(KeyEvent arg0) {
-			}
-		});
-		
-		
+		scrollPane2.setViewportView(txtDescripcion);		
 		
 		JLabel lblDerivarTicket = new JLabel("Derivar ticket");
 		lblDerivarTicket.setFont(new Font("Segoe UI Symbol", Font.BOLD, 40));
@@ -225,6 +223,7 @@ public class InterfazDerivarTicket2 extends JPanel {
 
 		btnDerivar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			if(txtAreaObservaciones.getText().length() <= 255) {
 				if (txtAreaObservaciones.getText().isEmpty()) {
 					errorObsVacio.setVisible(true);
 					errorGrupo.setVisible(false);
@@ -249,7 +248,13 @@ public class InterfazDerivarTicket2 extends JPanel {
 						}
 						ventana.setContentPane(new HomeMesaAyuda(ventana));
 						ventana.pack();
+						}
 					}
+				}
+		
+			else {
+				JOptionPane p = new JOptionPane();
+				p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
 				}
 			}
 		});	

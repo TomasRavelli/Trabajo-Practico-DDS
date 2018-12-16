@@ -27,8 +27,7 @@ public class LogIn extends JPanel{
 	private JLabel errorLegajoVacio;
 	private JLabel errorLegajoExistente;
 	private JTextField numeroLegajo;
-	private JTextField txtContrasenia;
-	//private JPasswordField txtContrasenia;
+	private JPasswordField txtContrasenia;
 	
 
 	public LogIn(Principal frame) {
@@ -91,7 +90,7 @@ public class LogIn extends JPanel{
 		this.add(numeroLegajo);
 		numeroLegajo.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (numeroLegajo.getText().length()== 5)
+				if (numeroLegajo.getText().length() >= 5)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -101,15 +100,14 @@ public class LogIn extends JPanel{
 		});
 		
 		
-		txtContrasenia = new JTextField();
+		txtContrasenia = new JPasswordField();
 		txtContrasenia.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		txtContrasenia.setBounds(679, 313, 219, 24);
-		add(txtContrasenia);
 		txtContrasenia.setColumns(10);
 		txtContrasenia.setVisible(true);
 		txtContrasenia.addKeyListener(new KeyListener(){	 
 			public void keyTyped(KeyEvent e){
-				if (txtContrasenia.getText().length() == 15)
+				if (txtContrasenia.getPassword().length >= 15)
 			     e.consume();
 			}
 			public void keyPressed(KeyEvent arg0) {
@@ -128,9 +126,7 @@ public class LogIn extends JPanel{
 		btnIngresar.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
 		btnIngresar.setBounds(1020, 655, 133, 37);
 		this.add(btnIngresar);
-		
-		
-		
+				
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -144,12 +140,13 @@ public class LogIn extends JPanel{
 		
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+			
+		if(numeroLegajo.getText().length() <= 5 && txtContrasenia.getPassword().length <= 15) {
 			if(numeroLegajo.getText().isEmpty()) {
 				errorLegajoVacio.setVisible(true);
 				errorContraseniaVacia.setVisible(false);
 			}
-			else if(txtContrasenia.getText().isEmpty()) {
+			else if(txtContrasenia.getPassword().length == 0) {
 				errorContraseniaVacia.setVisible(true);
 				errorLegajoVacio.setVisible(false);
 			}
@@ -159,8 +156,8 @@ public class LogIn extends JPanel{
 				
 				try{
 					Usuario u = ventana.getGestorBD().getUsuario(Integer.valueOf(numeroLegajo.getText()));
-
-					if (u.getPassword().intValue() == Integer.valueOf(txtContrasenia.getText())) {
+					
+					if (u.getPassword().intValue() == Integer.valueOf(new String(txtContrasenia.getPassword()))) {
 						ventana.setUsuario(u);
 							if(u.getEmpleado().getGrupo().getNombre().equalsIgnoreCase("Mesa de Ayuda")) {
 								ventana.setContentPane(new HomeMesaAyuda(ventana));
@@ -182,6 +179,15 @@ public class LogIn extends JPanel{
 				}				
 			}
 			}
+		else {
+			JOptionPane p = new JOptionPane();
+			p.showMessageDialog(ventana, "Revisar campos. Longitud no valida.", "Error", p.ERROR_MESSAGE);
+		}
+
+			
+		} 
 		});
+	
+		
 	}
 }
